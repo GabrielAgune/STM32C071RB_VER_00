@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32C071xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32C0xx/Include;../Drivers/CMSIS/Include;..\Core\Inc\Application;..\Core\Inc\Drivers;..\Core\Inc\Modules</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32C0xx/Include;../Drivers/CMSIS/Include;../Core/Inc/Application;../Core/Inc/Drivers;../Core/Inc/Modules</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -675,11 +675,6 @@
               <FilePath>..\Core\Src\Application\cli_driver.c</FilePath>
             </File>
             <File>
-              <FileName>interface_usuario.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\Application\interface_usuario.c</FilePath>
-            </File>
-            <File>
               <FileName>app_manager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\app_manager.c</FilePath>
@@ -688,6 +683,11 @@
               <FileName>retarget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\retarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\controller.c</FilePath>
             </File>
           </Files>
         </Group>

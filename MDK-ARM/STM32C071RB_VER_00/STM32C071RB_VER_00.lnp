@@ -51,9 +51,9 @@
 "stm32c071rb_ver_00\scale_filter.o"
 "stm32c071rb_ver_00\servo_controle.o"
 "stm32c071rb_ver_00\cli_driver.o"
-"stm32c071rb_ver_00\interface_usuario.o"
 "stm32c071rb_ver_00\app_manager.o"
 "stm32c071rb_ver_00\retarget.o"
+"stm32c071rb_ver_00\controller.o"
 --library_type=microlib --strict --scatter "STM32C071RB_VER_00\STM32C071RB_VER_00.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

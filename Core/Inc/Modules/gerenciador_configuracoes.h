@@ -30,8 +30,13 @@ typedef struct {
 typedef struct {
     uint32_t versao_struct;
     uint8_t indice_idioma_selecionado;
-    uint8_t preenchimento[3];
+    uint8_t indice_grao_ativo;
+    uint8_t preenchimento[2];
     char senha_sistema[MAX_SENHA_LEN + 2];
+    
+    float fat_cal_a_gain;
+    float fat_cal_a_zero;
+
     Config_Grao_t graos[MAX_GRAOS];
     uint32_t crc;
 } Config_Aplicacao_t;
@@ -40,17 +45,10 @@ typedef struct {
 // Mapeamento de Memória Dinâmico e Seguro
 //==============================================================================
 
-// 1. Calcula o tamanho exato do nosso bloco de dados.
-#define CONFIG_BLOCK_SIZE sizeof(Config_Aplicacao_t) // Aprox. 276 bytes
-
-// 2. Calcula o número de páginas de EEPROM necessárias, arredondando para cima.
+#define CONFIG_BLOCK_SIZE sizeof(Config_Aplicacao_t) // Calcula o tamanho exato do bloco de dados.
 #define CONFIG_PAGES_NEEDED ((CONFIG_BLOCK_SIZE / EEPROM_PAGE_SIZE) + 1) // (276 / 32) + 1 = 9 páginas
-
-// 3. Define o espaçamento seguro como um múltiplo do tamanho da página.
-//    Isso garante que nunca haverá sobreposição, mesmo se o tamanho da struct mudar.
 #define EEPROM_CONFIG_BLOCK_SPACING (CONFIG_PAGES_NEEDED * EEPROM_PAGE_SIZE) // 9 * 32 = 288 bytes
 
-// 4. Define os endereços finais com base no espaçamento seguro.
 #define ADDR_CONFIG_PRIMARY   0x0000
 #define ADDR_CONFIG_BACKUP1   (ADDR_CONFIG_PRIMARY + EEPROM_CONFIG_BLOCK_SPACING)
 #define ADDR_CONFIG_BACKUP2   (ADDR_CONFIG_BACKUP1 + EEPROM_CONFIG_BLOCK_SPACING)
@@ -69,5 +67,9 @@ bool Gerenciador_Config_Set_Senha(const char* nova_senha);
 uint8_t Gerenciador_Config_Get_Num_Graos(void);
 bool Gerenciador_Config_Set_Indice_Idioma(uint8_t novo_indice);
 bool Gerenciador_Config_Get_Indice_Idioma(uint8_t* indice);
+bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice);
+bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo);
+bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero);
+bool Gerenciador_Config_Set_Cal_A(float gain, float zero);
 
 #endif // GERENCIADOR_CONFIGURACOES_H

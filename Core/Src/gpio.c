@@ -55,7 +55,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(RELE_CAP_GPIO_Port, RELE_CAP_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(AD_SCLK_BAL_GPIO_Port, AD_SCLK_BAL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, AD_SCLK_BAL_Pin|LED_Blue_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, AD_PDWN_BAL_Pin|PESO_TEMP_Pin|TEMP_CHIP_Pin, GPIO_PIN_RESET);
@@ -70,12 +70,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(RELE_CAP_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : AD_SCLK_BAL_Pin */
-  GPIO_InitStruct.Pin = AD_SCLK_BAL_Pin;
+  /*Configure GPIO pins : AD_SCLK_BAL_Pin LED_Blue_Pin */
+  GPIO_InitStruct.Pin = AD_SCLK_BAL_Pin|LED_Blue_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(AD_SCLK_BAL_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : AD_DOUT_BAL_Pin HAB_ISP_Pin */
   GPIO_InitStruct.Pin = AD_DOUT_BAL_Pin|HAB_ISP_Pin;

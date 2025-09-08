@@ -38,10 +38,11 @@ stm32c071rb_ver_00/cli_driver.o: ..\Core\Src\Application\cli_driver.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\main.h \
-  ..\Core\Inc\Application\app_manager.h ..\Core\Inc\i2c.h \
-  ..\Core\Inc\usart.h ..\Core\Inc\crc.h ..\Core\Inc\rtc.h \
-  ..\Core\Inc\tim.h ..\Core\Inc\Drivers\eeprom_driver.h \
+  ..\Core\Inc\Drivers\dwin_driver.h \
+  ..\Core\Inc\Application\app_manager.h ..\Core\Inc\main.h \
+  ..\Core\Inc\i2c.h ..\Core\Inc\usart.h ..\Core\Inc\crc.h \
+  ..\Core\Inc\rtc.h ..\Core\Inc\tim.h \
+  ..\Core\Inc\Drivers\eeprom_driver.h \
   ..\Core\Inc\Drivers\ads1232_driver.h \
   ..\Core\Inc\Drivers\pwm_servo_driver.h \
   ..\Core\Inc\Drivers\pcb_frequency.h ..\Core\Inc\Drivers\temp_sensor.h \

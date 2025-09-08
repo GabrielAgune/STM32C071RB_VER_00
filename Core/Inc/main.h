@@ -75,6 +75,8 @@ void Error_Handler(void);
 #define USB_SENSE_GPIO_Port GPIOA
 #define HAB_ISP_Pin GPIO_PIN_8
 #define HAB_ISP_GPIO_Port GPIOC
+#define LED_Blue_Pin GPIO_PIN_9
+#define LED_Blue_GPIO_Port GPIOC
 #define SERVO_CAMARA_Pin GPIO_PIN_0
 #define SERVO_CAMARA_GPIO_Port GPIOD
 #define SERVO_FUNIL_Pin GPIO_PIN_1

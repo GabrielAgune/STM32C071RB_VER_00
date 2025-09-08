@@ -67,7 +67,9 @@ bool Gerenciador_Config_Forcar_Restauracao_Padrao(void)
     config_padrao.indice_idioma_selecionado = 0;
     strncpy(config_padrao.senha_sistema, "senha", MAX_SENHA_LEN);
     config_padrao.senha_sistema[MAX_SENHA_LEN] = '\0';
-
+		config_padrao.fat_cal_a_gain = 1.0f;
+    config_padrao.fat_cal_a_zero = 0.0f;
+		
     for (int i = 0; i < MAX_GRAOS; i++)
     {
         strncpy(config_padrao.graos[i].nome, Produto[i].Nome[0], MAX_NOME_GRAO_LEN);
@@ -190,4 +192,58 @@ static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config)
     
     printf("EEPROM Manager: ERRO CRITICO! Nenhum bloco valido encontrado.\n");
     return false;
+}
+
+bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice)
+{
+    if (s_crc_handle == NULL || novo_indice >= MAX_GRAOS) return false;
+    static Config_Aplicacao_t config_temp;
+    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
+    config_temp.indice_grao_ativo = novo_indice;
+    Recalcular_E_Atualizar_CRC(&config_temp);
+    return Salvar_Configuracao_Completa(&config_temp);
+}
+
+bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo)
+{
+    if (s_crc_handle == NULL || indice_ativo == NULL) return false;
+    
+    static Config_Aplicacao_t config_temp;
+    if (!Carregar_Primeira_Config_Valida(&config_temp))
+    {
+        *indice_ativo = 0; 
+        return false;
+    }
+
+    if (config_temp.indice_grao_ativo < MAX_GRAOS) {
+        *indice_ativo = config_temp.indice_grao_ativo;
+    } else {
+        *indice_ativo = 0;
+    }
+    
+    return true;
+}
+
+bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero)
+{
+    if (gain == NULL || zero == NULL) return false;
+    Config_Aplicacao_t config_temp;
+    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
+    
+    *gain = config_temp.fat_cal_a_gain;
+    *zero = config_temp.fat_cal_a_zero;
+    return true;
+}
+
+bool Gerenciador_Config_Set_Cal_A(float gain, float zero)
+{
+    if (s_crc_handle == NULL) return false;
+    Config_Aplicacao_t config_temp;
+    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
+
+    config_temp.fat_cal_a_gain = gain;
+    config_temp.fat_cal_a_zero = zero;
+
+    Recalcular_E_Atualizar_CRC(&config_temp);
+    return Salvar_Configuracao_Completa(&config_temp);
 }

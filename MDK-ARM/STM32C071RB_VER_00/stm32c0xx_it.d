@@ -37,6 +37,6 @@ stm32c071rb_ver_00/stm32c0xx_it.o: ..\Core\Src\stm32c0xx_it.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\stm32c0xx_it.h ..\Core\Inc\Drivers\dwin_driver.h \
-  ..\Core\Inc\Application\cli_driver.h \
+  ..\Core\Inc\stm32c0xx_it.h ..\Core\Inc\Application\retarget.h \
+  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\Application\cli_driver.h \
   ..\Core\Inc\Modules\servo_controle.h

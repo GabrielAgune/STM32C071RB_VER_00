@@ -45,9 +45,7 @@ void App_Manager_Process(void);
 
 // Funções de Callback para serem chamadas pela UI
 void App_Manager_Handle_Start_Process(void);
-void App_Manager_Handle_Password_Input(const char* password);
 void App_Manager_Handle_New_Password(const char* new_password);
-void App_Manager_Handle_DateTime_Input(uint8_t d, uint8_t m, uint8_t y, uint8_t h, uint8_t min, uint8_t s);
 
 void App_Manager_GetScaleData(ScaleFilterOut* data);
 void App_Manager_GetFreqData(FreqData_t* data);

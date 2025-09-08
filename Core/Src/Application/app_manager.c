@@ -8,6 +8,8 @@
 
 #include "app_manager.h"
 #include "rtc_driver.h"
+#include "dwin_driver.h"
+#include "controller.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -26,7 +28,7 @@ static void Task_Handle_High_Frequency_Polling(void);
 static void Task_Handle_Scale(void);
 static void Task_Handle_Frequency(void);
 static void Task_Handle_Temperature(void);
-static void Task_Handle_UI_Periodic(void);
+
 
 //================================================================================
 // Implementação da Função de Inicialização
@@ -39,7 +41,7 @@ void App_Manager_Init(void)
     printf("1. CLI/Debug UART... OK\r\n");
 		
 		EEPROM_Driver_Init(&hi2c1);
-    RTC_Driver_Init();
+    RTC_Driver_Init(&hrtc);
 		printf("2. Drivers I2C e RTC... OK\r\n");
     
     
@@ -69,8 +71,8 @@ void App_Manager_Init(void)
     
 		s_temperatura_mcu = TempSensor_GetTemperature();
     printf("Temperatura inicial: %.2f C\r\n", s_temperatura_mcu);
-    // A UI gere a sua própria inicialização não-bloqueante
-    UI_Init();
+		
+		DWIN_Driver_Init(&huart2, Controller_DwinCallback);
 
     printf("6. Interface de Usuario... Iniciando sequencia de splash.\r\n");
 
@@ -82,12 +84,11 @@ void App_Manager_Init(void)
 //================================================================================
 void App_Manager_Process(void)
 {
-    // O nosso super-loop agora apenas chama as tarefas.
-    // Cada tarefa é responsável por gerir o seu próprio tempo.
     Task_Handle_High_Frequency_Polling();
     Task_Handle_Scale();
     Task_Handle_Frequency();
-    Task_Handle_UI_Periodic();
+		Task_Handle_Temperature();
+    RTC_Driver_Process();
 }
 
 //================================================================================
@@ -102,7 +103,7 @@ static void Task_Handle_High_Frequency_Polling(void)
     DWIN_Driver_Process(); // Processa bytes recebidos da UART do display
     CLI_Process();         // Processa comandos da interface de linha de comando
     Servos_Process();      // Atualiza a máquina de estados dos servos
-    UI_Process();          // Executa a máquina de estados da UI (splash screen, etc.)
+    Process_Controller();         // Executa a máquina de estados da UI (splash screen, etc.)
 }
 
 /**
@@ -118,13 +119,21 @@ static void Task_Handle_Scale(void)
         int32_t leitura_adc = ADS1232_Read_Median_of_3();
         ScaleFilter_Push(&s_scale_filter, leitura_adc, &s_scale_output);
 
-        // TODO: Implementar máquina de estados da balança (estável, instável, auto-zero)
-        
-        /*printf("Peso: %.2f g | Estavel: %d | Sigma: %.2f\r\n", 
-               s_scale_output.avg_grams, 
-               s_scale_output.is_stable,
-               s_scale_output.sigma_grams);*/
     }
+}
+
+static float Calcular_Escala_A(uint32_t frequencia_hz)
+{
+    float escala_a;
+    float freq_corr = (float)frequencia_hz; 
+    escala_a = (-0.00014955f * freq_corr) + 396.85f;
+
+    float gain = 1.0f;
+    float zero = 0.0f;
+    Gerenciador_Config_Get_Cal_A(&gain, &zero);
+    escala_a = (escala_a * gain) + zero;
+    
+    return escala_a;
 }
 
 /**
@@ -133,64 +142,53 @@ static void Task_Handle_Scale(void)
 static void Task_Handle_Frequency(void)
 {
     static uint32_t ultimo_tick = 0;
-    if (HAL_GetTick() - ultimo_tick >= 500)
-    {
-        ultimo_tick = HAL_GetTick();
-        
-        uint32_t contagem_pulsos = Frequency_Get_Pulse_Count();
-        Frequency_Reset();
-
-
-
-        float escala_a = 0.0f;
-        if (s_temperatura_mcu > 0) {
-            escala_a = (float)contagem_pulsos / s_temperatura_mcu;
-        }
-        
-        /*printf("Pulsos/500ms: %lu | Temp: %.2f C | Escala A: %.2f\r\n",
-               (unsigned long)contagem_pulsos, temperatura, escala_a);*/
-    }
-}
-
-/**
- * @brief Tarefa que atualiza periodicamente a UI. Executa a cada 1 segundo.
- */
-static void Task_Handle_UI_Periodic(void)
-{
-    static uint32_t ultimo_tick = 0;
     if (HAL_GetTick() - ultimo_tick >= 1000)
     {
         ultimo_tick = HAL_GetTick();
-        UI_Update_Periodic();
-    }
+        
+
+        uint32_t contagem_pulsos = Frequency_Get_Pulse_Count();
+        Frequency_Reset(); 
+
+        float escala_a = 0.0f;
+        if (s_temperatura_mcu > 0) {
+            escala_a = Calcular_Escala_A(contagem_pulsos);
+        }
+
+        s_freq_data.pulsos = contagem_pulsos;
+        s_freq_data.escala_a = escala_a;
+				
+        int32_t frequencia_para_dwin = (int32_t)((s_freq_data.pulsos / 1000.0f) * 10.0f);
+        DWIN_Driver_WriteInt32(FREQUENCIA, frequencia_para_dwin);
+
+        int32_t escala_a_para_dwin = (int32_t)(s_freq_data.escala_a * 10.0f);
+        DWIN_Driver_WriteInt32(ESCALA_A, escala_a_para_dwin);
+        
+	}
 }
+
 
 static void Task_Handle_Temperature(void) {
     static uint32_t ultimo_tick = 0;
-    // Lê a temperatura a uma frequência diferente para não sobrecarregar o ADC
     if (HAL_GetTick() - ultimo_tick >= 1000) { 
         ultimo_tick = HAL_GetTick();
         s_temperatura_mcu = TempSensor_GetTemperature();
+
+        // Converte o float para um inteiro com uma casa decimal (ex: 25.7f se torna 257)
+        int16_t temperatura_para_dwin = (int16_t)(s_temperatura_mcu * 10.0f);
+        
+        // Envia o valor inteiro para o display
+        DWIN_Driver_WriteInt(TEMP_SAMPLE, temperatura_para_dwin);
     }
 }
 
-//================================================================================
+//================================================================
 // Implementação dos Handlers (chamados pela UI)
-//================================================================================
+//================================================================
+
 void App_Manager_Handle_Start_Process(void) {
     printf("APP: Comando para iniciar processo recebido.\r\n");
     Servos_Start_Sequence();
-}
-
-void App_Manager_Handle_Password_Input(const char* password) {
-    char senha_armazenada[MAX_SENHA_LEN + 1];
-    if (Gerenciador_Config_Get_Senha(senha_armazenada, sizeof(senha_armazenada))) {
-        if (strcmp(password, senha_armazenada) == 0) {
-            UI_On_Auth_Success();
-        } else {
-            UI_On_Auth_Failure();
-        }
-    }
 }
 
 void App_Manager_Handle_New_Password(const char* new_password) {
@@ -198,22 +196,15 @@ void App_Manager_Handle_New_Password(const char* new_password) {
     printf("APP: Nova senha definida.\r\n");
 }
 
-void App_Manager_Handle_DateTime_Input(uint8_t d, uint8_t m, uint8_t y, uint8_t h, uint8_t min, uint8_t s) {
-    RTC_TimeTypeDef sTime = { .Hours = h, .Minutes = min, .Seconds = s };
-    RTC_DateTypeDef sDate = { .Date = d, .Month = m, .Year = y };
-    RTC_Driver_SetDateTime(&sTime, &sDate);
-    printf("APP: Data e Hora atualizadas.\r\n");
-}
-
 void App_Manager_GetScaleData(ScaleFilterOut* data) {
     if (data != NULL) {
-        *data = s_scale_output; // Copia os dados mais recentes
+        *data = s_scale_output; 
     }
 }
 
 void App_Manager_GetFreqData(FreqData_t* data) {
     if (data != NULL) {
-        *data = s_freq_data; // Copia os dados mais recentes
+        *data = s_freq_data; 
     }
 }
 

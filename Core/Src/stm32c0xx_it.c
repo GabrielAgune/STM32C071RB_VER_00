@@ -1,3 +1,4 @@
+
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -20,6 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32c0xx_it.h"
+#include "retarget.h"
 #include "dwin_driver.h"
 #include "cli_driver.h"
 #include "servo_controle.h"
@@ -203,6 +205,17 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+    // Verifica se o erro ocorreu na UART do DWIN (USART2)
+    if (huart->Instance == USART2)
+    {
+        // ADICIONAMOS UM LOG PARA SABER QUAL ERRO ACONTECEU
+        // Os códigos de erro estão definidos em stm32c0xx_hal_uart.h (HAL_UART_ERROR_...)
+        printf("\r\n!!! ERRO NA UART DO DWIN! Codigo: 0x%u !!!\r\n\r\n", huart->ErrorCode);
+        DWIN_Driver_HandleError(huart);
+    }
+}
 
 
 /* USER CODE BEGIN 1 */

@@ -1,104 +1,128 @@
-/*******************************************************************************
- * @file        rtc_driver.c
- * @brief       Driver de abstração para o periférico RTC (Real-Time Clock).
- * @details     Este módulo fornece uma interface simplificada para as funções
- * do RTC da HAL, além de utilitários para converter o formato
- * de data/hora do hardware para o padrão Unix Timestamp e vice-versa.
- ******************************************************************************/
+/**
+  ******************************************************************************
+  * @file           : rtc_driver.c
+  * @brief          : Módulo para gerenciamento do Real-Time Clock (RTC).
+  * Este módulo encapsula a inicialização, atualização periódica
+  * no display e o tratamento de eventos DWIN para ajuste de hora.
+  ******************************************************************************
+  */
 
 #include "rtc_driver.h"
-#include "rtc.h"
-#include <time.h> 
+#include "dwin_driver.h" // Necessário para enviar dados para o display
+#include <stdio.h>       // Para sprintf e sscanf
+#include <string.h>      // Para memcpy
 
-extern RTC_HandleTypeDef hrtc;
+// --- Variáveis Estáticas do Módulo (privadas) ---
 
-//==============================================================================
-// Implementação das Funções Públicas
-//==============================================================================
+// Ponteiro para o handle do RTC, guardado localmente após a inicialização
+static RTC_HandleTypeDef* s_hrtc = NULL;
 
-// Inicializa o driver do RTC (função de verificação).
-HAL_StatusTypeDef RTC_Driver_Init(void)
+// Buffers para as strings de data e hora formatadas
+static char s_time_buffer[9]; // Formato "HH:MM:SS" + '\0'
+static char s_date_buffer[9]; // Formato "DD/MM/YY" + '\0'
+
+// Variável para controlar o tempo de atualização no display (1 segundo)
+static uint32_t s_last_update_tick = 0;
+
+
+/**
+ * @brief Inicializa o driver do RTC com a data e hora padrão.
+ * @param hrtc Ponteiro para a estrutura do HAL RTC (gerada pelo CubeMX).
+ */
+void RTC_Driver_Init(RTC_HandleTypeDef* hrtc)
 {
-    RTC_TimeTypeDef sTime;
-    // Apenas verifica se o RTC está acessível lendo a hora atual.
-    return HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-}
-
-// Obtém a data e a hora atuais do RTC.
-HAL_StatusTypeDef RTC_Driver_GetDateTime(RTC_TimeTypeDef *sTime, RTC_DateTypeDef *sDate)
-{
-    if (HAL_RTC_GetTime(&hrtc, sTime, RTC_FORMAT_BIN) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    if (HAL_RTC_GetDate(&hrtc, sDate, RTC_FORMAT_BIN) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    return HAL_OK;
-}
-
-// Ajusta a data e a hora do RTC.
-HAL_StatusTypeDef RTC_Driver_SetDateTime(RTC_TimeTypeDef *sTime, RTC_DateTypeDef *sDate)
-{
-    if (HAL_RTC_SetTime(&hrtc, sTime, RTC_FORMAT_BIN) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    if (HAL_RTC_SetDate(&hrtc, sDate, RTC_FORMAT_BIN) != HAL_OK)
-    {
-        return HAL_ERROR;
-    }
-    return HAL_OK;
-}
-
-// Lê a data e a hora do RTC e converte para Unix Timestamp.
-uint32_t RTC_Driver_GetUnixTimestamp(void)
-{
-    RTC_TimeTypeDef sTime;
-    RTC_DateTypeDef sDate;
-    RTC_Driver_GetDateTime(&sTime, &sDate);
-
-    struct tm timeinfo = {0};
-
-    // Converte do formato do RTC da ST para o formato da struct tm
-    // tm_year é o número de anos desde 1900. O RTC da ST é desde 2000.
-    timeinfo.tm_year = sDate.Year + 100;
-    // tm_mon é de 0 a 11. O RTC da ST é de 1 a 12.
-    timeinfo.tm_mon  = sDate.Month - 1;
-    timeinfo.tm_mday = sDate.Date;
-    timeinfo.tm_hour = sTime.Hours;
-    timeinfo.tm_min  = sTime.Minutes;
-    timeinfo.tm_sec  = sTime.Seconds;
-
-    // mktime converte a estrutura 'tm' local em um timestamp.
-    time_t timestamp = mktime(&timeinfo);
-
-    return (uint32_t)timestamp;
-}
-
-// Recebe um Unix Timestamp e ajusta o relógio do RTC.
-HAL_StatusTypeDef RTC_Driver_SetUnixTimestamp(uint32_t timestamp)
-{
-    time_t raw_time = timestamp;
-    struct tm *timeinfo = gmtime(&raw_time);
+    s_hrtc = hrtc;
 
     RTC_TimeTypeDef sTime = {0};
     RTC_DateTypeDef sDate = {0};
 
-    sTime.Hours   = timeinfo->tm_hour;
-    sTime.Minutes = timeinfo->tm_min;
-    sTime.Seconds = timeinfo->tm_sec;
-    sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-    sTime.StoreOperation = RTC_STOREOPERATION_RESET;
 
-    sDate.Date    = timeinfo->tm_mday;
-    // Conversão inversa de tm_mon (0-11) para o formato do RTC (1-12)
-    sDate.Month   = timeinfo->tm_mon + 1;
-    // Conversão inversa de tm_year (anos desde 1900) para o formato do RTC (anos desde 2000)
-    sDate.Year    = timeinfo->tm_year - 100;
-    // tm_wday é 0(Dom)-6. O RTC da ST é 1(Seg)-7. Ajuste para o domingo.
-    sDate.WeekDay = (timeinfo->tm_wday == 0) ? 7 : timeinfo->tm_wday;
+    sTime.Hours = 0;
+    sTime.Minutes = 0;
+    sTime.Seconds = 0;
+    HAL_RTC_SetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
 
-    return RTC_Driver_SetDateTime(&sTime, &sDate);
+
+    sDate.Date = 8;
+    sDate.Month = RTC_MONTH_SEPTEMBER;
+    sDate.Year = 25;
+    sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
+    HAL_RTC_SetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
+	
+	printf("RTC Driver inicializado.\r\n");
+}
+
+/**
+ * @brief Processa as tarefas periódicas do RTC.
+ * Deve ser chamada continuamente no loop principal (while(1)).
+ * Esta função atualiza o display DWIN com a hora/data a cada segundo.
+ */
+void RTC_Driver_Process(void)
+{
+    if (HAL_GetTick() - s_last_update_tick >= 1000)
+    {
+        s_last_update_tick = HAL_GetTick();
+
+        RTC_TimeTypeDef sTime = {0};
+        RTC_DateTypeDef sDate = {0};
+
+        HAL_RTC_GetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
+        HAL_RTC_GetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
+
+        // Formata as strings de hora e data
+        sprintf(s_time_buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+        sprintf(s_date_buffer, "%02d/%02d/%02d", sDate.Date, sDate.Month, sDate.Year);
+
+        // Envia as strings para os VPs corretos no display DWIN
+        DWIN_Driver_WriteString(HORA_SISTEMA, s_time_buffer, 8);
+        DWIN_Driver_WriteString(DATA_SISTEMA, s_date_buffer, 8);
+    }
+}
+
+/**
+ * @brief Manipula um evento DWIN para ajuste de hora.
+ * A função recebe o pacote de dados brutos e é responsável por interpretá-lo,
+ * extraindo a string de hora e atualizando o hardware do RTC.
+ * @param rx_buffer O buffer de dados brutos recebido do DWIN.
+ * @param rx_len O comprimento do buffer de dados brutos.
+ */
+void Set_Just_Time(const uint8_t* rx_buffer, uint16_t rx_len)
+{
+    char time_str_safe[16];
+    int hours, minutes, seconds;
+
+    // 1. Lógica de PARSING: Este módulo sabe como interpretar o pacote DWIN
+    if (rx_len > 9) {
+        // O texto da hora começa no 10º byte (índice 9)
+        size_t text_len = rx_len - 9;
+        if (text_len > sizeof(time_str_safe) - 1) {
+            text_len = sizeof(time_str_safe) - 1;
+        }
+        memcpy(time_str_safe, &rx_buffer[9], text_len);
+        time_str_safe[text_len] = '\0';
+
+        // 2. Lógica de NEGÓCIO: Converter a string e atualizar o RTC
+        if (sscanf(time_str_safe, "%d:%d:%d", &hours, &minutes, &seconds) == 3)
+        {
+            RTC_TimeTypeDef new_time = {0};
+            new_time.Hours   = hours;
+            new_time.Minutes = minutes;
+            new_time.Seconds = seconds;
+
+            if (HAL_RTC_SetTime(s_hrtc, &new_time, RTC_FORMAT_BIN) == HAL_OK)
+            {
+                // Força a atualização imediata no display no próximo ciclo de Process()
+                s_last_update_tick = 0; 
+                printf("RTC atualizado com sucesso para: %s\r\n", time_str_safe);
+            }
+            else
+            {
+                printf("Falha ao configurar o RTC via HAL.\r\n");
+            }
+        }
+        else
+        {
+             printf("RTC Driver: Falha ao converter a string DWIN '%s'.\r\n", time_str_safe);
+        }
+    }
 }

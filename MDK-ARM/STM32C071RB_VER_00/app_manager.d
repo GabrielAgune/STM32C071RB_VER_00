@@ -49,4 +49,5 @@ stm32c071rb_ver_00/app_manager.o: ..\Core\Src\Application\app_manager.c \
   ..\Core\Inc\Modules\scale_filter.h \
   ..\Core\Inc\Application\interface_usuario.h \
   ..\Core\Inc\Application\app_eventos.h \
-  ..\Core\Inc\Application\cli_driver.h ..\Core\Inc\Drivers\rtc_driver.h
+  ..\Core\Inc\Application\cli_driver.h ..\Core\Inc\Drivers\rtc_driver.h \
+  ..\Core\Inc\Application\controller.h
