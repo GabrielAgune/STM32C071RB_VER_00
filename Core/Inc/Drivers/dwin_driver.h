@@ -166,6 +166,7 @@ void DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size);
 void DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max_len);
 void DWIN_Driver_HandleRxEvent(uint16_t size);
 void DWIN_Driver_HandleError(UART_HandleTypeDef *huart);
-
+bool DWIN_Driver_IsTxBusy(void);
+void DWIN_Driver_HandleTxCplt(void);
 
 #endif // __DWIN_DRIVER_H

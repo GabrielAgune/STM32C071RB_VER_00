@@ -37,4 +37,5 @@ stm32c071rb_ver_00/retarget.o: ..\Core\Src\Application\retarget.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
-  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h
+  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
+  ..\Core\Inc\Application\cli_driver.h

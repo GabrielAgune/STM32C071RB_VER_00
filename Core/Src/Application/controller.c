@@ -119,15 +119,32 @@ void Process_Controller(void)
 
 static void Lidar_Com_Entrada_De_Senha(const uint8_t* dwin_data, uint16_t len)
 {
-    if (len <= 6) return;
+    if (len <= 7) return; // Precisa ter pelo menos o cabeçalho E o byte de data_len
 
+    // O byte no índice 6 nos diz quantos bytes de dados REAIS existem.
+    uint8_t tamanho_senha_real = dwin_data[6]; 
+    
     char senha_digitada[MAX_SENHA_LEN + 1] = {0};
-    uint8_t tamanho_senha = len - 6; // Para login, não há byte de tamanho
-    if (tamanho_senha > MAX_SENHA_LEN) tamanho_senha = MAX_SENHA_LEN;
-    memcpy(senha_digitada, &dwin_data[6], tamanho_senha);
-    for (int i = strlen(senha_digitada) - 1; i >= 0; i--) {
-        if (senha_digitada[i] <= ' ') senha_digitada[i] = '\0';
-        else break;
+
+    // Garante que não copiemos mais do que o buffer permite ou do que o pacote contém
+    uint8_t bytes_no_pacote = len - 7;
+    uint8_t tamanho_a_copiar = tamanho_senha_real;
+
+    if (tamanho_a_copiar > MAX_SENHA_LEN) {
+        tamanho_a_copiar = MAX_SENHA_LEN;
+    }
+    if (tamanho_a_copiar > bytes_no_pacote) {
+        tamanho_a_copiar = bytes_no_pacote; // Proteção contra frame mal formado
+    }
+
+    memcpy(senha_digitada, &dwin_data[7], tamanho_a_copiar);
+    senha_digitada[tamanho_a_copiar] = '\0'; // Garante terminação nula
+
+    for (int i = 0; i < tamanho_a_copiar; i++) {
+         if (senha_digitada[i] <= ' ' || senha_digitada[i] == (char)0xFF) {
+            senha_digitada[i] = '\0';
+            break;
+         }
     }
 
     char senha_armazenada[MAX_SENHA_LEN + 1] = {0};

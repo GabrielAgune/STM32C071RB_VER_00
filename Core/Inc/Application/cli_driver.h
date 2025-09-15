@@ -1,26 +1,45 @@
-#ifndef __CLI_DRIVER_H
-#define __CLI_DRIVER_H
+// Core/Inc/Application/cli_driver.h
+
+#ifndef CLI_DRIVER_H
+#define CLI_DRIVER_H
 
 #include "stm32c0xx_hal.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 /**
- * @brief Inicializa a Command Line Interface (CLI).
- * @param debug_huart Ponteiro para o handle da UART de debug (normalmente USART2).
+ * @brief Inicializa o driver CLI com a UART de depuração.
  */
 void CLI_Init(UART_HandleTypeDef* debug_huart);
 
 /**
- * @brief Processa um comando pendente na CLI.
- * Deve ser chamada repetidamente no laço principal do programa.
+ * @brief Processa comandos CLI pendentes (deve ser chamado no super-loop).
  */
 void CLI_Process(void);
 
 /**
- * @brief Entrega um caractere recebido da UART para o buffer da CLI.
- * Deve ser chamada pela interrupção de recepção da UART.
- * @param received_char O caractere recebido.
+ * @brief Callback chamado pela ISR da UART RX para cada caractere recebido.
  */
 void CLI_Receive_Char(uint8_t received_char);
 
-#endif // __CLI_DRIVER_H
+/**
+ * @brief Função de transmissão de baixo nível para retarget.c (printf).
+ * Adiciona um caractere ao FIFO de transmissão e inicia a ISR de TX se necessário.
+ * Esta função é ATÔMICA (segura contra interrupções).
+ */
+void CLI_Printf_Transmit(uint8_t ch);
+
+/**
+ * @brief Callback interno chamado pela ISR HAL_UART_TxCpltCallback quando a TX da UART1 termina.
+ * Esta é a "engine" de esvaziamento do FIFO.
+ */
+void CLI_HandleTxCplt(void);
+
+/**
+ * @brief Verifica se o FIFO de TX do CLI ainda tem dados para enviar.
+ * @return true se o FIFO não estiver vazio ou a UART estiver ativamente enviando.
+ */
+bool CLI_IsTxBusy(void);
+
+
+#endif // CLI_DRIVER_H

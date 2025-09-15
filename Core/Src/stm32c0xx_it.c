@@ -205,15 +205,38 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART2) // É a UART do DWIN?
+    {
+        DWIN_Driver_HandleTxCplt(); // Informa ao driver que a TX terminou
+    }
+		
+    if (huart->Instance == USART1) // É a UART do CLI?
+    {
+        CLI_HandleTxCplt(); // (Você precisará criar esta função para o CLI também)
+    }
+}
+
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-    // Verifica se o erro ocorreu na UART do DWIN (USART2)
-    if (huart->Instance == USART2)
+    if (huart->Instance == USART2) // DWIN
     {
-        // ADICIONAMOS UM LOG PARA SABER QUAL ERRO ACONTECEU
-        // Os códigos de erro estão definidos em stm32c0xx_hal_uart.h (HAL_UART_ERROR_...)
-        printf("\r\n!!! ERRO NA UART DO DWIN! Codigo: 0x%u !!!\r\n\r\n", huart->ErrorCode);
-        DWIN_Driver_HandleError(huart);
+        // Se tivermos um erro de Overrun (mais comum)
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
+        {
+            DWIN_Driver_HandleError(huart);
+        }
+    }
+		
+    if (huart->Instance == USART1) // CLI
+    {
+        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
+        {
+            // Reinicia o listener do CLI
+            HAL_UART_AbortReceive_IT(huart);
+            HAL_UART_Receive_IT(&huart1, &cli_rx_buffer, 1);
+        }
     }
 }
 

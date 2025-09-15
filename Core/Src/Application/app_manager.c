@@ -1,9 +1,11 @@
 /*******************************************************************************
  * @file        app_manager.c
  * @brief       Gerenciador central da aplicação com arquitetura de tarefas.
- * @version     2.0 (Refatorado para multitarefa cooperativa explícita)
+ * @version     2.1 (Refatorado para FSM cooperativa de TX de display por Dev STM)
  * @details     Este módulo orquestra a inicialização e o processamento de
  * todas as outras partes do sistema de forma não-bloqueante.
+ * A atualização de dados do display (Freq, Temp, Escala) é feita por uma
+ * máquina de estados (FSM) para serializar comandos TX assíncronos.
  ******************************************************************************/
 
 #include "app_manager.h"
@@ -22,17 +24,42 @@ static FreqData_t s_freq_data;
 static float s_temperatura_mcu = 0.0f;
 
 //================================================================================
+// Definições da FSM de Atualização do Display (NOVO)
+//================================================================================
+
+/**
+ * @brief Estados da máquina de estados (FSM) de atualização do display.
+ * Gerencia o envio sequencial e não-bloqueante de dados para a UART.
+ */
+typedef enum {
+    TASK_DISPLAY_IDLE,              // 0: Ocioso, aguardando timer de 1000ms
+    TASK_DISPLAY_CALC_ALL,          // 1: Timer estourou, calcular todos os valores (Temp, Freq, Escala A)
+    TASK_DISPLAY_SEND_FREQ,         // 2: Aguardando UART livre para enviar Frequência
+    TASK_DISPLAY_SEND_ESCALA_A,     // 3: Aguardando UART livre para enviar Escala A
+    TASK_DISPLAY_SEND_TEMP          // 4: Aguardando UART livre para enviar Temperatura
+} TaskDisplay_State_t;
+
+static TaskDisplay_State_t s_display_state = TASK_DISPLAY_IDLE;
+static uint32_t s_display_last_tick = 0;
+static const uint32_t DISPLAY_UPDATE_INTERVAL_MS = 1000;
+
+//================================================================================
 // Protótipos das Tarefas (Funções Privadas)
 //================================================================================
+
 static void Task_Handle_High_Frequency_Polling(void);
 static void Task_Handle_Scale(void);
-static void Task_Handle_Frequency(void);
-static void Task_Handle_Temperature(void);
+static void Task_Update_Display_FSM(void); // NOVA FSM (substitui Freq e Temp)
+
+// Protótipo da função auxiliar (movida para cima)
+static float Calcular_Escala_A(uint32_t frequencia_hz);
 
 
 //================================================================================
 // Implementação da Função de Inicialização
 //================================================================================
+
+// ... (Função App_Manager_Init() permanece exatamente como no seu original) ...
 void App_Manager_Init(void)
 {
     // Drivers
@@ -49,9 +76,7 @@ void App_Manager_Init(void)
     Gerenciador_Config_Init(&hcrc);
     printf("3. Gerenciador de Configuracoes... ");
     if (!Gerenciador_Config_Validar_e_Restaurar()) {
-        // Se a escrita falhar, a mensagem de erro já é impressa dentro do módulo
         printf("[FALHA]\r\nERRO FATAL: Nao foi possivel carregar/restaurar configuracoes.\r\n");
-        // O sistema continua, mas pode não funcionar como esperado.
     } else {
         printf("[OK]\r\n");
     }
@@ -65,11 +90,11 @@ void App_Manager_Init(void)
     
     // Inicializa o filtro da balança com uma tara inicial
     printf("5. Executando tara da balanca (pode demorar alguns segundos)...\r\n");
-    int32_t offset_inicial = ADS1232_Tare(); // Esta função é bloqueante
+    int32_t offset_inicial = ADS1232_Tare(); // Esta função é bloqueante (OK, é na INIT)
     ScaleFilter_Init(&s_scale_filter, offset_inicial);
     printf("   ... Tara concluida.\r\n");
     
-		s_temperatura_mcu = TempSensor_GetTemperature();
+		s_temperatura_mcu = TempSensor_GetTemperature(); // Leitura inicial
     printf("Temperatura inicial: %.2f C\r\n", s_temperatura_mcu);
 		
 		DWIN_Driver_Init(&huart2, Controller_DwinCallback);
@@ -79,15 +104,27 @@ void App_Manager_Init(void)
     printf("\r\n>>> INICIALIZACAO COMPLETA <<<\r\n\r\n");
 }
 
+
 //================================================================================
-// Implementação do Despachante de Tarefas (Super-Loop)
+// Implementação do Despachante de Tarefas (Super-Loop) - REATORADO
 //================================================================================
+
+/**
+ * @brief Loop de processo principal. Chama todas as tarefas cooperativas.
+ * Esta função NUNCA deve bloquear.
+ */
 void App_Manager_Process(void)
 {
+    // 1. Tarefas de alta frequência (processamento de buffers de ISR e lógica rápida)
     Task_Handle_High_Frequency_Polling();
+    
+    // 2. Tarefa da Balança (leitura de ADC) - 100ms
     Task_Handle_Scale();
-    Task_Handle_Frequency();
-		Task_Handle_Temperature();
+    
+    // 3. FSM de Atualização de Display (Freq, Escala A, Temp) - 1000ms
+    Task_Update_Display_FSM();
+    
+    // 4. Outras tarefas periódicas (ex: RTC)
     RTC_Driver_Process();
 }
 
@@ -97,17 +134,19 @@ void App_Manager_Process(void)
 
 /**
  * @brief Tarefa para módulos que precisam ser chamados em todas as iterações do loop.
+ * (Função original mantida)
  */
 static void Task_Handle_High_Frequency_Polling(void)
 {
-    DWIN_Driver_Process(); // Processa bytes recebidos da UART do display
-    CLI_Process();         // Processa comandos da interface de linha de comando
+    DWIN_Driver_Process(); // Processa bytes recebidos da UART do display (RX)
+    CLI_Process();         // Processa comandos da interface de linha de comando (UART1 RX)
     Servos_Process();      // Atualiza a máquina de estados dos servos
-    Process_Controller();         // Executa a máquina de estados da UI (splash screen, etc.)
+    Process_Controller();  // Executa a máquina de estados da UI (splash screen, etc.)
 }
 
 /**
  * @brief Tarefa que gere a lógica da balança. Executa a cada 100ms.
+ * (Função original mantida - esta tarefa não usa TX, é segura)
  */
 static void Task_Handle_Scale(void)
 {
@@ -122,6 +161,9 @@ static void Task_Handle_Scale(void)
     }
 }
 
+/**
+ * @brief Função auxiliar para cálculo (Função original mantida)
+ */
 static float Calcular_Escala_A(uint32_t frequencia_hz)
 {
     float escala_a;
@@ -136,54 +178,100 @@ static float Calcular_Escala_A(uint32_t frequencia_hz)
     return escala_a;
 }
 
+
 /**
- * @brief Tarefa que gere a medição de frequência e temperatura. Executa a cada 500ms.
+ * @brief [NOVA FSM] Tarefa de atualização dos VPs do Display (Freq, Escala, Temp).
+ * Substitui as antigas Task_Handle_Frequency() e Task_Handle_Temperature().
+ * Esta FSM garante que os comandos UART TX sejam enviados um de cada vez,
+ * cooperando com o driver DWIN e nunca bloqueando o loop principal.
  */
-static void Task_Handle_Frequency(void)
+static void Task_Update_Display_FSM(void)
 {
-    static uint32_t ultimo_tick = 0;
-    if (HAL_GetTick() - ultimo_tick >= 1000)
+    if (s_display_state == TASK_DISPLAY_IDLE)
     {
-        ultimo_tick = HAL_GetTick();
-        
-
-        uint32_t contagem_pulsos = Frequency_Get_Pulse_Count();
-        Frequency_Reset(); 
-
-        float escala_a = 0.0f;
-        if (s_temperatura_mcu > 0) {
-            escala_a = Calcular_Escala_A(contagem_pulsos);
+        if (HAL_GetTick() - s_display_last_tick < DISPLAY_UPDATE_INTERVAL_MS)
+        {
+            return; // Ainda não é hora
         }
 
-        s_freq_data.pulsos = contagem_pulsos;
-        s_freq_data.escala_a = escala_a;
-				
-        int32_t frequencia_para_dwin = (int32_t)((s_freq_data.pulsos / 1000.0f) * 10.0f);
-        DWIN_Driver_WriteInt32(FREQUENCIA, frequencia_para_dwin);
-
-        int32_t escala_a_para_dwin = (int32_t)(s_freq_data.escala_a * 10.0f);
-        DWIN_Driver_WriteInt32(ESCALA_A, escala_a_para_dwin);
+        if (DWIN_Driver_IsTxBusy())
+        {
+             s_display_last_tick = HAL_GetTick(); // Reinicia o timer mesmo se pulamos o ciclo
+             return; // Driver ocupado com outra coisa, não sobrecarregue.
+        }
         
-	}
-}
+        // Driver livre, podemos iniciar nosso ciclo.
+        s_display_last_tick = HAL_GetTick();  
+        s_display_state = TASK_DISPLAY_CALC_ALL; 
+    }
 
 
-static void Task_Handle_Temperature(void) {
-    static uint32_t ultimo_tick = 0;
-    if (HAL_GetTick() - ultimo_tick >= 1000) { 
-        ultimo_tick = HAL_GetTick();
-        s_temperatura_mcu = TempSensor_GetTemperature();
+    if (s_display_state != TASK_DISPLAY_CALC_ALL && s_display_state != TASK_DISPLAY_IDLE)
+    {
+        if (DWIN_Driver_IsTxBusy())
+        {
+            // Esperando o comando anterior (FREQ ou ESCALA) terminar de ser enviado pela ISR
+            return; 
+        }
+    }
 
-        // Converte o float para um inteiro com uma casa decimal (ex: 25.7f se torna 257)
-        int16_t temperatura_para_dwin = (int16_t)(s_temperatura_mcu * 10.0f);
+    // --- Passo 3: Execução dos Estados da FSM ---
+    switch (s_display_state)
+    {
+        case TASK_DISPLAY_CALC_ALL:
+            // (Lógica de cálculo permanece a mesma)
+            s_freq_data.pulsos = Frequency_Get_Pulse_Count();
+            Frequency_Reset(); 
+            if (s_temperatura_mcu > 0) {
+                s_freq_data.escala_a = Calcular_Escala_A(s_freq_data.pulsos);
+            } else {
+                s_freq_data.escala_a = 0.0f;
+            }
+            s_temperatura_mcu = TempSensor_GetTemperature();
+            
+            s_display_state = TASK_DISPLAY_SEND_FREQ;
+            // Fall-through (proposital) para enviar o primeiro comando imediatamente
+
+        case TASK_DISPLAY_SEND_FREQ:
+        {
+            int32_t frequencia_para_dwin = (int32_t)((s_freq_data.pulsos / 1000.0f) * 10.0f);
+            DWIN_Driver_WriteInt32(FREQUENCIA, frequencia_para_dwin); 
+            s_display_state = TASK_DISPLAY_SEND_ESCALA_A;
+            break; // Retorna ao super-loop (espera o TxCplt)
+        }
+
+        case TASK_DISPLAY_SEND_ESCALA_A:
+        {
+            int32_t escala_a_para_dwin = (int32_t)(s_freq_data.escala_a * 10.0f);
+            DWIN_Driver_WriteInt32(ESCALA_A, escala_a_para_dwin);
+            s_display_state = TASK_DISPLAY_SEND_TEMP;
+            break; // Retorna ao super-loop (espera o TxCplt)
+        }
+
+        case TASK_DISPLAY_SEND_TEMP:
+        {
+            int16_t temperatura_para_dwin = (int16_t)(s_temperatura_mcu * 10.0f);
+            DWIN_Driver_WriteInt(TEMP_SAMPLE, temperatura_para_dwin);
+            s_display_state = TASK_DISPLAY_IDLE; 
+            break; // Retorna ao super-loop (sequência terminada)
+        }
         
-        // Envia o valor inteiro para o display
-        DWIN_Driver_WriteInt(TEMP_SAMPLE, temperatura_para_dwin);
+        case TASK_DISPLAY_IDLE:
+        default:
+             break; // Estado ocioso, já tratado no Passo 1.
     }
 }
 
+
+
+/* NOTA: As funções antigas Task_Handle_Frequency() e Task_Handle_Temperature() 
+   foram REMOVIDAS e substituídas pela FSM Task_Update_Display_FSM() acima.
+*/
+
+
 //================================================================
 // Implementação dos Handlers (chamados pela UI)
+// (Funções originais mantidas - Sem alteração)
 //================================================================
 
 void App_Manager_Handle_Start_Process(void) {
@@ -209,5 +297,6 @@ void App_Manager_GetFreqData(FreqData_t* data) {
 }
 
 float App_Manager_GetTemperature(void) {
-    return TempSensor_GetTemperature();
+    // Retorna o último valor lido pela FSM, em vez de ler o sensor aqui
+    return s_temperatura_mcu; 
 }
