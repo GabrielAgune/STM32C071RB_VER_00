@@ -71,5 +71,6 @@ bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice);
 bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo);
 bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero);
 bool Gerenciador_Config_Set_Cal_A(float gain, float zero);
+void Gerenciador_Config_Run_FSM(void);
 
 #endif // GERENCIADOR_CONFIGURACOES_H

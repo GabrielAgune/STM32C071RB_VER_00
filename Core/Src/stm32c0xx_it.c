@@ -1,4 +1,3 @@
-
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -21,10 +20,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32c0xx_it.h"
-#include "retarget.h"
 #include "dwin_driver.h"
 #include "cli_driver.h"
 #include "servo_controle.h"
+#include "ads1232_driver.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -60,10 +59,14 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim14;
+extern DMA_HandleTypeDef hdma_usart1_tx;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart2_rx;
+extern DMA_HandleTypeDef hdma_usart2_tx;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
-uint8_t cli_rx_buffer;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -131,7 +134,6 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	Servos_Tick_ms();
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -145,6 +147,63 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32c0xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles DMA1 channel 1 interrupt.
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel 2 and channel 3 interrupts.
+  */
+void DMA1_Channel2_3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel2_3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  HAL_DMA_IRQHandler(&hdma_usart2_rx);
+  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel2_3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMAMUX1, DMA1 Channel 4 and 5.
+  */
+void DMAMUX1_DMA1_CH4_5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMAMUX1_DMA1_CH4_5_IRQn 0 */
+
+  /* USER CODE END DMAMUX1_DMA1_CH4_5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
+  /* USER CODE BEGIN DMAMUX1_DMA1_CH4_5_IRQn 1 */
+
+  /* USER CODE END DMAMUX1_DMA1_CH4_5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM14 global interrupt.
+  */
+void TIM14_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM14_IRQn 0 */
+
+  /* USER CODE END TIM14_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim14);
+  /* USER CODE BEGIN TIM14_IRQn 1 */
+
+  /* USER CODE END TIM14_IRQn 1 */
+}
 
 /**
   * @brief This function handles USART1 interrupt.
@@ -174,73 +233,89 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 1 */
 }
 
-/**
-  * @brief  Callback de evento de recepção da UART (usado para ReceiveToIdle).
-  * @param  huart: ponteiro para a estrutura UART_HandleTypeDef.
-  * @param  Size: quantidade de dados recebidos.
-  */
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+void EXTI4_15_IRQHandler(void)
 {
-    // Este callback é AGORA APENAS para a USART2 (DWIN)
-    if (huart->Instance == USART2)
-    {
-        DWIN_Driver_HandleRxEvent(Size);
-    }
+  /* USER CODE BEGIN EXTI4_15_IRQn 0 */
+
+  /* USER CODE END EXTI4_15_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5); 
+  /* USER CODE BEGIN EXTI4_15_IRQn 1 */
+
+  /* USER CODE END EXTI4_15_IRQn 1 */
 }
 
-/**
-  * @brief  Callback de recepção completa da UART (usado para Receive_IT).
-  * @param  huart: ponteiro para a estrutura UART_HandleTypeDef.
-  */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-     // Apenas para a USART1 (CLI) que usa Receive_IT de 1 byte
-    if (huart->Instance == USART1)
-    {
-        // 1. Passa o caractere recebido para a lógica da CLI
-        CLI_Receive_Char(cli_rx_buffer);
-        
-        // 2. Re-arma a interrupção para escutar o próximo caractere
-        HAL_UART_Receive_IT(&huart1, &cli_rx_buffer, 1);
-    }
+  /* USER CODE BEGIN PeriodElapsedCallback 0 */
+
+  /* USER CODE END PeriodElapsedCallback 0 */
+  if (htim->Instance == TIM14) {
+
+    // Esta é a nossa substituição de 1ms para a tarefa do superloop.
+    // Agora ela roda em alta prioridade de hardware, de forma determinística.
+    Servos_Tick_ms(); 
+
+  }
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if (huart->Instance == USART2) // É a UART do DWIN?
+    if (huart->Instance == USART1) // CLI (UART1)
     {
-        DWIN_Driver_HandleTxCplt(); // Informa ao driver que a TX terminou
+        CLI_HandleTxCplt(huart); // (Avisa ao driver CLI que o DMA TX está livre)
     }
-		
-    if (huart->Instance == USART1) // É a UART do CLI?
+    else if (huart->Instance == USART2) // DWIN (UART2)
     {
-        CLI_HandleTxCplt(); // (Você precisará criar esta função para o CLI também)
+        DWIN_Driver_HandleTxCplt(huart); // (Avisa ao driver DWIN que o DMA TX está livre)
     }
 }
 
+/**
+  * @brief  Callback de Recepção UART (RX Complete) - Apenas para CLI (1 byte IT)
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART1) // CLI (UART1)
+    {
+        CLI_HandleRxCplt(huart); // (Processa 1 byte de RX do CLI e rearma o IT)
+    }
+}
+
+
+/**
+  * @brief  Callback de Evento de Recepção UART (RX Event) - Apenas para DWIN (Idle Line + DMA)
+  * Chamado quando o DMA termina de receber OU a linha fica ociosa.
+  */
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+    if (huart->Instance == USART2) // DWIN (UART2)
+    {
+        DWIN_Driver_HandleRxEvent(huart, Size); // (Handler V6.0 / V8.0)
+    }
+}
+
+/**
+  * @brief  Callback de Erro UART.
+  */
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-    if (huart->Instance == USART2) // DWIN
-    {
-        // Se tivermos um erro de Overrun (mais comum)
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
-        {
-            DWIN_Driver_HandleError(huart);
-        }
-    }
-		
     if (huart->Instance == USART1) // CLI
     {
-        if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE))
-        {
-            // Reinicia o listener do CLI
-            HAL_UART_AbortReceive_IT(huart);
-            HAL_UART_Receive_IT(&huart1, &cli_rx_buffer, 1);
-        }
+        CLI_HandleError(huart); // Delega o tratamento de erro ao driver
+    }
+    else if (huart->Instance == USART2) // DWIN
+    {
+        DWIN_Driver_HandleError(huart); // Delega o tratamento de erro ao driver
     }
 }
 
-
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == AD_DOUT_BAL_Pin) // AD_DOUT_BAL_Pin é PC5
+    {
+        Drv_ADS1232_DRDY_Callback();
+    }
+}
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

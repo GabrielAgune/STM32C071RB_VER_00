@@ -20,15 +20,16 @@
 #include "main.h"
 #include "adc.h"
 #include "crc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb.h"
 #include "gpio.h"
-
-#include "retarget.h"
 #include "app_manager.h"
+#include "retarget.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -48,7 +49,7 @@
 /* USER CODE BEGIN PM */
 
 /* USER CODE END PM */
-extern uint8_t cli_rx_buffer; 
+
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
@@ -95,6 +96,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC1_Init();
   MX_CRC_Init();
   MX_I2C1_Init();
@@ -105,11 +107,13 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USB_PCD_Init();
   MX_TIM2_Init();
+  MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 	Retarget_Init(&huart1, &huart2); 
 	App_Manager_Init();
+	HAL_TIM_Base_Start_IT(&htim14);
   /* USER CODE END 2 */
-	HAL_UART_Receive_IT(&huart1, &cli_rx_buffer, 1);
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

@@ -1,10 +1,10 @@
 /*******************************************************************************
  * @file        retarget.c
- * @brief       Redirecionamento (Retarget) da função printf para UART (NÃO-BLOQUEANTE).
- * @version     2.1 (Refatorado por Dev STM para usar TX FIFO assíncrono do CLI)
+ * @brief       Redirecionamento (Retarget) da função printf para UART (V8.1 - DMA).
+ * @version     2.1 (Refatorado por Dev STM)
  * @details     Este módulo redireciona o fputc (usado pelo printf) para o
- * driver CLI, que gerencia um buffer circular (FIFO) de transmissão
- * para garantir que chamadas printf NUNCA bloqueiem o sistema.
+ * driver CLI (CLI_Printf_Transmit), que gerencia um FIFO de TX assíncrono
+ * que alimenta a Bomba (Pump) de DMA.
  ******************************************************************************/
 
 #include "retarget.h"
@@ -35,7 +35,7 @@ void Retarget_Init(UART_HandleTypeDef* debug_huart, UART_HandleTypeDef* dwin_hua
 
 
 //==============================================================================
-// Reimplementação de Funções da Biblioteca C Padrão (REFATORADO)
+// Reimplementação de Funções da Biblioteca C Padrão (REFATORADO V8.1)
 //==============================================================================
 
 /**
@@ -45,16 +45,18 @@ int fputc(int ch, FILE *f)
 {
     uint8_t c = (uint8_t)ch;
 
-    // Ignora escritas destinadas ao DWIN (printf não deve ir para o DWIN)
+    // printf() SÓ deve ir para o console de DEBUG (UART1).
     if (g_retarget_dest == TARGET_DEBUG)
     {
         if (s_debug_huart != NULL)
         {
+            // Substitui o HAL_UART_Transmit(..., HAL_MAX_DELAY) por:
             // Chama a função atômica do driver CLI que enfileira o byte no FIFO
             // e retorna imediatamente.
             CLI_Printf_Transmit(c);
         }
     }
+    // O caso TARGET_DWIN é removido (não é seguro enviar printf() cru para o DWIN).
     
     return ch;
 }

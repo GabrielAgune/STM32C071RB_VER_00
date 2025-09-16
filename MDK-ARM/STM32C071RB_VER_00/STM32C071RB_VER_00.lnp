@@ -4,6 +4,7 @@
 "stm32c071rb_ver_00\gpio.o"
 "stm32c071rb_ver_00\adc.o"
 "stm32c071rb_ver_00\crc.o"
+"stm32c071rb_ver_00\dma.o"
 "stm32c071rb_ver_00\i2c.o"
 "stm32c071rb_ver_00\rtc.o"
 "stm32c071rb_ver_00\tim.o"

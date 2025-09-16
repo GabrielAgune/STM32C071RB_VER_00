@@ -1,249 +1,385 @@
 /*******************************************************************************
  * @file        gerenciador_configuracoes.c
- * @brief       Gerencia o armazenamento e a recuperação de configurações na EEPROM.
- * @details     Este módulo é responsável por salvar, ler e validar a estrutura
- * de configurações da aplicação, usando um CRC32 para garantir a
- * integridade e uma estratégia de 3 cópias (primária + 2 backups)
- * para garantir a redundância e recuperação de dados.
+ * @brief       Gerencia o armazenamento e recuperação de configurações na EEPROM.
+ * @version     8.2 (Refatorado por Dev STM - Arquitetura Assíncrona Não-Bloqueante)
+ * @details     Mantém uma cópia da configuração em cache na RAM para leitura rápida.
+ * As operações de escrita são assíncronas:
+ * 1. Funções 'Set' apenas atualizam o cache da RAM e definem um flag 'dirty'.
+ * 2. A FSM (Run_FSM) detecta o flag e inicia a escrita NÃO-BLOQUEANTE (DMA).
+ * 3. Mantém a lógica robusta de 3 cópias (Primária, BKP1, BKP2) + CRC32 HW.
  ******************************************************************************/
 
 #include "gerenciador_configuracoes.h"
-#include "eeprom_driver.h"
+#include "eeprom_driver.h" 
 #include "GXXX_Equacoes.h"
 #include "retarget.h"
 #include <string.h>
 #include <stdio.h>
 #include <stddef.h>
 
+//================================================================================
+// Variáveis Estáticas (Cache RAM e FSM de Armazenamento)
+//================================================================================
+
 static CRC_HandleTypeDef *s_crc_handle = NULL;
 
-static void Recalcular_E_Atualizar_CRC(Config_Aplicacao_t* config);
-static bool Salvar_Configuracao_Completa(const Config_Aplicacao_t* config);
+/**
+ * @brief CÓPIA CACHE NA RAM.
+ * Esta é a "fonte da verdade" para toda a aplicação durante o runtime.
+ * As funções 'Get' leem daqui (instantâneo).
+ * As funções 'Set' escrevem aqui (instantâneo) e definem o flag 'dirty'.
+ */
+static Config_Aplicacao_t s_config_cache;
+
+/**
+ * @brief Máquina de Estados (FSM) de Armazenamento.
+ * Gerencia o processo de escrita assíncrona em 3 cópias.
+ */
+typedef enum {
+    FSM_STORE_IDLE,
+    FSM_STORE_START_WRITE_PRIMARY,
+    FSM_STORE_WAIT_WRITE_PRIMARY,
+    FSM_STORE_START_WRITE_BKP1,
+    FSM_STORE_WAIT_WRITE_BKP1,
+    FSM_STORE_START_WRITE_BKP2,
+    FSM_STORE_WAIT_WRITE_BKP2,
+    FSM_STORE_ERROR
+} StorageFsmState_t;
+
+static struct {
+    StorageFsmState_t state;
+    volatile bool dirty;       // Definido como true pelas funções 'Set'
+    bool          is_saving;   // Flag interno da FSM para evitar reentrância
+} s_storage_fsm = { FSM_STORE_IDLE, false, false };
+
+
+//================================================================================
+// Protótipos Privados
+//================================================================================
+
+static void Recalcular_E_Atualizar_CRC_Cache(void);
 static bool Tentar_Carregar_De_Endereco(uint16_t address, Config_Aplicacao_t* config);
-static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config);
+static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config_out);
+static void Carregar_Configuracao_Padrao(void);
+
+
+//================================================================================
+// Init e FSM Principal (Chamada pelo Superloop)
+//================================================================================
 
 void Gerenciador_Config_Init(CRC_HandleTypeDef* hcrc)
 {
     s_crc_handle = hcrc;
+    s_storage_fsm.state = FSM_STORE_IDLE;
+    s_storage_fsm.dirty = false;
+    s_storage_fsm.is_saving = false;
 }
 
+/**
+ * @brief (V8.2) FSM de Armazenamento - CHAMADA NO SUPERLOOP (por app_manager.c)
+ * Executa a lógica de salvamento assíncrona.
+ */
+void Gerenciador_Config_Run_FSM(void)
+{
+    // A FSM só é executada se o flag 'dirty' for definido E não estivermos já no meio de um ciclo de salvamento.
+    if (s_storage_fsm.state == FSM_STORE_IDLE && s_storage_fsm.dirty)
+    {
+        if (EEPROM_Driver_IsBusy())
+        {
+            return; // Espera o driver I2C/DMA ficar livre
+        }
+        
+        // Marca como ocupado e limpa o flag 'dirty' (inicia o processo)
+        s_storage_fsm.is_saving = true;
+        s_storage_fsm.dirty = false; 
+        
+        // Recalcula o CRC sobre o cache da RAM antes de iniciar a escrita
+        Recalcular_E_Atualizar_CRC_Cache(); 
+        
+        printf("Storage FSM: Flag 'dirty' detectado. Iniciando salvamento assincrono das 3 copias...\r\n");
+        s_storage_fsm.state = FSM_STORE_START_WRITE_PRIMARY;
+    }
+
+    if (!s_storage_fsm.is_saving)
+    {
+        return; // Nada a fazer.
+    }
+
+    // --- Processamento da FSM de Escrita Assíncrona ---
+    
+    // (O driver EEPROM_Driver_Write_Async() retorna 'true' quando termina, 
+    // ou 'false' enquanto o DMA + Delay de Página ainda está ocupado)
+    
+    switch (s_storage_fsm.state)
+    {
+        case FSM_STORE_START_WRITE_PRIMARY:
+            // Inicia a escrita NÃO-BLOQUEANTE
+            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_PRIMARY, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
+            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_PRIMARY;
+            break;
+
+        case FSM_STORE_WAIT_WRITE_PRIMARY:
+            if (EEPROM_Driver_Write_Async_Poll()) // Esta função deve ser chamada repetidamente
+            {
+                printf("Storage FSM: Bloco Primario OK.\r\n");
+                s_storage_fsm.state = FSM_STORE_START_WRITE_BKP1; // Sucesso, vai para o BKP1
+            }
+            break;
+
+        case FSM_STORE_START_WRITE_BKP1:
+            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP1, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
+            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP1;
+            break;
+
+        case FSM_STORE_WAIT_WRITE_BKP1:
+            if (EEPROM_Driver_Write_Async_Poll())
+            {
+                printf("Storage FSM: Bloco BKP1 OK.\r\n");
+                s_storage_fsm.state = FSM_STORE_START_WRITE_BKP2; // Sucesso, vai para o BKP2
+            }
+            break;
+
+        case FSM_STORE_START_WRITE_BKP2:
+            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP2, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
+            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP2;
+            break;
+
+        case FSM_STORE_WAIT_WRITE_BKP2:
+            if (EEPROM_Driver_Write_Async_Poll())
+            {
+                printf("Storage FSM: Bloco BKP2 OK. Salvamento completo.\r\n");
+                s_storage_fsm.is_saving = false;
+                s_storage_fsm.state = FSM_STORE_IDLE; // Concluído!
+            }
+            break;
+
+        case FSM_STORE_IDLE:
+        case FSM_STORE_ERROR:
+        default:
+            // Se entrarmos em um estado de erro (ex: falha no DMA I2C), paramos a FSM
+            s_storage_fsm.is_saving = false; 
+            s_storage_fsm.dirty = true; // Marca como dirty novamente para tentar salvar no próximo ciclo
+            s_storage_fsm.state = FSM_STORE_IDLE;
+            printf("Storage FSM: ERRO DURANTE ESCRITA ASYNC!\r\n");
+            break;
+    }
+}
+
+/**
+ * @brief Valida os 3 slots da EEPROM e carrega o melhor para o cache s_config_cache.
+ * Se todos falharem, carrega os padrões de fábrica para o cache.
+ * (Esta função ainda é BLOQUEANTE, mas só roda UMA VEZ no boot em App_Manager_Init).
+ */
 bool Gerenciador_Config_Validar_e_Restaurar(void)
 {
     if (s_crc_handle == NULL) return false;
-    static Config_Aplicacao_t config_temp;
 
     printf("EEPROM Manager: Verificando integridade dos dados...\n");
 
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_PRIMARY, &config_temp))
-    {	
-				printf("EEPROM Manager: Integridade dos dados OK!\n\r");
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_PRIMARY, &s_config_cache))
+    {
+        printf("EEPROM Manager: Integridade dos dados OK (Primario)!\n\r");
+        return true; 
+    }
+    printf("EEPROM Manager: Primario corrompido. Tentando Backup 1...\n");
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP1, &s_config_cache))
+    {
+        printf("EEPROM Manager: Restaurado do Backup 1. Marcando para ressalvar...\n");
+        s_storage_fsm.dirty = true; // Marca para reescrever todos os slots
         return true;
     }
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP1, &config_temp))
+     printf("EEPROM Manager: Backup 1 corrompido. Tentando Backup 2...\n");
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP2, &s_config_cache))
     {
-        printf("EEPROM Manager: Primario corrompido. Restaurando a partir do Backup 1.\n");
-        return Salvar_Configuracao_Completa(&config_temp);
-    }
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP2, &config_temp))
-    {
-        printf("EEPROM Manager: Primario e Backup 1 corrompidos. Restaurando a partir do Backup 2.\n");
-        return Salvar_Configuracao_Completa(&config_temp);
+        printf("EEPROM Manager: Restaurado do Backup 2. Marcando para ressalvar...\n");
+        s_storage_fsm.dirty = true; // Marca para reescrever todos os slots
+        return true;
     }
 
-    printf("EEPROM Manager: ERRO FATAL! Todas as copias de dados estao corrompidas.\n");
-    return Gerenciador_Config_Forcar_Restauracao_Padrao();
+    printf("EEPROM Manager: ERRO FATAL! Todas as copias corrompidas. Carregando Fabrica.\n");
+    Carregar_Configuracao_Padrao(); // Carrega padrões na s_config_cache RAM
+    s_storage_fsm.dirty = true;   // Marca para salvar os padrões na EEPROM
+    return false; // Retorna falso para sinalizar à App que os padrões foram carregados
 }
 
-bool Gerenciador_Config_Forcar_Restauracao_Padrao(void)
+/**
+ * @brief Carrega os padrões de fábrica APENAS no cache da RAM (s_config_cache).
+ */
+static void Carregar_Configuracao_Padrao(void)
 {
-    if (s_crc_handle == NULL) return false;
+    memset(&s_config_cache, 0, sizeof(Config_Aplicacao_t));
 
-    static Config_Aplicacao_t config_padrao;
-    memset(&config_padrao, 0, sizeof(Config_Aplicacao_t));
-
-    printf("EEPROM Manager: Carregando configuracoes de fabrica...\n");
-
-    config_padrao.versao_struct = 1;
-    config_padrao.indice_idioma_selecionado = 0;
-    strncpy(config_padrao.senha_sistema, "senha", MAX_SENHA_LEN);
-    config_padrao.senha_sistema[MAX_SENHA_LEN] = '\0';
-		config_padrao.fat_cal_a_gain = 1.0f;
-    config_padrao.fat_cal_a_zero = 0.0f;
+    s_config_cache.versao_struct = 1;
+    s_config_cache.indice_idioma_selecionado = 0;
+    strncpy(s_config_cache.senha_sistema, "senha", MAX_SENHA_LEN);
+    s_config_cache.senha_sistema[MAX_SENHA_LEN] = '\0';
+    s_config_cache.fat_cal_a_gain = 1.0f;
+    s_config_cache.fat_cal_a_zero = 0.0f;
 		
     for (int i = 0; i < MAX_GRAOS; i++)
     {
-        strncpy(config_padrao.graos[i].nome, Produto[i].Nome[0], MAX_NOME_GRAO_LEN);
-        config_padrao.graos[i].nome[MAX_NOME_GRAO_LEN] = '\0';
-        strncpy(config_padrao.graos[i].validade, "22/06/2028", MAX_VALIDADE_LEN);
-        config_padrao.graos[i].validade[MAX_VALIDADE_LEN] = '\0';
-        config_padrao.graos[i].id_curva = Produto[i].Nr_Equa;
-        config_padrao.graos[i].umidade_min = Produto[i].Um_Min;
-        config_padrao.graos[i].umidade_max = Produto[i].Um_Max;
+        strncpy(s_config_cache.graos[i].nome, Produto[i].Nome[0], MAX_NOME_GRAO_LEN);
+        s_config_cache.graos[i].nome[MAX_NOME_GRAO_LEN] = '\0';
+        strncpy(s_config_cache.graos[i].validade, "22/06/2028", MAX_VALIDADE_LEN);
+        s_config_cache.graos[i].validade[MAX_VALIDADE_LEN] = '\0';
+        s_config_cache.graos[i].id_curva = Produto[i].Nr_Equa;
+        s_config_cache.graos[i].umidade_min = Produto[i].Um_Min;
+        s_config_cache.graos[i].umidade_max = Produto[i].Um_Max;
     }
-
-    Recalcular_E_Atualizar_CRC(&config_padrao);
-    return Salvar_Configuracao_Completa(&config_padrao);
+    // O CRC será calculado pela FSM antes de salvar.
 }
+
+// (Removida: Gerenciador_Config_Forcar_Restauracao_Padrao(). Substituída pela lógica acima).
+
+//================================================================================
+// FUNÇÕES "SET" (REFATORADAS V8.2) - Agora são assíncronas
+// Elas apenas atualizam o cache da RAM e definem o flag 'dirty'. A FSM faz o resto.
+//================================================================================
 
 bool Gerenciador_Config_Set_Indice_Idioma(uint8_t novo_indice)
 {
-    if (s_crc_handle == NULL) return false;
-    static Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
-
-    config_temp.indice_idioma_selecionado = novo_indice;
-    Recalcular_E_Atualizar_CRC(&config_temp);
-    return Salvar_Configuracao_Completa(&config_temp);
+    if (s_storage_fsm.is_saving) return false; // Rejeita se já estiver salvando
+    s_config_cache.indice_idioma_selecionado = novo_indice;
+    s_storage_fsm.dirty = true;
+    return true;
 }
 
 bool Gerenciador_Config_Set_Senha(const char* nova_senha)
 {
-    if (s_crc_handle == NULL || nova_senha == NULL) return false;
-    static Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
-
-    strncpy(config_temp.senha_sistema, nova_senha, MAX_SENHA_LEN);
-    config_temp.senha_sistema[MAX_SENHA_LEN] = '\0';
-    Recalcular_E_Atualizar_CRC(&config_temp);
-    return Salvar_Configuracao_Completa(&config_temp);
+    if (nova_senha == NULL) return false;
+    if (s_storage_fsm.is_saving) return false; // Rejeita se já estiver salvando
+    
+    strncpy(s_config_cache.senha_sistema, nova_senha, MAX_SENHA_LEN);
+    s_config_cache.senha_sistema[MAX_SENHA_LEN] = '\0';
+    s_storage_fsm.dirty = true;
+    return true;
 }
+
+bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice)
+{
+    if (novo_indice >= MAX_GRAOS) return false;
+    if (s_storage_fsm.is_saving) return false; 
+
+    s_config_cache.indice_grao_ativo = novo_indice;
+    s_storage_fsm.dirty = true;
+    return true;
+}
+
+bool Gerenciador_Config_Set_Cal_A(float gain, float zero)
+{
+    if (s_storage_fsm.is_saving) return false; 
+    
+    s_config_cache.fat_cal_a_gain = gain;
+    s_config_cache.fat_cal_a_zero = zero;
+    s_storage_fsm.dirty = true;
+    return true;
+}
+
+
+//================================================================================
+// FUNÇÕES "GET" (REFATORADAS V8.2) - Agora leem do Cache RAM (instantâneo)
+//================================================================================
 
 bool Gerenciador_Config_Get_Indice_Idioma(uint8_t* indice)
 {
-    if (s_crc_handle == NULL || indice == NULL) return false;
-    Config_Aplicacao_t config_temp;
-    if (!Tentar_Carregar_De_Endereco(ADDR_CONFIG_PRIMARY, &config_temp)) return false;
-    *indice = config_temp.indice_idioma_selecionado;
+    if (indice == NULL) return false;
+    *indice = s_config_cache.indice_idioma_selecionado;
     return true;
 }
 
 bool Gerenciador_Config_Get_Dados_Grao(uint8_t indice, Config_Grao_t* dados_grao)
 {
     if (indice >= MAX_GRAOS || dados_grao == NULL) return false;
-    uint16_t endereco = ADDR_CONFIG_PRIMARY + offsetof(Config_Aplicacao_t, graos) + (indice * sizeof(Config_Grao_t));
-    return EEPROM_Driver_Read(endereco, (uint8_t*)dados_grao, sizeof(Config_Grao_t));
+    // Lê diretamente do cache da RAM, não da EEPROM.
+    memcpy(dados_grao, &s_config_cache.graos[indice], sizeof(Config_Grao_t));
+    return true;
 }
 
 bool Gerenciador_Config_Get_Senha(char* buffer, uint8_t tamanho_buffer)
 {
     if (buffer == NULL || tamanho_buffer == 0) return false;
-    uint8_t tamanho_leitura = (tamanho_buffer > MAX_SENHA_LEN + 1) ? (MAX_SENHA_LEN + 1) : tamanho_buffer;
-    uint16_t endereco = ADDR_CONFIG_PRIMARY + offsetof(Config_Aplicacao_t, senha_sistema);
-    return EEPROM_Driver_Read(endereco, (uint8_t*)buffer, tamanho_leitura);
+    // Lê diretamente do cache da RAM.
+    strncpy(buffer, s_config_cache.senha_sistema, tamanho_buffer - 1);
+    buffer[tamanho_buffer - 1] = '\0'; // Garante terminação nula
+    return true;
 }
 
 uint8_t Gerenciador_Config_Get_Num_Graos(void) { return MAX_GRAOS; }
 
-bool Gerenciador_Config_Verificar_Bloco(uint16_t address, Config_Aplicacao_t* config_out)
-{
-    if (s_crc_handle == NULL || config_out == NULL) return false;
-    return Tentar_Carregar_De_Endereco(address, config_out);
-}
-
-static void Recalcular_E_Atualizar_CRC(Config_Aplicacao_t* config)
-{
-    if (s_crc_handle == NULL || config == NULL) return;
-    uint32_t tamanho_dados_crc = sizeof(Config_Aplicacao_t) - sizeof(uint32_t);
-    config->crc = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)config, tamanho_dados_crc / 4);
-}
-
-static bool Salvar_Configuracao_Completa(const Config_Aplicacao_t* config)
-{
-    const uint16_t addresses[] = { ADDR_CONFIG_PRIMARY, ADDR_CONFIG_BACKUP1, ADDR_CONFIG_BACKUP2 };
-    const char* names[] = { "Primario", "Backup 1", "Backup 2" };
-
-    for (int i = 0; i < 3; i++)
-    {
-        if (!EEPROM_Driver_Write(addresses[i], (const uint8_t*)config, sizeof(Config_Aplicacao_t)))
-        {
-            printf("EEPROM Manager: Falha na operacao de escrita no bloco %s.\n", names[i]);
-            return false;
-        }
-
-        uint32_t start_tick = HAL_GetTick();
-        while (!EEPROM_Driver_IsReady())
-        {
-            if (HAL_GetTick() - start_tick > 100)
-            {
-                printf("EEPROM Manager: Timeout esperando EEPROM no bloco %s.\n", names[i]);
-                return false;
-            }
-        }
-    }
-
-    printf("EEPROM Manager: Presets salvos com sucesso nas tres localizacoes.\n");
-    return true;
-}
-
-static bool Tentar_Carregar_De_Endereco(uint16_t address, Config_Aplicacao_t* config)
-{
-    if (!EEPROM_Driver_Read(address, (uint8_t*)config, sizeof(Config_Aplicacao_t))) { return false; }
-    uint32_t crc_armazenado = config->crc;
-    Recalcular_E_Atualizar_CRC(config);
-    uint32_t crc_calculado = config->crc;
-    return (crc_calculado == crc_armazenado);
-}
-
-static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config)
-{
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_PRIMARY, config)) return true;
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP1, config)) return true;
-    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP2, config)) return true;
-    
-    printf("EEPROM Manager: ERRO CRITICO! Nenhum bloco valido encontrado.\n");
-    return false;
-}
-
-bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice)
-{
-    if (s_crc_handle == NULL || novo_indice >= MAX_GRAOS) return false;
-    static Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
-    config_temp.indice_grao_ativo = novo_indice;
-    Recalcular_E_Atualizar_CRC(&config_temp);
-    return Salvar_Configuracao_Completa(&config_temp);
-}
 
 bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo)
 {
-    if (s_crc_handle == NULL || indice_ativo == NULL) return false;
+    if (indice_ativo == NULL) return false;
     
-    static Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp))
-    {
-        *indice_ativo = 0; 
-        return false;
-    }
-
-    if (config_temp.indice_grao_ativo < MAX_GRAOS) {
-        *indice_ativo = config_temp.indice_grao_ativo;
+    if (s_config_cache.indice_grao_ativo < MAX_GRAOS) {
+        *indice_ativo = s_config_cache.indice_grao_ativo;
     } else {
-        *indice_ativo = 0;
+        *indice_ativo = 0; // Sanidade
     }
-    
     return true;
 }
 
 bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero)
 {
     if (gain == NULL || zero == NULL) return false;
-    Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
-    
-    *gain = config_temp.fat_cal_a_gain;
-    *zero = config_temp.fat_cal_a_zero;
+    *gain = s_config_cache.fat_cal_a_gain;
+    *zero = s_config_cache.fat_cal_a_zero;
     return true;
 }
 
-bool Gerenciador_Config_Set_Cal_A(float gain, float zero)
+
+//================================================================================
+// Funções Internas de CRC e Carregamento (Usadas apenas no Boot)
+//================================================================================
+
+static void Recalcular_E_Atualizar_CRC_Cache(void)
 {
-    if (s_crc_handle == NULL) return false;
-    Config_Aplicacao_t config_temp;
-    if (!Carregar_Primeira_Config_Valida(&config_temp)) return false;
-
-    config_temp.fat_cal_a_gain = gain;
-    config_temp.fat_cal_a_zero = zero;
-
-    Recalcular_E_Atualizar_CRC(&config_temp);
-    return Salvar_Configuracao_Completa(&config_temp);
+    if (s_crc_handle == NULL) return;
+    // Calcula o CRC sobre toda a struct, exceto o próprio campo CRC (que deve estar no final da struct)
+    uint32_t tamanho_dados_crc = offsetof(Config_Aplicacao_t, crc);
+    
+    // (O HAL_CRC_Calculate espera o tamanho em palavras de 32 bits)
+    s_config_cache.crc = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)&s_config_cache, tamanho_dados_crc / 4);
 }
+
+
+/**
+ * @brief (Função BLOQUEANTE de Boot) Tenta carregar e validar um bloco.
+ */
+static bool Tentar_Carregar_De_Endereco(uint16_t address, Config_Aplicacao_t* config_out)
+{
+    if (!EEPROM_Driver_Read_Blocking(address, (uint8_t*)config_out, sizeof(Config_Aplicacao_t))) 
+    { 
+        printf("EEPROM Check: Falha na leitura I2C no endereco 0x%X\r\n", address);
+        return false; 
+    }
+    
+    uint32_t crc_armazenado = config_out->crc;
+    
+    // Calcula o CRC esperado
+    uint32_t tamanho_dados_crc = offsetof(Config_Aplicacao_t, crc);
+    uint32_t crc_calculado = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)config_out, tamanho_dados_crc / 4);
+    
+    if(crc_calculado == crc_armazenado)
+    {
+        return true; // Sucesso!
+    }
+
+    printf("EEPROM Check: Falha de CRC no endereco 0x%X. Esperado [0x%lX] vs Lido [0x%lX]\r\n", 
+           address, (unsigned long)crc_calculado, (unsigned long)crc_armazenado);
+    return false;
+}
+
+/**
+ * @brief (Função BLOQUEANTE de Boot) Tenta carregar o primeiro bloco válido para o cache_out.
+ */
+static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config_out)
+{
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_PRIMARY, config_out)) return true;
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP1, config_out)) return true;
+    if (Tentar_Carregar_De_Endereco(ADDR_CONFIG_BACKUP2, config_out)) return true;
+    return false;
+}
+
+// (Removida: Salvar_Configuracao_Completa. Substituída pela FSM Run().)
+// (Removida: Carregar_Primeira_Config_Valida (agora usada apenas internamente no boot)).

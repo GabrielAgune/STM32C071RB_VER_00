@@ -26,6 +26,7 @@ float ADS1232_ConvertToGrams(int32_t raw_value);
 int32_t ADS1232_GetOffset(void);
 void ADS1232_SetOffset(int32_t new_offset);
 float ADS1232_GetCalibrationFactor(void);
+void Drv_ADS1232_DRDY_Callback(void);
 
 
 #endif // __ADS1232_DRIVER_H

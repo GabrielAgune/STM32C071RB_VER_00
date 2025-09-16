@@ -2,9 +2,11 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 static int32_t cal_zero_adc = 0; // ADC do ponto de 0 g da TABELA de calibração
+static volatile bool g_ads_data_ready = false;
 
 // --- DEFINIÇÃO DA TABELA DE CALIBRAÇÃO ---
 // Os valores de adc_value devem ser preenchidos por você com a rotina de calibração
@@ -31,6 +33,12 @@ static void sort_three(int32_t *a, int32_t *b, int32_t *c) {
 }
 
 // --- Implementação das Funções Públicas ---
+
+void Drv_ADS1232_DRDY_Callback(void)
+{
+    g_ads_data_ready = true;
+}
+
 void ADS1232_Init(void) {
     HAL_GPIO_WritePin(AD_PDWN_BAL_GPIO_Port, AD_PDWN_BAL_Pin, GPIO_PIN_RESET);
     HAL_Delay(1); 
@@ -40,11 +48,6 @@ void ADS1232_Init(void) {
 
 int32_t ADS1232_Read(void) {
     uint32_t data = 0;
-    uint32_t timeout = HAL_GetTick() + 200;
-
-    while(HAL_GPIO_ReadPin(AD_DOUT_BAL_GPIO_Port, AD_DOUT_BAL_Pin) == GPIO_PIN_SET) {
-        if (HAL_GetTick() > timeout) return 0;
-    }
 
     __disable_irq();
     for(int i = 0; i < 24; i++) {

@@ -153,20 +153,24 @@ enum
 
 
 
-// Define o tipo da função de callback que tratará os dados recebidos do DWIN
+// Callback para a camada de Controle
 typedef void (*dwin_rx_callback_t)(const uint8_t* buffer, uint16_t len);
 
-// Funções Públicas
+// Funções Públicas (API do Driver V8.1)
 void DWIN_Driver_Init(UART_HandleTypeDef *huart, dwin_rx_callback_t callback);
-void DWIN_Driver_Process(void);
+void DWIN_Driver_Process(void); // Processa o buffer de RX (com debounce de pacote)
+void DWIN_TX_Pump(void);        // "Bomba" de TX do DWIN (chamada no super-loop)
+bool DWIN_Driver_IsTxBusy(void); // Verifica se o FIFO de TX não está vazio
+
+// Funções de Escrita (Assíncronas e Enfileiradas)
 void DWIN_Driver_SetScreen(uint16_t screen_id);
 void DWIN_Driver_WriteInt(uint16_t vp_address, int16_t value);
 void DWIN_Driver_WriteInt32(uint16_t vp_address, int32_t value);
 void DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size);
 void DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max_len);
-void DWIN_Driver_HandleRxEvent(uint16_t size);
-void DWIN_Driver_HandleError(UART_HandleTypeDef *huart);
-bool DWIN_Driver_IsTxBusy(void);
-void DWIN_Driver_HandleTxCplt(void);
 
+// --- Handlers de ISR (Chamados pelos Callbacks do HAL) ---
+void DWIN_Driver_HandleTxCplt(UART_HandleTypeDef *huart);
+void DWIN_Driver_HandleRxEvent(UART_HandleTypeDef *huart, uint16_t size); // (Para RX IDLE+DMA)
+void DWIN_Driver_HandleError(UART_HandleTypeDef *huart);
 #endif // __DWIN_DRIVER_H

@@ -65,6 +65,7 @@ void Error_Handler(void);
 #define AD_SCLK_BAL_GPIO_Port GPIOC
 #define AD_DOUT_BAL_Pin GPIO_PIN_5
 #define AD_DOUT_BAL_GPIO_Port GPIOC
+#define AD_DOUT_BAL_EXTI_IRQn EXTI4_15_IRQn
 #define AD_PDWN_BAL_Pin GPIO_PIN_0
 #define AD_PDWN_BAL_GPIO_Port GPIOB
 #define PESO_TEMP_Pin GPIO_PIN_1

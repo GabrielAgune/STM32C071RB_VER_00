@@ -17,4 +17,5 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len);
  */
 void Process_Controller(void);
 
+uint16_t Controller_GetCurrentScreen(void);
 #endif /* CONTROLLER_H */

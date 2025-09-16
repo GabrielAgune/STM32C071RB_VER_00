@@ -1,23 +1,31 @@
 /*******************************************************************************
  * @file        dwin_driver.c
- * @brief       Driver de comunicação não-bloqueante para Display DWIN (UART)
- * @version     3.0 (Refatorado para TX FIFO Robusto por Dev STM)
- * @details     Este driver gerencia a comunicação com o DWIN usando
- * RX (ReceiveToIdle_IT) e um TX FIFO completo.
- * Múltiplas tarefas (FSM e Callbacks de RX) podem agora enfileirar
- * dados para transmissão sem contenção ou perda de comandos.
+ * @brief       Driver DWIN (UART2) NÃO-BLOQUEANTE (Arquitetura V6.0 - DMA TX/RX)
+ * @version     6.0 (Refatoração por Dev STM)
+ * @details     RX: Usa HAL_UARTEx_ReceiveToIdle_DMA + Debounce de Software (20ms).
+ * Isso é eficiente (baixo uso de CPU) e robusto contra senders lentos
+ * (corrige o bug da senha 'senh').
+ * TX: Usa SW FIFO + DMA Pump no Main Loop.
  ******************************************************************************/
 
 #include "dwin_driver.h"
 #include <string.h>
 #include "main.h"
-#include <stdio.h> // Para Error_Handler
+#include <stdio.h> 
 
 //================================================================================
 // Definições do Driver
 //================================================================================
-#define DWIN_RX_BUFFER_SIZE     64  // Buffer de entrada
-#define DWIN_TX_FIFO_SIZE       128 // Buffer circular de saída (para enfileirar múltiplos comandos)
+#define DWIN_RX_BUFFER_SIZE     64  // Buffer de entrada (Linear, para DMA)
+#define DWIN_TX_FIFO_SIZE       128 // Buffer circular de saída (Software FIFO)
+#define DWIN_TX_DMA_BUFFER_SIZE 64  // Bloco linear de TX para o DMA ler
+
+/**
+ * @brief Debounce de software (em ms) para o RX. 
+ * O DWIN é lento. Esperamos este tempo após um evento IDLE para garantir que o 
+ * pacote (ex: "senha") está realmente completo antes de processá-lo.
+ */
+#define DWIN_RX_PACKET_TIMEOUT_MS 20 
 
 //================================================================================
 // Variáveis Estáticas (Privadas do Módulo)
@@ -26,102 +34,239 @@
 static UART_HandleTypeDef* s_huart = NULL;
 static dwin_rx_callback_t s_rx_callback = NULL;
 
-// --- Buffers e Flags de RX (Assíncrono via Idle-Line IT) ---
-static uint8_t s_rx_buffer[DWIN_RX_BUFFER_SIZE];
-static volatile bool s_frame_received = false;
-static volatile uint16_t s_received_len = 0;
+// --- Buffers e Flags de RX (DMA + Idle-Line IT + SW Debounce) ---
+static uint8_t s_rx_dma_buffer[DWIN_RX_BUFFER_SIZE]; // DMA escreve aqui
+static volatile bool s_rx_pending_data = false;    // Flag: ISR -> Main (Temos dados, aguardando debounce)
+static volatile uint16_t s_received_len = 0;     // Tamanho dos dados pendentes
+static volatile uint32_t s_last_rx_event_tick = 0; // Tick de quando o último byte/idle chegou
 
-// --- Buffers e Flags de TX (Assíncrono via TX FIFO e ISR) ---
+
+// --- Buffers e Flags de TX (Software FIFO + DMA Pump) ---
 static uint8_t s_tx_fifo[DWIN_TX_FIFO_SIZE];
 static volatile uint16_t s_tx_fifo_head = 0;
 static volatile uint16_t s_tx_fifo_tail = 0;
-static volatile bool s_tx_is_busy = false;     // Flag: A ISR da UART está ativamente enviando um byte
-static uint8_t s_tx_temp_byte;                 // Buffer de 1 byte para o HAL_UART_Transmit_IT
+static uint8_t s_tx_dma_buffer[DWIN_TX_DMA_BUFFER_SIZE]; // DMA lê daqui
+static volatile bool s_dma_tx_busy = false; // Flag: DMA está transferindo ATIVAMENTE
+static volatile bool s_rx_needs_reset = false; 
+static uint32_t s_rx_error_cooldown_tick = 0; 
 
+// Protótipo interno
+static void DWIN_Start_Listening(void);
+static void DWIN_TX_Queue_Send_Bytes(const uint8_t* data, uint16_t size);
 
 //================================================================================
 // Funções de Inicialização e Processamento (Super-loop)
 //================================================================================
 
 /**
- * @brief Inicializa o driver DWIN e inicia a primeira escuta da UART RX.
+ * @brief Inicia a escuta de RX (DMA + Idle Line).
  */
-void DWIN_Driver_Init(UART_HandleTypeDef *huart, dwin_rx_callback_t callback) {
-    s_huart = huart;
-    s_rx_callback = callback;
-    
-    // Reseta o estado dos FIFOs e flags
-    s_tx_is_busy = false;
-    s_frame_received = false;
-    s_tx_fifo_head = 0;
-    s_tx_fifo_tail = 0;
-    s_received_len = 0;
-
-    if (HAL_UARTEx_ReceiveToIdle_IT(s_huart, s_rx_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK) {
-        Error_Handler();
-    }
-}
-
-/**
- * @brief Processador de RX (Chamado continuamente pelo super-loop).
- * Verifica se a ISR de RX sinalizou um novo pacote e chama o callback.
- */
-void DWIN_Driver_Process(void) {
-    if (!s_frame_received) {
-        return; // Nenhum pacote novo para processar
-    }
-
-    uint8_t local_buffer[DWIN_RX_BUFFER_SIZE];
-    uint16_t local_len;
-
-    // Seção crítica: Copia os dados recebidos pela ISR para um buffer local
-    __disable_irq(); // Garante que a ISR não escreva aqui enquanto lemos
-    local_len = s_received_len;
-    memcpy(local_buffer, s_rx_buffer, local_len);
-    s_frame_received = false; // Libera a flag
-    __enable_irq();
-
-    // Validação mínima do frame DWIN e chamada do callback
-    if (local_len >= 3 && local_buffer[0] == 0x5A && local_buffer[1] == 0xA5) {
-        if (s_rx_callback != NULL) {
-            s_rx_callback(local_buffer, local_len);
+static void DWIN_Start_Listening(void)
+{
+    // Inicia o RX via DMA com detecção de IDLE
+    if (HAL_UARTEx_ReceiveToIdle_DMA(s_huart, s_rx_dma_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK)
+    {
+        HAL_UART_AbortReceive_IT(s_huart);
+        if (HAL_UARTEx_ReceiveToIdle_DMA(s_huart, s_rx_dma_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK)
+        {
+            Error_Handler(); // Falha crítica
         }
     }
 }
 
-
-//================================================================================
-// Funções de Controle de Estado de TX (Refatoradas para FIFO)
-//================================================================================
+void DWIN_Driver_Init(UART_HandleTypeDef *huart, dwin_rx_callback_t callback) {
+    s_huart = huart;
+    s_rx_callback = callback;
+    
+    s_dma_tx_busy = false;
+    s_rx_pending_data = false;
+    s_tx_fifo_head = 0;
+    s_tx_fifo_tail = 0;
+    
+    DWIN_Start_Listening(); // Inicia a escuta RX
+}
 
 /**
- * @brief [NOVO] Adiciona uma sequência de bytes ao FIFO de TX.
- * Esta função é ATÔMICA (segura contra interrupção).
- * Esta é a única função que as funções "Write" devem chamar.
+ * @brief [V8.1] Processador de RX (Chamado no super-loop).
+ * Implementa o "debounce de software" (20ms) para pacotes DWIN lentos/quebrados.
+ * Isso corrige o bug da senha "senh".
  */
-static void DWIN_TX_Queue_Send_Bytes(const uint8_t* data, uint16_t size)
-{
-    if (data == NULL || size == 0) {
+void DWIN_Driver_Process(void) {
+		
+		if (s_rx_error_cooldown_tick != 0)
+    {
+        // Verifica se o tempo de 100ms já passou
+        if (HAL_GetTick() - s_rx_error_cooldown_tick < 100)
+        {
+            return; // Ainda em cooldown, não faz nada
+        }
+        
+        // Cooldown de 100ms terminou.
+        s_rx_error_cooldown_tick = 0; // Limpa o timer
+        s_rx_needs_reset = true;    // Agora sim, sinaliza para o reset
+    }
+		
+		if (s_rx_needs_reset) {
+        s_rx_needs_reset = false;    // Consome o flag
+        s_rx_pending_data = false; // Descarta quaisquer dados parciais
+        
+        printf("[WARN] DWIN UART RX Resetado apos erro.\r\n"); // <-- Agora é seguro imprimir
+        
+        // Aborta e reinicia a escuta (agora é seguro fazer isso)
+        HAL_UART_AbortReceive_IT(s_huart);
+        DWIN_Start_Listening();
+        return; // Retorna e espera o próximo ciclo do loop principal
+    }
+		
+    if (!s_rx_pending_data) {
         return;
     }
 
-    // --- INÍCIO DA SEÇÃO CRÍTICA ---
-    // Desabilita a IRQ da UART2 para enfileirar este frame inteiro sem ser interrompido
-    // pela ISR de TX Cplt (que mexe no s_tx_is_busy e no tail).
-    HAL_NVIC_DisableIRQ(USART2_IRQn);
+    if (HAL_GetTick() - s_last_rx_event_tick < DWIN_RX_PACKET_TIMEOUT_MS) {
+        return;
+    }
+		
+		// --- DEBUG: Verificar se o buffer DMA tem dados antes da cópia ---
+		printf("[DEBUG] Conteudo do buffer DMA (s_received_len = %d): ", s_received_len);
+		for (uint16_t i = 0; i < s_received_len; i++) {
+				printf("%02X ", s_rx_dma_buffer[i]);
+		}
+		printf("\r\n");
 
-    // Verifica se há espaço no FIFO para o frame inteiro
-    uint16_t free_space;
-    if (s_tx_fifo_head >= s_tx_fifo_tail) {
-        free_space = DWIN_TX_FIFO_SIZE - (s_tx_fifo_head - s_tx_fifo_tail);
-    } else {
-        free_space = (s_tx_fifo_tail - s_tx_fifo_head);
+    // --- Filtro rápido de pacote ACK "OK" diretamente do buffer DMA ---
+    if (s_received_len == 6 &&
+        s_rx_dma_buffer[0] == 0x5A &&
+        s_rx_dma_buffer[1] == 0xA5 &&
+        s_rx_dma_buffer[2] == 0x03 &&
+        s_rx_dma_buffer[3] == 0x82 &&
+        s_rx_dma_buffer[4] == 0x4F &&
+        s_rx_dma_buffer[5] == 0x4B)
+    {
+        s_rx_pending_data = false;
+        s_received_len = 0;
+        printf("ACK 'OK' descartado imediatamente (DMA)\r\n");
+				DWIN_Start_Listening();
+        return;
     }
 
-    if (size >= free_space) {
-        // Buffer cheio ou não há espaço suficiente. O comando é descartado.
-        // (Em um sistema mais complexo, poderíamos retornar 'false' e pedir à app para tentar de novo)
+    // --- Cópia dos dados para buffer local (válido) ---
+    uint8_t local_buffer[DWIN_RX_BUFFER_SIZE];
+    uint16_t local_len;
+
+    __disable_irq();
+    local_len = s_received_len;
+    memcpy(local_buffer, s_rx_dma_buffer, local_len);
+    s_rx_pending_data = false;
+    s_received_len = 0;
+    __enable_irq();
+		
+		DWIN_Start_Listening();
+		memset(s_rx_dma_buffer, 0, DWIN_RX_BUFFER_SIZE);
+
+    // --- Validação e encaminhamento ---
+    if (local_len >= 4 &&
+				local_buffer[0] == 0x5A &&
+				local_buffer[1] == 0xA5)
+		{
+				uint8_t payload_len = local_buffer[2];
+				uint8_t declared_len = 3 + payload_len;
+
+				if (local_len >= declared_len)
+				{
+						// OK: pacote contém pelo menos o necessário (possui padding extra? tudo bem)
+						if (s_rx_callback != NULL) {
+								s_rx_callback(local_buffer, declared_len);  // Só passa o necessário
+						}
+				}
+				else
+				{
+						printf("Pacote truncado: recebido=%d, esperado (min)=%d\r\n", local_len, declared_len);
+				}
+		}
+		else
+		{
+				printf("Pacote invalido ou sem prefixo esperado - descartado (tamanho: %d): ", local_len);
+				for (uint16_t i = 0; i < local_len; i++) {
+						printf("%02X ", local_buffer[i]);
+				}
+				printf("\r\n");
+		}
+}
+
+/**
+ * @brief (V8.1) "Bomba" de TX do DWIN (chamada no super-loop).
+ * Gerencia o envio do FIFO de S/W para o DMA.
+ */
+void DWIN_TX_Pump(void)
+{
+    // Se DMA está ocupado OU o FIFO está vazio, não faz nada.
+    if (s_dma_tx_busy || (s_tx_fifo_head == s_tx_fifo_tail)) {
+        return;
+    }
+
+    // --- Seção Crítica --- 
+    // Protege contra a ISR de TX Cplt (que mexe no s_dma_tx_busy)
+    HAL_NVIC_DisableIRQ(USART2_IRQn);
+    HAL_NVIC_DisableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
+    
+    if (s_dma_tx_busy) // Dupla verificação (safety check)
+    {
         HAL_NVIC_EnableIRQ(USART2_IRQn);
+        HAL_NVIC_EnableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
+        return;
+    }
+    
+    // Marca como ocupado ANTES de preparar o buffer
+    s_dma_tx_busy = true;
+    
+    // Prepara o buffer de DMA (linear) a partir do nosso FIFO (circular)
+    uint16_t bytes_to_send = 0;
+    while ((s_tx_fifo_tail != s_tx_fifo_head) && (bytes_to_send < DWIN_TX_DMA_BUFFER_SIZE))
+    {
+        s_tx_dma_buffer[bytes_to_send] = s_tx_fifo[s_tx_fifo_tail];
+        s_tx_fifo_tail = (s_tx_fifo_tail + 1) % DWIN_TX_FIFO_SIZE;
+        bytes_to_send++;
+    }
+
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
+    HAL_NVIC_EnableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
+    // --- Fim da Seção Crítica ---
+
+    // Inicia a transmissão DMA (CPU está livre).
+    // HAL_UART_TxCpltCallback será chamado pelo Handler da ISR do DMA quando terminar.
+    if (HAL_UART_Transmit_DMA(s_huart, s_tx_dma_buffer, bytes_to_send) != HAL_OK)
+    {
+        s_dma_tx_busy = false; // Falha no DMA, libera a flag para o Pump tentar de novo
+    }
+}
+
+//================================================================================
+// Funções de Controle de Estado de TX (Refatoradas para DMA FIFO)
+//================================================================================
+
+/**
+ * @brief Adiciona uma sequência de bytes ao FIFO de TX. Função ATÔMICA.
+ * (Corrigido V8.1: Usa bloqueio NVIC específico em vez de __disable_irq() global)
+ */
+static void DWIN_TX_Queue_Send_Bytes(const uint8_t* data, uint16_t size)
+{
+    if (data == NULL || size == 0) return;
+
+    // Seção Crítica Específica (impede que a ISR de TX e as IRQs da UART2 colidam)
+    HAL_NVIC_DisableIRQ(USART2_IRQn);
+    HAL_NVIC_DisableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
+
+    uint16_t free_space;
+    if (s_tx_fifo_head >= s_tx_fifo_tail) {
+        free_space = DWIN_TX_FIFO_SIZE - (s_tx_fifo_head - s_tx_fifo_tail) - 1;
+    } else {
+        free_space = (s_tx_fifo_tail - s_tx_fifo_head) - 1;
+    }
+
+    if (size > free_space) {
+        // Buffer cheio. Comando descartado. (Poderíamos logar isso no CLI)
+        HAL_NVIC_EnableIRQ(USART2_IRQn);
+        HAL_NVIC_EnableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
         return;
     }
 
@@ -131,95 +276,88 @@ static void DWIN_TX_Queue_Send_Bytes(const uint8_t* data, uint16_t size)
         s_tx_fifo_head = (s_tx_fifo_head + 1) % DWIN_TX_FIFO_SIZE;
     }
 
-    // --- Kickstart da Transmissão ---
-    // Se a ISR da UART TX não estiver ocupada (parada), devemos "acordá-la".
-    if (!s_tx_is_busy) 
-    {
-        s_tx_is_busy = true; // Marcamos como ocupada
-        
-        // Pega o primeiro byte disponível no tail
-        s_tx_temp_byte = s_tx_fifo[s_tx_fifo_tail];
-        s_tx_fifo_tail = (s_tx_fifo_tail + 1) % DWIN_TX_FIFO_SIZE;
-        
-        // Inicia a transmissão de 1 BYTE por interrupção.
-        HAL_UART_Transmit_IT(s_huart, &s_tx_temp_byte, 1);
-    }
-
-    // --- FIM DA SEÇÃO CRÍTICA ---
+    // Reabilita IRQs
     HAL_NVIC_EnableIRQ(USART2_IRQn);
-}
-
-
-/**
- * @brief Verifica se o driver DWIN TX está ocupado.
- * (Agora verifica se o FIFO está vazio, não apenas a flag da ISR).
- */
-bool DWIN_Driver_IsTxBusy(void) {
-    // Está ocupado se a ISR estiver no meio de um envio (s_tx_is_busy)
-    // OU se ainda houver bytes no FIFO esperando para serem enviados.
-    return (s_tx_is_busy || (s_tx_fifo_head != s_tx_fifo_tail));
-}
-
-/**
- * @brief (Função Chave) Callback chamado de HAL_UART_TxCpltCallback (Contexto de ISR).
- * Esta é a "engine" de esvaziamento do FIFO de TX do DWIN. 
- */
-void DWIN_Driver_HandleTxCplt(void)
-{
-    // (Contexto de ISR - não precisa desabilitar IRQs globais)
-
-    // Verifica se há mais dados no FIFO
-    if (s_tx_fifo_head == s_tx_fifo_tail) {
-        // FIFO está vazio. A transmissão para.
-        s_tx_is_busy = false;
-        return;
-    }
-
-    // Ainda há dados. Pega o próximo byte do tail.
-    s_tx_temp_byte = s_tx_fifo[s_tx_fifo_tail];
-    s_tx_fifo_tail = (s_tx_fifo_tail + 1) % DWIN_TX_FIFO_SIZE;
+    HAL_NVIC_EnableIRQ(DMAMUX1_DMA1_CH4_5_IRQn);
     
-    // Envia o próximo byte. Isso irá disparar este mesmo callback novamente quando terminar.
-    HAL_UART_Transmit_IT(s_huart, &s_tx_temp_byte, 1);
+    // NÃO inicia o DMA daqui. O DWIN_TX_Pump() no main loop é o único mestre do DMA.
+}
+
+
+bool DWIN_Driver_IsTxBusy(void) {
+    // Está "ocupado" se o DMA estiver ativo OU se o FIFO de S/W ainda tiver dados para a bomba pegar.
+    return (s_dma_tx_busy || (s_tx_fifo_head != s_tx_fifo_tail));
+}
+
+//================================================================================
+// Handlers de Callbacks da ISR (Chamados pelo HAL)
+//================================================================================
+
+/**
+ * @brief (Callback da ISR de TX) Chamado por HAL_UART_TxCpltCallback (ISR Context DMA).
+ * APENAS libera a flag. O Pump no main loop fará o resto.
+ */
+void DWIN_Driver_HandleTxCplt(UART_HandleTypeDef *huart)
+{
+    s_dma_tx_busy = false; // O DMA está livre.
+}
+
+
+/**
+ * @brief (Callback da ISR de RX) Chamado por HAL_UARTEx_RxEventCallback (ISR Context, IDLE+DMA).
+ * Esta é a lógica V6.0/V8.1 (corrige o bug da senha com debounce).
+ */
+void DWIN_Driver_HandleRxEvent(UART_HandleTypeDef *huart, uint16_t size)
+{
+    if (huart->Instance != USART2) return;
+
+    if (size > 0 && size <= DWIN_RX_BUFFER_SIZE) {
+        s_received_len = size;
+        s_rx_pending_data = true;           
+        s_last_rx_event_tick = HAL_GetTick(); 
+    }
+}
+
+
+/**
+ * @brief Manipulador de erros da UART (Chamado por HAL_UART_ErrorCallback).
+ */
+void DWIN_Driver_HandleError(UART_HandleTypeDef *huart) {
+    // Apenas limpa os flags de erro
+    __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_OREF | UART_CLEAR_NEF | UART_CLEAR_FEF);
+
+    // NÃO define s_rx_needs_reset aqui.
+    // Em vez disso, inicia o timer de cooldown.
+    s_rx_error_cooldown_tick = HAL_GetTick(); 
+    s_rx_needs_reset = false; // Garante que o reset não seja acionado
+    s_rx_pending_data = false; // Descarta dados
 }
 
 
 //================================================================================
-// Funções de Escrita (TX) - REATORADAS (NÃO-BLOQUEANTES, BASEADAS EM FILA)
+// Funções de Escrita (API Pública) - (V8.1)
 //================================================================================
 
-/**
- * @brief Muda a tela do display (Agora 100% Assíncrono e Enfileirado).
- */
 void DWIN_Driver_SetScreen(uint16_t screen_id) {
     const uint16_t VP_ADDR_PIC_ID = 0x0084;
-    uint8_t cmd_buffer[] = { // Buffer local (stack) usado apenas para formatar
+    uint8_t cmd_buffer[] = { 
         0x5A, 0xA5, 0x07, 0x82,
         (uint8_t)(VP_ADDR_PIC_ID >> 8), (uint8_t)(VP_ADDR_PIC_ID & 0xFF),
         0x5A, 0x01,
         (uint8_t)(screen_id >> 8), (uint8_t)(screen_id & 0xFF)
     };
-    
-    // Chama a função que coloca no FIFO de forma atômica
     DWIN_TX_Queue_Send_Bytes(cmd_buffer, sizeof(cmd_buffer));
 }
 
-/**
- * @brief Escreve um Int16 (2 bytes) em um VP (Agora 100% Assíncrono e Enfileirado).
- */
 void DWIN_Driver_WriteInt(uint16_t vp_address, int16_t value) {
     uint8_t cmd_buffer[] = { 
         0x5A, 0xA5, 0x05, 0x82,
         (uint8_t)(vp_address >> 8), (uint8_t)(vp_address & 0xFF),
         (uint8_t)(value >> 8), (uint8_t)(value & 0xFF)
     };
-    
     DWIN_TX_Queue_Send_Bytes(cmd_buffer, sizeof(cmd_buffer));
 }
 
-/**
- * @brief Escreve um Int32 (4 bytes) em um VP (Agora 100% Assíncrono e Enfileirado).
- */
 void DWIN_Driver_WriteInt32(uint16_t vp_address, int32_t value) {
     uint8_t cmd_buffer[] = { 
         0x5A, 0xA5, 0x07, 0x82,
@@ -227,87 +365,28 @@ void DWIN_Driver_WriteInt32(uint16_t vp_address, int32_t value) {
         (uint8_t)((value >> 24) & 0xFF), (uint8_t)((value >> 16) & 0xFF),
         (uint8_t)((value >> 8) & 0xFF),  (uint8_t)(value & 0xFF)
     };
-
     DWIN_TX_Queue_Send_Bytes(cmd_buffer, sizeof(cmd_buffer));
 }
 
-/**
- * @brief Escreve uma string (Agora 100% Assíncrono e Enfileirado).
- */
 void DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max_len) {
-    if (s_huart == NULL || text == NULL || max_len == 0) {
-        return;
-    }
-    
+    if (s_huart == NULL || text == NULL || max_len == 0) return;
     size_t text_len = strlen(text);
-    if (text_len > max_len) {
-        text_len = max_len; 
-    }
-    
-    uint8_t frame_payload_len = 3 + text_len; // 3 (cmd+vp) + N bytes de texto
-    uint16_t total_frame_size = 3 + frame_payload_len; // Header (5A A5 LEN) + Payload
-
-    // Precisamos de um buffer temporário para montar o frame completo
-    // Não podemos usar o s_static_tx_buffer porque esta função pode ser chamada
-    // de múltiplos locais. O DWIN_TX_Queue_Send_Bytes irá copiar dele.
+    if (text_len > max_len) text_len = max_len; 
+    uint8_t frame_payload_len = 3 + text_len; 
+    uint16_t total_frame_size = 3 + frame_payload_len; 
     uint8_t temp_frame_buffer[total_frame_size];
-
     temp_frame_buffer[0] = 0x5A;
     temp_frame_buffer[1] = 0xA5;
     temp_frame_buffer[2] = frame_payload_len;
-    temp_frame_buffer[3] = 0x82; // Comando de escrita
+    temp_frame_buffer[3] = 0x82;
     temp_frame_buffer[4] = (uint8_t)(vp_address >> 8);
     temp_frame_buffer[5] = (uint8_t)(vp_address & 0xFF);
-
     memcpy(&temp_frame_buffer[6], text, text_len);
-    
-    // Enfileira o frame montado
     DWIN_TX_Queue_Send_Bytes(temp_frame_buffer, total_frame_size);
 }
 
-
 void DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size) {
     if (s_huart != NULL && data != NULL && size > 0) {
-        // Enfileira os bytes crus
         DWIN_TX_Queue_Send_Bytes(data, size);
-    }
-}
-
-
-//================================================================================
-// Handlers de Callbacks da ISR (Chamados pelo HAL)
-//================================================================================
-
-/**
- * @brief Manipulador de evento de RX (Chamado por HAL_UARTEx_RxEventCallback).
- * Reinicia a escuta da UART imediatamente após receber um frame.
- */
-void DWIN_Driver_HandleRxEvent(uint16_t size) {
-    s_received_len = size;
-    s_frame_received = true; // Sinaliza ao main loop (Process) que há dados
-    
-    // Reinicia a escuta imediatamente
-    if (HAL_UARTEx_ReceiveToIdle_IT(s_huart, s_rx_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK) {
-        HAL_UART_AbortReceive_IT(s_huart);
-        if(HAL_UARTEx_ReceiveToIdle_IT(s_huart, s_rx_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK){
-             Error_Handler(); // Falha crítica
-        }
-    }
-}
-
-/**
- * @brief Manipulador de erros da UART (Chamado por HAL_UART_ErrorCallback).
- * Focado em limpar o erro de Overrun (ORE) e reiniciar a escuta de RX.
- */
-void DWIN_Driver_HandleError(UART_HandleTypeDef *huart) {
-    if (__HAL_UART_GET_FLAG(huart, UART_FLAG_ORE)) {
-        (void)huart->Instance->RDR; 
-        __HAL_UART_CLEAR_FLAG(huart, UART_CLEAR_OREF);
-    }
-
-    HAL_UART_AbortReceive_IT(huart);
-    
-    if (HAL_UARTEx_ReceiveToIdle_IT(s_huart, s_rx_buffer, DWIN_RX_BUFFER_SIZE) != HAL_OK) {
-       Error_Handler(); 
     }
 }

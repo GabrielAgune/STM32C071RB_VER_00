@@ -46,8 +46,5 @@ stm32c071rb_ver_00/app_manager.o: ..\Core\Src\Application\app_manager.c \
   ..\Core\Inc\Drivers\pcb_frequency.h ..\Core\Inc\Drivers\temp_sensor.h \
   ..\Core\Inc\Modules\gerenciador_configuracoes.h \
   ..\Core\Inc\Modules\servo_controle.h \
-  ..\Core\Inc\Modules\scale_filter.h \
-  ..\Core\Inc\Application\interface_usuario.h \
-  ..\Core\Inc\Application\app_eventos.h \
-  ..\Core\Inc\Application\cli_driver.h ..\Core\Inc\Drivers\rtc_driver.h \
-  ..\Core\Inc\Application\controller.h
+  ..\Core\Inc\Application\controller.h \
+  ..\Core\Inc\Application\cli_driver.h ..\Core\Inc\Drivers\rtc_driver.h

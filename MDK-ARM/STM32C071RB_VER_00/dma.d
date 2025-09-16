@@ -1,5 +1,5 @@
-stm32c071rb_ver_00/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
-  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
+stm32c071rb_ver_00/dma.o: ..\Core\Src\dma.c ..\Core\Inc\dma.h \
+  ..\Core\Inc\main.h ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c071xx.h \
@@ -36,17 +36,4 @@ stm32c071rb_ver_00/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
-  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\adc.h ..\Core\Inc\crc.h ..\Core\Inc\dma.h \
-  ..\Core\Inc\i2c.h ..\Core\Inc\rtc.h ..\Core\Inc\tim.h \
-  ..\Core\Inc\usart.h ..\Core\Inc\usb.h ..\Core\Inc\gpio.h \
-  ..\Core\Inc\Application\app_manager.h \
-  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\Drivers\eeprom_driver.h \
-  ..\Core\Inc\Drivers\ads1232_driver.h \
-  ..\Core\Inc\Drivers\pwm_servo_driver.h \
-  ..\Core\Inc\Drivers\pcb_frequency.h ..\Core\Inc\Drivers\temp_sensor.h \
-  ..\Core\Inc\Modules\gerenciador_configuracoes.h \
-  ..\Core\Inc\Modules\servo_controle.h \
-  ..\Core\Inc\Application\controller.h \
-  ..\Core\Inc\Application\cli_driver.h \
-  ..\Core\Inc\Application\retarget.h
+  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h

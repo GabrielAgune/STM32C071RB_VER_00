@@ -1,5 +1,5 @@
 stm32c071rb_ver_00/eeprom_driver.o: ..\Core\Src\Drivers\eeprom_driver.c \
-  ..\Core\Inc\Drivers\eeprom_driver.h ..\Core\Inc\main.h \
+  ..\Core\Inc\Drivers\eeprom_driver.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h \

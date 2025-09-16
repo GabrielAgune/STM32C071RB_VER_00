@@ -77,11 +77,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : AD_DOUT_BAL_Pin HAB_ISP_Pin */
-  GPIO_InitStruct.Pin = AD_DOUT_BAL_Pin|HAB_ISP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : AD_DOUT_BAL_Pin */
+  GPIO_InitStruct.Pin = AD_DOUT_BAL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(AD_DOUT_BAL_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : AD_PDWN_BAL_Pin PESO_TEMP_Pin TEMP_CHIP_Pin */
   GPIO_InitStruct.Pin = AD_PDWN_BAL_Pin|PESO_TEMP_Pin|TEMP_CHIP_Pin;
@@ -96,6 +96,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USB_SENSE_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : HAB_ISP_Pin */
+  GPIO_InitStruct.Pin = HAB_ISP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(HAB_ISP_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : POWER_SEL_Pin CHIP_DISABLE_Pin */
   GPIO_InitStruct.Pin = POWER_SEL_Pin|CHIP_DISABLE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -108,6 +114,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 3, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 
 }
 
