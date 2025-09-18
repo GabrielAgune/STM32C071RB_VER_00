@@ -5,7 +5,24 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-static const uint8_t CMD_AJUSTAR_BACKLIGHT_10[]  = {0x5A, 0xA5, 0x05, 0x82, 0x00, 0x82, 0x0A, 0x00};
+/**
+ * @file dwin_driver.h
+ * @brief Driver para comunicação com Display DWIN via UART DMA (não bloqueante).
+ *
+ * Utiliza DMA UART com IDLE line detect para RX, debounce de software para
+ * montagem de pacotes, fila circular para TX com bombeamento via DMA.
+ *  
+ * As funções são seguras para uso tanto no contexto de interrupção (não bloqueantes)
+ * quanto no contexto principal (superloop).
+ *
+ * @note Ajuste os tamanhos conforme capacidade e frequência esperadas.
+ */
+
+#define DWIN_RX_BUFFER_SIZE         64  /**< Tamanho do buffer DMA RX. */
+#define DWIN_TX_FIFO_SIZE          128  /**< Tamanho do buffer circular software para TX. */
+#define DWIN_TX_DMA_BUFFER_SIZE     64  /**< Tamanho do buffer linear DMA TX. */
+
+static const uint8_t CMD_AJUSTAR_BACKLIGHT_10[] = {0x5A, 0xA5, 0x05, 0x82, 0x00, 0x82, 0x0A, 0x00};
 static const uint8_t CMD_AJUSTAR_BACKLIGHT_100[] = {0x5A, 0xA5, 0x05, 0x82, 0x00, 0x82, 0x64, 0x00};
 
 enum
@@ -153,24 +170,76 @@ enum
 
 
 
-// Callback para a camada de Controle
+/** Callback para tratamento dos pacotes recebidos */
 typedef void (*dwin_rx_callback_t)(const uint8_t* buffer, uint16_t len);
 
-// Funções Públicas (API do Driver V8.1)
+/**
+ * @brief Inicializa o driver DWIN.
+ * @param huart Apontador para o handler da UART configurada para DWIN.
+ * @param callback Função chamada ao receber pacote completo via RX.
+ */
 void DWIN_Driver_Init(UART_HandleTypeDef *huart, dwin_rx_callback_t callback);
-void DWIN_Driver_Process(void); // Processa o buffer de RX (com debounce de pacote)
-void DWIN_TX_Pump(void);        // "Bomba" de TX do DWIN (chamada no super-loop)
-bool DWIN_Driver_IsTxBusy(void); // Verifica se o FIFO de TX não está vazio
 
-// Funções de Escrita (Assíncronas e Enfileiradas)
-void DWIN_Driver_SetScreen(uint16_t screen_id);
-void DWIN_Driver_WriteInt(uint16_t vp_address, int16_t value);
-void DWIN_Driver_WriteInt32(uint16_t vp_address, int32_t value);
-void DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size);
-void DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max_len);
+/**
+ * @brief Deve ser chamado no loop principal para processar a recepção (debounce).
+ */
+void DWIN_Driver_Process(void);
 
-// --- Handlers de ISR (Chamados pelos Callbacks do HAL) ---
+/**
+ * @brief Deve ser chamado no loop principal para processar o envio de dados presos no FIFO TX.
+ */
+void DWIN_TX_Pump(void);
+
+/**
+ * @brief Indica se o driver está ocupado enviando dados (FIFO ou DMA ativo).
+ */
+bool DWIN_Driver_IsTxBusy(void);
+
+/**
+ * @brief Envia um comando para alterar a tela no display.
+ * @param screen_id ID da tela a ser selecionada.
+ * @return true se o comando foi enfileirado; false se fila TX está cheia.
+ */
+bool DWIN_Driver_SetScreen(uint16_t screen_id);
+
+/**
+ * @brief Envia um valor inteiro 16 bits para o display.
+ * @param vp_address Endereço VP a ser escrito.
+ * @param value Valor int16 a enviar.
+ * @return true se o comando foi enfileirado; false se fila TX cheia.
+ */
+bool DWIN_Driver_WriteInt(uint16_t vp_address, int16_t value);
+
+/**
+ * @brief Envia um valor inteiro 32 bits para o display.
+ * @param vp_address Endereço VP a ser escrito.
+ * @param value Valor int32 a enviar.
+ * @return true se o comando foi enfileirado; false se fila TX cheia.
+ */
+bool DWIN_Driver_WriteInt32(uint16_t vp_address, int32_t value);
+
+/**
+ * @brief Envia string para o display.
+ * @param vp_address Endereço VP associado.
+ * @param text Ponteiro para string ASCII.
+ * @param max_len Tamanho máximo da string a enviar.
+ * @return true se enfileirado com sucesso; false caso contrário.
+ */
+bool DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max_len);
+
+/**
+ * @brief Envia bytes cru sem formatação.
+ * @param data Buffer de dados.
+ * @param size Tamanho dos dados em bytes.
+ * @return true se enfileirado; false se fila cheia.
+ */
+bool DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size);
+
+/** 
+ * @brief Funções para chamados nos ISRs do HAL UART (não chamar diretamente).
+ * @note Implementadas com __weak para sobreposição se necessário.
+ */
 void DWIN_Driver_HandleTxCplt(UART_HandleTypeDef *huart);
-void DWIN_Driver_HandleRxEvent(UART_HandleTypeDef *huart, uint16_t size); // (Para RX IDLE+DMA)
+void DWIN_Driver_HandleRxEvent(UART_HandleTypeDef *huart, uint16_t size);
 void DWIN_Driver_HandleError(UART_HandleTypeDef *huart);
 #endif // __DWIN_DRIVER_H

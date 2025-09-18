@@ -354,12 +354,10 @@ void Tela_ON_OFF(void)
 {
 	if (received_value == 0x0010) {
 		DWIN_Driver_WriteRawBytes(CMD_AJUSTAR_BACKLIGHT_10, sizeof(CMD_AJUSTAR_BACKLIGHT_10));
-		Set_Active_Screen(SYSTEM_STANDBY); 
 		printf("Desliga backlight\n\r");
 	}
 	else {
 		DWIN_Driver_WriteRawBytes(CMD_AJUSTAR_BACKLIGHT_100, sizeof(CMD_AJUSTAR_BACKLIGHT_100));
-		Set_Active_Screen(PRINCIPAL); 
 		printf("Religa backlight\n\r");
 	}
 }
@@ -371,10 +369,12 @@ static void Set_Just_Time_Parser(const uint8_t* rx_buffer, uint16_t rx_len)
 {
     char time_str_safe[16]; 
     int hours, minutes, seconds;
-
+		
+		
     if (rx_len > 7) { 
-        const uint8_t* payload = &rx_buffer[6];
-        uint16_t payload_len = rx_len - 6;
+        const uint8_t* payload = &rx_buffer[8];
+        uint16_t payload_len = rx_len - 8;
+				
 
         if (!Parse_Dwin_String_Payload_Robust(payload, payload_len, time_str_safe, sizeof(time_str_safe)))
         {
