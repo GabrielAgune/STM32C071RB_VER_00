@@ -3,7 +3,7 @@
 <title>Static Call Graph - [STM32C071RB_VER_00\STM32C071RB_VER_00.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STM32C071RB_VER_00\STM32C071RB_VER_00.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Thu Sep 18 16:29:07 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Thu Sep 18 17:11:19 2025
 <BR><P>
 <H3>Maximum Stack Usage =        292 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -203,7 +203,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 </UL>
 
-<P><STRONG><a name="[b7]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
+<P><STRONG><a name="[b6]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
 </UL>
 
@@ -254,18 +254,18 @@ Global Symbols
 <P><STRONG><a name="[9d]"></a>strlen</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, strlen.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
 <P><STRONG><a name="[118]"></a>strcmp</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, strcmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strcmp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 </UL>
 
 <P><STRONG><a name="[11c]"></a>strcpy</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, strcpy.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
 <P><STRONG><a name="[48]"></a>strcasecmp</STRONG> (Thumb, 38 bytes, Stack size 24 bytes, strcasecmp.o(.text))
@@ -282,7 +282,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__vfscanf_char
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
 </UL>
 
 <P><STRONG><a name="[4c]"></a>_scanf_int</STRONG> (Thumb, 330 bytes, Stack size 48 bytes, _scanf_int.o(.text))
@@ -804,17 +804,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[27]"></a>Controller_DwinCallback</STRONG> (Thumb, 268 bytes, Stack size 8 bytes, controller.o(.text.Controller_DwinCallback))
+<P><STRONG><a name="[27]"></a>Controller_DwinCallback</STRONG> (Thumb, 260 bytes, Stack size 8 bytes, controller.o(.text.Controller_DwinCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = Controller_DwinCallback &rArr; Set_Just_Time_Parser &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> app_manager.o(.text.App_Manager_Init)
@@ -827,25 +826,25 @@ Global Symbols
 <P><STRONG><a name="[f]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMA1_Channel1_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
 <P><STRONG><a name="[10]"></a>DMA1_Channel2_3_IRQHandler</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMA1_Channel2_3_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMA1_Channel2_3_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
 <P><STRONG><a name="[11]"></a>DMAMUX1_DMA1_CH4_5_IRQHandler</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMAMUX1_DMA1_CH4_5_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMAMUX1_DMA1_CH4_5_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[b4]"></a>DWIN_Driver_HandleError</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleError))
+<P><STRONG><a name="[b3]"></a>DWIN_Driver_HandleError</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleError))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DWIN_Driver_HandleError
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -853,7 +852,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_ErrorCallback
 </UL>
 
-<P><STRONG><a name="[b5]"></a>DWIN_Driver_HandleRxEvent</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleRxEvent))
+<P><STRONG><a name="[b4]"></a>DWIN_Driver_HandleRxEvent</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleRxEvent))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DWIN_Driver_HandleRxEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -869,7 +868,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = DWIN_Driver_Init &rArr; HAL_UARTEx_ReceiveToIdle_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
@@ -886,24 +885,21 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[ac]"></a>DWIN_Driver_SetScreen</STRONG> (Thumb, 232 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_SetScreen))
+<P><STRONG><a name="[b7]"></a>DWIN_Driver_SetScreen</STRONG> (Thumb, 232 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_SetScreen))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = DWIN_Driver_SetScreen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
-<LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
+<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_PIC
 </UL>
 
@@ -933,7 +929,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_RAW
 </UL>
 
@@ -1064,12 +1060,12 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[119]"></a>Gerenciador_Config_Get_Grao_Ativo</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Grao_Ativo))
-<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[11a]"></a>Gerenciador_Config_Get_Num_Graos</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Num_Graos))
-<BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[c2]"></a>Gerenciador_Config_Get_Senha</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Senha))
@@ -1077,7 +1073,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 </UL>
 
 <P><STRONG><a name="[80]"></a>Gerenciador_Config_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Init))
@@ -1100,7 +1096,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[11b]"></a>Gerenciador_Config_Set_Grao_Ativo</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Set_Grao_Ativo))
-<BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
 </UL>
 
 <P><STRONG><a name="[c7]"></a>Gerenciador_Config_Set_Senha</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Set_Senha))
@@ -1108,7 +1104,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
 <P><STRONG><a name="[81]"></a>Gerenciador_Config_Validar_e_Restaurar</STRONG> (Thumb, 784 bytes, Stack size 48 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Validar_e_Restaurar))
@@ -1220,7 +1216,7 @@ Global Symbols
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
 </UL>
 
-<P><STRONG><a name="[b3]"></a>HAL_DMA_IRQHandler</STRONG> (Thumb, 228 bytes, Stack size 40 bytes, stm32c0xx_hal_dma.o(.text.HAL_DMA_IRQHandler))
+<P><STRONG><a name="[b2]"></a>HAL_DMA_IRQHandler</STRONG> (Thumb, 228 bytes, Stack size 40 bytes, stm32c0xx_hal_dma.o(.text.HAL_DMA_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = HAL_DMA_IRQHandler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMAMUX1_DMA1_CH4_5_IRQHandler
@@ -1301,8 +1297,8 @@ Global Symbols
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Stop
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Enable
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetDate
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
@@ -1428,7 +1424,7 @@ Global Symbols
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
@@ -1444,7 +1440,7 @@ Global Symbols
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
@@ -1727,7 +1723,7 @@ Global Symbols
 <LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
 
-<P><STRONG><a name="[b6]"></a>HAL_UARTEx_ReceiveToIdle_DMA</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32c0xx_hal_uart_ex.o(.text.HAL_UARTEx_ReceiveToIdle_DMA))
+<P><STRONG><a name="[b5]"></a>HAL_UARTEx_ReceiveToIdle_DMA</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32c0xx_hal_uart_ex.o(.text.HAL_UARTEx_ReceiveToIdle_DMA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = HAL_UARTEx_ReceiveToIdle_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_DMA
@@ -1739,7 +1735,7 @@ Global Symbols
 <P><STRONG><a name="[101]"></a>HAL_UARTEx_RxEventCallback</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UARTEx_RxEventCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_UARTEx_RxEventCallback &rArr; DWIN_Driver_HandleRxEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
+<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAReceiveCplt
@@ -1800,7 +1796,7 @@ Global Symbols
 <P><STRONG><a name="[106]"></a>HAL_UART_ErrorCallback</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UART_ErrorCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = HAL_UART_ErrorCallback &rArr; CLI_HandleError &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
+<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
@@ -2111,7 +2107,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
 </UL>
 
 <P><STRONG><a name="[ed]"></a>RTC_ExitInitMode</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, stm32c0xx_hal_rtc.o(.text.RTC_ExitInitMode))
@@ -2218,7 +2214,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Start_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
 </UL>
 
 <P><STRONG><a name="[112]"></a>UART_Start_Receive_IT</STRONG> (Thumb, 296 bytes, Stack size 20 bytes, stm32c0xx_hal_uart.o(.text.UART_Start_Receive_IT))
@@ -2304,10 +2300,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Init
@@ -2388,11 +2384,11 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetFreq
@@ -2602,7 +2598,7 @@ Local Symbols
 <P><STRONG><a name="[3b]"></a>Handle_Dwin_PIC</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, cli_driver.o(.text.Handle_Dwin_PIC))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Handle_Dwin_PIC &rArr; atoi &rArr; strtol &rArr; _strtoul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -2640,10 +2636,10 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli_driver.o(.rodata.s_dwin_table)
 </UL>
-<P><STRONG><a name="[ad]"></a>Lidar_Com_Entrada_De_Senha</STRONG> (Thumb, 324 bytes, Stack size 40 bytes, controller.o(.text.Lidar_Com_Entrada_De_Senha))
+<P><STRONG><a name="[ac]"></a>Lidar_Com_Entrada_De_Senha</STRONG> (Thumb, 328 bytes, Stack size 40 bytes, controller.o(.text.Lidar_Com_Entrada_De_Senha))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Lidar_Com_Entrada_De_Senha &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Senha
@@ -2652,10 +2648,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[ae]"></a>Lidar_Com_VP_Senha</STRONG> (Thumb, 368 bytes, Stack size 32 bytes, controller.o(.text.Lidar_Com_VP_Senha))
+<P><STRONG><a name="[ad]"></a>Lidar_Com_VP_Senha</STRONG> (Thumb, 360 bytes, Stack size 32 bytes, controller.o(.text.Lidar_Com_VP_Senha))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Lidar_Com_VP_Senha &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
@@ -2665,7 +2661,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[af]"></a>Tela_ON_OFF</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, controller.o(.text.Tela_ON_OFF))
+<P><STRONG><a name="[ae]"></a>Tela_ON_OFF</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, controller.o(.text.Tela_ON_OFF))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = Tela_ON_OFF &rArr; DWIN_Driver_WriteRawBytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteRawBytes
@@ -2674,7 +2670,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[b0]"></a>Set_Just_Time_Parser</STRONG> (Thumb, 380 bytes, Stack size 48 bytes, controller.o(.text.Set_Just_Time_Parser))
+<P><STRONG><a name="[af]"></a>Set_Just_Time_Parser</STRONG> (Thumb, 380 bytes, Stack size 48 bytes, controller.o(.text.Set_Just_Time_Parser))
 <BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = Set_Just_Time_Parser &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
@@ -2685,11 +2681,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[b1]"></a>Lidar_Com_Entrada_Tela_Graos</STRONG> (Thumb, 68 bytes, Stack size 24 bytes, controller.o(.text.Lidar_Com_Entrada_Tela_Graos))
+<P><STRONG><a name="[b0]"></a>Lidar_Com_Entrada_Tela_Graos</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, controller.o(.text.Lidar_Com_Entrada_Tela_Graos))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = Lidar_Com_Entrada_Tela_Graos &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
+<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 <LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Grao_Ativo
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Num_Graos
@@ -2697,11 +2692,10 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[b2]"></a>Lidar_Com_Selecao_De_Grao</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, controller.o(.text.Lidar_Com_Selecao_De_Grao))
+<P><STRONG><a name="[b1]"></a>Lidar_Com_Selecao_De_Grao</STRONG> (Thumb, 152 bytes, Stack size 8 bytes, controller.o(.text.Lidar_Com_Selecao_De_Grao))
 <BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = Lidar_Com_Selecao_De_Grao &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
-<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
+<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Num_Graos
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Set_Grao_Ativo
@@ -2720,8 +2714,8 @@ Local Symbols
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[144]"></a>_fp_digits</STRONG> (Thumb, 344 bytes, Stack size 64 bytes, printfa.o(i._fp_digits), UNUSED)

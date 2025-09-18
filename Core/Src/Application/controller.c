@@ -61,7 +61,6 @@ uint16_t Controller_GetCurrentScreen(void)
 static void Set_Active_Screen(uint16_t screen_id)
 {
     s_current_screen_id = screen_id;
-    DWIN_Driver_SetScreen(screen_id);
 }
 
 
@@ -111,19 +110,15 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
             
             // **** INÍCIO DA CORREÇÃO V8.4 ****
             case MONITOR: // VP 0x7090 (O usuário pressionou o botão MONITOR)
-                // O usuário pressionou o botão para entrar no monitor.
-                // A tela DWIN mudou para 56. Devemos atualizar nosso estado interno.
                 Set_Active_Screen(TELA_MONITOR_SYSTEM); // Tela 56
                 printf("CONTROLLER: Entrando na Tela de Monitor do Sistema.\r\n");
                 break;
             
-            case ESCAPE: // VP 0x5000 (Provavelmente o botão "Voltar" do Monitor/Serviço)
-                // Se estamos no monitor, voltamos para a tela de serviço.
+            case ESCAPE: 
                 if (s_current_screen_id == TELA_MONITOR_SYSTEM) {
-                     Set_Active_Screen(TELA_SERVICO); // Tela 46
+                     Set_Active_Screen(PRINCIPAL); // Tela 46
                      printf("CONTROLLER: Saindo do Monitor -> Tela de Servico.\r\n");
                 }
-                // (Adicione outros 'else if' se o ESCAPE for usado em outras telas)
                 break;
             // **** FIM DA CORREÇÃO V8.4 ****
             
@@ -187,23 +182,23 @@ static void Lidar_Com_Entrada_De_Senha(const uint8_t* dwin_data, uint16_t len)
 
     if (strlen(senha_digitada) == 0) {
         printf("Controller: Senha vazia recebida.\r\n");
-        Set_Active_Screen(SENHA_ERRADA); 
+        DWIN_Driver_SetScreen(SENHA_ERRADA); 
         return;
     }
 
     char senha_armazenada[MAX_SENHA_LEN + 1] = {0};
     if (!Gerenciador_Config_Get_Senha(senha_armazenada, sizeof(senha_armazenada))) {
-        Set_Active_Screen(MSG_ERROR); 
+        DWIN_Driver_SetScreen(MSG_ERROR); 
         return;
     }
     senha_armazenada[MAX_SENHA_LEN] = '\0';
 
     if (strcmp(senha_digitada, senha_armazenada) == 0) {
         printf("Controller: Senha correta! Acessando menu de servico.\r\n");
-        Set_Active_Screen(TELA_SERVICO); 
+        DWIN_Driver_SetScreen(TELA_CONFIGURAR); 
     } else {
         printf("Controller: Senha incorreta. Digitado: '%s' | Esperado: '%s'\r\n", senha_digitada, senha_armazenada);
-        Set_Active_Screen(SENHA_ERRADA); 
+        DWIN_Driver_SetScreen(SENHA_ERRADA); 
     }
 }
 
@@ -235,12 +230,12 @@ static void Lidar_Com_VP_Senha(const uint8_t* dwin_data, uint16_t len)
             printf("Controller: Recebida primeira senha para alteracao.\r\n");
             if (strlen(senha_recebida) < 4) {
                 printf("Controller: Nova senha muito curta.\r\n");
-                Set_Active_Screen(SENHA_MIN_4_CARAC); 
+                DWIN_Driver_SetScreen(SENHA_MIN_4_CARAC); 
             } else {
                 strcpy(s_nova_senha_temporaria, senha_recebida);
                 printf("Controller: Primeira senha OK. Aguardando confirmacao.\r\n");
                 s_estado_senha_atual = ESTADO_SENHA_AGUARDANDO_CONFIRMACAO;
-                Set_Active_Screen(TELA_SET_PASS_AGAIN); 
+                DWIN_Driver_SetScreen(TELA_SET_PASS_AGAIN); 
             }
             break;
         
@@ -255,11 +250,11 @@ static void Lidar_Com_VP_Senha(const uint8_t* dwin_data, uint16_t len)
                 else printf("Controller: ERRO ao definir a nova senha (FSM ocupada?)\r\n");
                 
                 s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
-                Set_Active_Screen(TELA_CONFIGURAR); 
+                DWIN_Driver_SetScreen(TELA_CONFIGURAR); 
             } else {
                 printf("Controller: Senhas nao coincidem.\r\n");
                 s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
-                Set_Active_Screen(SENHAS_DIFERENTES); 
+                DWIN_Driver_SetScreen(SENHAS_DIFERENTES); 
             }
             break;
 
