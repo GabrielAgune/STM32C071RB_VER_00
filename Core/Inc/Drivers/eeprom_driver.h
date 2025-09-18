@@ -38,6 +38,7 @@ bool EEPROM_Driver_IsReady(void);
  */
 bool EEPROM_Driver_Read_Blocking(uint16_t addr, uint8_t *data, uint16_t size);
 
+bool EEPROM_Driver_Write_Blocking(uint16_t addr, const uint8_t *data, uint16_t size);
 
 // --- API de Escrita Assíncrona (FSM) ---
 
@@ -66,6 +67,13 @@ bool EEPROM_Driver_Write_Async_Poll(void);
 // (O driver I2C do C071 usa DMA, então precisamos dos callbacks de DMA)
 void EEPROM_Driver_HandleTxCplt(I2C_HandleTypeDef *hi2c);
 void EEPROM_Driver_HandleError(I2C_HandleTypeDef *hi2c);
+
+/**
+ * @brief Verifica se ocorreu um erro de I2C/DMA na última operação assíncrona.
+ * Limpa o flag de erro se ele for lido.
+ * @return true se um erro ocorreu, false caso contrário.
+ */
+bool EEPROM_Driver_GetAndClearErrorFlag(void);
 
 
 #endif // EEPROM_DRIVER_H

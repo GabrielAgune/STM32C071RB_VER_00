@@ -111,11 +111,12 @@ bool EEPROM_Driver_Write_Async_Start(uint16_t addr, const uint8_t *data, uint16_
     s_fsm.current_addr = addr;
     s_fsm.bytes_remaining = size;
     s_i2c_error = false;
-    s_i2c_dma_tx_cplt = false;
+    s_i2c_dma_tx_cplt = false; // Não será mais usado, mas limpamos por segurança
 
-    // Inicia o primeiro bloco
-    s_fsm.state = ASYNC_WRITING_PAGE;
-    
+    // =================================================================
+    // **** INÍCIO DA MODIFICAÇÃO (TESTE SEM DMA) ****
+    // =================================================================
+
     // Calcula o tamanho do primeiro bloco (chunk) para caber na página da EEPROM
     uint16_t chunk_size = EEPROM_PAGE_SIZE - (s_fsm.current_addr % EEPROM_PAGE_SIZE);
     if (chunk_size > s_fsm.bytes_remaining)
@@ -123,12 +124,24 @@ bool EEPROM_Driver_Write_Async_Start(uint16_t addr, const uint8_t *data, uint16_
         chunk_size = s_fsm.bytes_remaining;
     }
 
-    // Inicia a primeira escrita DMA
-    if (HAL_I2C_Mem_Write_DMA(s_i2c_handle, EEPROM_I2C_ADDR, s_fsm.current_addr, I2C_MEMADD_SIZE_16BIT, (uint8_t*)s_fsm.p_data, chunk_size) != HAL_OK)
+    // Inicia a primeira escrita BLOQUEANTE
+    HAL_StatusTypeDef status = HAL_I2C_Mem_Write(s_i2c_handle, EEPROM_I2C_ADDR, s_fsm.current_addr, I2C_MEMADD_SIZE_16BIT, (uint8_t*)s_fsm.p_data, chunk_size, EEPROM_I2C_TIMEOUT_MS);
+
+    if (status != HAL_OK)
     {
-        s_fsm.state = ASYNC_IDLE; // Falha ao iniciar DMA
+        printf("EEPROM (BLOCKING_TEST): HAL_I2C_Mem_Write falhou! (Status: %d)\r\n", status);
+        s_fsm.state = ASYNC_IDLE; // Falha
         return false;
     }
+
+    // Sucesso! A FSM não vai para "WRITING" (pois já terminou),
+    // vai direto para "WAIT_DELAY".
+    s_fsm.state = ASYNC_WAIT_PAGE_DELAY;
+    s_fsm.page_delay_start_tick = HAL_GetTick(); // Inicia o timer de software de 5ms
+
+    // =================================================================
+    // **** FIM DA MODIFICAÇÃO *****
+    // =================================================================
 
     return true; // Escrita iniciada, a FSM assume a partir daqui
 }
@@ -148,8 +161,8 @@ bool EEPROM_Driver_Write_Async_Poll(void)
     // Verifica erros de I2C/DMA (sinalizados pela ISR de Erro)
     if (s_i2c_error)
     {
-        printf("EEPROM ASYNC: Erro de I2C/DMA detectado!\r\n");
-        HAL_I2C_Master_Abort_IT(s_i2c_handle, EEPROM_I2C_ADDR);
+        printf("EEPROM (BLOCKING_TEST): Erro de I2C detectado!\r\n");
+        // HAL_I2C_Master_Abort_IT(s_i2c_handle, EEPROM_I2C_ADDR); // Não estamos usando IT/DMA
         s_fsm.state = ASYNC_IDLE; // Aborta a FSM
         s_i2c_error = false;
         return true; // Sinaliza "terminado" (com falha)
@@ -158,14 +171,18 @@ bool EEPROM_Driver_Write_Async_Poll(void)
     switch (s_fsm.state)
     {
         case ASYNC_WRITING_PAGE:
-            // Espera pelo flag da ISR de DMA TC (Transfer Complete)
-            if (s_i2c_dma_tx_cplt)
-            {
-                s_i2c_dma_tx_cplt = false; // Consome o flag
-                s_fsm.state = ASYNC_WAIT_PAGE_DELAY;
-                s_fsm.page_delay_start_tick = HAL_GetTick(); // Inicia o timer de software de 5ms
-            }
+            // =================================================================
+            // **** INÍCIO DA MODIFICAÇÃO (TESTE SEM DMA) ****
+            // =================================================================
+            // Este estado não é mais usado, pois a escrita agora acontece
+            // em 'Start' ou no final do 'WAIT_DELAY'.
+            // Se cairmos aqui, é um erro de lógica.
+            printf("EEPROM (BLOCKING_TEST): FSM em estado invalido (WRITING_PAGE)\r\n");
+            s_i2c_error = true;
             break;
+            // =================================================================
+            // **** FIM DA MODIFICAÇÃO *****
+            // =================================================================
 
         case ASYNC_WAIT_PAGE_DELAY:
             // Espera NÃO-BLOQUEANTE pelo tempo de escrita da página (5ms)
@@ -177,7 +194,7 @@ bool EEPROM_Driver_Write_Async_Poll(void)
                 {
                     last_chunk_size = s_fsm.bytes_remaining;
                 }
-                
+
                 s_fsm.current_addr += last_chunk_size;
                 s_fsm.p_data += last_chunk_size;
                 s_fsm.bytes_remaining -= last_chunk_size;
@@ -191,15 +208,28 @@ bool EEPROM_Driver_Write_Async_Poll(void)
                 }
                 else
                 {
-                    // Ainda há dados, envia a próxima página
+                    // =================================================================
+                    // **** INÍCIO DA MODIFICAÇÃO (TESTE SEM DMA) ****
+                    // =================================================================
+                    // Ainda há dados, envia a próxima página (BLOQUEANTE)
                     uint16_t next_chunk_size = (s_fsm.bytes_remaining > EEPROM_PAGE_SIZE) ? EEPROM_PAGE_SIZE : s_fsm.bytes_remaining;
-                    
-                    s_fsm.state = ASYNC_WRITING_PAGE;
-                    if (HAL_I2C_Mem_Write_DMA(s_i2c_handle, EEPROM_I2C_ADDR, s_fsm.current_addr, I2C_MEMADD_SIZE_16BIT, (uint8_t*)s_fsm.p_data, next_chunk_size) != HAL_OK)
+
+                    HAL_StatusTypeDef status = HAL_I2C_Mem_Write(s_i2c_handle, EEPROM_I2C_ADDR, s_fsm.current_addr, I2C_MEMADD_SIZE_16BIT, (uint8_t*)s_fsm.p_data, next_chunk_size, EEPROM_I2C_TIMEOUT_MS);
+
+                    if (status != HAL_OK)
                     {
-                         printf("EEPROM ASYNC: Falha ao iniciar DMA da proxima pagina!\r\n");
+                         printf("EEPROM (BLOCKING_TEST): Falha ao escrever proxima pagina! (Status: %d)\r\n", status);
                          s_i2c_error = true; // A FSM tratará disso no próximo ciclo
                     }
+                    else
+                    {
+                        // Sucesso, reseta o timer de 5ms e permanece no estado
+                        s_fsm.state = ASYNC_WAIT_PAGE_DELAY;
+                        s_fsm.page_delay_start_tick = HAL_GetTick();
+                    }
+                    // =================================================================
+                    // **** FIM DA MODIFICAÇÃO *****
+                    // =================================================================
                 }
             }
             break;
@@ -210,6 +240,16 @@ bool EEPROM_Driver_Write_Async_Poll(void)
     }
 
     return false; // Ainda ocupado
+}
+
+bool EEPROM_Driver_GetAndClearErrorFlag(void)
+{
+    if (s_i2c_error)
+    {
+        s_i2c_error = false; // Consome o flag
+        return true;
+    }
+    return false;
 }
 
 //==============================================================================

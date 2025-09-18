@@ -46,11 +46,15 @@ typedef enum {
     FSM_STORE_ERROR
 } StorageFsmState_t;
 
+#define FSM_ERROR_COOLDOWN_MS 5000 // Tenta salvar novamente a cada 5 segundos
+
 static struct {
     StorageFsmState_t state;
-    volatile bool dirty;       // Definido como true pelas funções 'Set'
-    bool          is_saving;   // Flag interno da FSM para evitar reentrância
-} s_storage_fsm = { FSM_STORE_IDLE, false, false };
+    volatile bool dirty;
+    bool          is_saving;
+    uint32_t      error_retry_tick; 
+} s_storage_fsm = { FSM_STORE_IDLE, false, false, 0 }; 
+;
 
 
 //================================================================================
@@ -88,14 +92,22 @@ void Gerenciador_Config_Run_FSM(void)
         {
             return; // Espera o driver I2C/DMA ficar livre
         }
-        
+
+        // **** INÍCIO DA CORREÇÃO ****
+        // Verifica se estamos em cooldown de erro
+        if (HAL_GetTick() - s_storage_fsm.error_retry_tick < FSM_ERROR_COOLDOWN_MS)
+        {
+             return; // Ainda não é hora de tentar de novo
+        }
+        // **** FIM DA CORREÇÃO ****
+
         // Marca como ocupado e limpa o flag 'dirty' (inicia o processo)
         s_storage_fsm.is_saving = true;
         s_storage_fsm.dirty = false; 
-        
+
         // Recalcula o CRC sobre o cache da RAM antes de iniciar a escrita
         Recalcular_E_Atualizar_CRC_Cache(); 
-        
+
         printf("Storage FSM: Flag 'dirty' detectado. Iniciando salvamento assincrono das 3 copias...\r\n");
         s_storage_fsm.state = FSM_STORE_START_WRITE_PRIMARY;
     }
@@ -114,42 +126,99 @@ void Gerenciador_Config_Run_FSM(void)
     {
         case FSM_STORE_START_WRITE_PRIMARY:
             // Inicia a escrita NÃO-BLOQUEANTE
-            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_PRIMARY, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
-            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_PRIMARY;
+            // **** INÍCIO DA CORREÇÃO ****
+            if (!EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_PRIMARY, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t)))
+            {
+                printf("Storage FSM: Falha ao INICIAR escrita primaria!\r\n");
+                s_storage_fsm.state = FSM_STORE_ERROR; // Vai para o estado de erro
+            }
+            else
+            {
+                s_storage_fsm.state = FSM_STORE_WAIT_WRITE_PRIMARY;
+            }
+            // **** FIM DA CORREÇÃO ****
             break;
 
         case FSM_STORE_WAIT_WRITE_PRIMARY:
             if (EEPROM_Driver_Write_Async_Poll()) // Esta função deve ser chamada repetidamente
             {
-                printf("Storage FSM: Bloco Primario OK.\r\n");
-                s_storage_fsm.state = FSM_STORE_START_WRITE_BKP1; // Sucesso, vai para o BKP1
+                // **** INÍCIO DA CORREÇÃO ****
+                if (EEPROM_Driver_GetAndClearErrorFlag())
+                {
+                    printf("Storage FSM: Erro de driver ao escrever Bloco Primario.\r\n");
+                    s_storage_fsm.state = FSM_STORE_ERROR;
+                }
+                else
+                {
+                    printf("Storage FSM: Bloco Primario OK.\r\n");
+                    s_storage_fsm.state = FSM_STORE_START_WRITE_BKP1; // Sucesso, vai para o BKP1
+                }
+                // **** FIM DA CORREÇÃO ****
             }
             break;
 
         case FSM_STORE_START_WRITE_BKP1:
-            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP1, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
-            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP1;
+            // **** INÍCIO DA CORREÇÃO ****
+            if (!EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP1, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t)))
+            {
+                printf("Storage FSM: Falha ao INICIAR escrita BKP1!\r\n");
+                s_storage_fsm.state = FSM_STORE_ERROR;
+            }
+            else
+            {
+                s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP1;
+            }
+            // **** FIM DA CORREÇÃO ****
             break;
 
         case FSM_STORE_WAIT_WRITE_BKP1:
             if (EEPROM_Driver_Write_Async_Poll())
             {
-                printf("Storage FSM: Bloco BKP1 OK.\r\n");
-                s_storage_fsm.state = FSM_STORE_START_WRITE_BKP2; // Sucesso, vai para o BKP2
+                // **** INÍCIO DA CORREÇÃO ****
+                if (EEPROM_Driver_GetAndClearErrorFlag())
+                {
+                    printf("Storage FSM: Erro de driver ao escrever Bloco BKP1.\r\n");
+                    s_storage_fsm.state = FSM_STORE_ERROR;
+                }
+                else
+                {
+                    printf("Storage FSM: Bloco BKP1 OK.\r\n");
+                    s_storage_fsm.state = FSM_STORE_START_WRITE_BKP2; // Sucesso, vai para o BKP2
+                }
+                // **** FIM DA CORREÇÃO ****
             }
             break;
 
         case FSM_STORE_START_WRITE_BKP2:
-            EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP2, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t));
-            s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP2;
+            // **** INÍCIO DA CORREÇÃO ****
+            if (!EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP2, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t)))
+            {
+                printf("Storage FSM: Falha ao INICIAR escrita BKP2!\r\n");
+                s_storage_fsm.state = FSM_STORE_ERROR;
+            }
+            else
+            {
+                s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP2;
+            }
+            // **** FIM DA CORREÇÃO ****
             break;
 
         case FSM_STORE_WAIT_WRITE_BKP2:
             if (EEPROM_Driver_Write_Async_Poll())
             {
-                printf("Storage FSM: Bloco BKP2 OK. Salvamento completo.\r\n");
-                s_storage_fsm.is_saving = false;
-                s_storage_fsm.state = FSM_STORE_IDLE; // Concluído!
+                // **** INÍCIO DA CORREÇÃO ****
+                if (EEPROM_Driver_GetAndClearErrorFlag())
+                {
+                    printf("Storage FSM: Erro de driver ao escrever Bloco BKP2.\r\n");
+                    s_storage_fsm.state = FSM_STORE_ERROR;
+                }
+                else
+                {
+                    printf("Storage FSM: Bloco BKP2 OK. Salvamento completo.\r\n");
+                    s_storage_fsm.is_saving = false;
+                    s_storage_fsm.state = FSM_STORE_IDLE; // Concluído!
+                }
+                // **** FIM DA CORREÇÃO ****
             }
             break;
 
@@ -158,9 +227,11 @@ void Gerenciador_Config_Run_FSM(void)
         default:
             // Se entrarmos em um estado de erro (ex: falha no DMA I2C), paramos a FSM
             s_storage_fsm.is_saving = false; 
-            s_storage_fsm.dirty = true; // Marca como dirty novamente para tentar salvar no próximo ciclo
+            s_storage_fsm.dirty = true; // Marca como dirty novamente para tentar salvar
             s_storage_fsm.state = FSM_STORE_IDLE;
-            printf("Storage FSM: ERRO DURANTE ESCRITA ASYNC!\r\n");
+            s_storage_fsm.error_retry_tick = HAL_GetTick(); // <-- ATIVA O TIMER DE COOLDOWN
+            printf("Storage FSM: ERRO DURANTE ESCRITA ASYNC! Tentando novamente em %dms...\r\n", FSM_ERROR_COOLDOWN_MS);
+            // **** FIM DA CORREÇÃO ****
             break;
     }
 }
@@ -339,7 +410,13 @@ static void Recalcular_E_Atualizar_CRC_Cache(void)
     uint32_t tamanho_dados_crc = offsetof(Config_Aplicacao_t, crc);
     
     // (O HAL_CRC_Calculate espera o tamanho em palavras de 32 bits)
-    s_config_cache.crc = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)&s_config_cache, tamanho_dados_crc / 4);
+    uint32_t novo_crc = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)&s_config_cache, tamanho_dados_crc / 4);
+    
+    // **** DEBUG ADICIONADO ****
+    printf("DEBUG CRC (WRITE): Calculando CRC sobre %lu bytes. Novo CRC: [0x%lX]\r\n", 
+           (unsigned long)tamanho_dados_crc, (unsigned long)novo_crc);
+    
+    s_config_cache.crc = novo_crc;
 }
 
 
