@@ -1,0 +1,30 @@
+# Build artifacts
+/MDK-ARM/STM32C071RB_VER_00/
+*.o
+*.bin
+*.hex
+*.elf
+*.axf
+*.map
+*.lst
+*.htm
+
+# Keil backup files
+*.uvgui*
+*.bak
+*_old.c
+*_old.h
+
+# IDE files  
+.DS_Store
+Thumbs.db
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Debug files
+*.pdb
+*.log
+*.dep
+*.d
