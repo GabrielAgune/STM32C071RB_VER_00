@@ -43,6 +43,7 @@ static void Cmd_Dwin(char* args);
 static void Cmd_GetPeso(char* args); // <-- Modificado
 static void Cmd_GetTemp(char* args);
 static void Cmd_GetFreq(char* args);
+static void Cmd_Service(char* args);
 static void Handle_Dwin_PIC(char* sub_args);
 static void Handle_Dwin_INT(char* sub_args);
 static void Handle_Dwin_INT32(char* sub_args);
@@ -72,6 +73,7 @@ static volatile bool s_dma_tx_busy = false;
 static const cli_command_t s_command_table[] = {
     { "HELP", Cmd_Help }, { "?", Cmd_Help }, { "DWIN", Cmd_Dwin },
     { "PESO", Cmd_GetPeso }, { "TEMP", Cmd_GetTemp }, { "FREQ", Cmd_GetFreq },
+		{ "SERVICE", Cmd_Service},
 };
 static const size_t NUM_COMMANDS = sizeof(s_command_table) / sizeof(s_command_table[0]);
 
@@ -282,6 +284,10 @@ static void Cmd_Help(char* args) {
     printf("%s", HELP_TEXT); 
 }
 
+static void Cmd_Service(char* args)
+{
+		DWIN_Driver_SetScreen(TELA_SERVICO);
+}
 /**
  * @brief (ATUALIZADO V8.2) Usa a nova struct App_ScaleData_t
  */

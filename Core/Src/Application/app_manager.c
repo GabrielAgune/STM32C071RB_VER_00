@@ -269,7 +269,7 @@ static void Task_Update_Display_FSM(void)
                 s_temperatura_mcu = TempSensor_GetTemperature(); // <-- BLOQUEIO DE 100ms (Agora só a cada 5s)
                 
                 int16_t temperatura_para_dwin = (int16_t)(s_temperatura_mcu * 10.0f);
-                DWIN_Driver_WriteInt(TEMP_SAMPLE, temperatura_para_dwin); 
+                DWIN_Driver_WriteInt(TEMP_INSTRU, temperatura_para_dwin); 
             }
             // *** FIM CORREÇÃO V8.6 ***
         }
