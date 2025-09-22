@@ -38,7 +38,15 @@ void RTC_Driver_Init(RTC_HandleTypeDef* hrtc)
         sDate.Date = 8; sDate.Month = RTC_MONTH_SEPTEMBER; sDate.Year = 25; 
         sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
         HAL_RTC_SetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
+				
+				sprintf(s_time_buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+				sprintf(s_date_buffer, "%02d/%02d/%02d", sDate.Date, sDate.Month, sDate.Year);
+
+				DWIN_Driver_WriteString(HORA_SISTEMA, s_time_buffer, 8);
+				DWIN_Driver_WriteString(DATA_SISTEMA, s_date_buffer, 8);
     }
+
+
 	printf("RTC Driver inicializado.\r\n");
 }
 

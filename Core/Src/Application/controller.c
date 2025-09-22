@@ -276,7 +276,7 @@ static void Lidar_Com_Entrada_Tela_Graos(void)
         s_indice_grao_selecionado = 0;
     }
     Atualizar_Display_Grao_Selecionado(s_indice_grao_selecionado);
-    Set_Active_Screen(SELECT_GRAO); 
+		DWIN_Driver_SetScreen(SELECT_GRAO); 
 }
 
 static void Lidar_Com_Selecao_De_Grao(int16_t tecla)
@@ -348,10 +348,12 @@ static void Atualizar_Display_Grao_Selecionado(int8_t indice)
 void Tela_ON_OFF(void)
 {
 	if (received_value == 0x0010) {
+		DWIN_Driver_SetScreen(SYSTEM_STANDBY);
 		DWIN_Driver_WriteRawBytes(CMD_AJUSTAR_BACKLIGHT_10, sizeof(CMD_AJUSTAR_BACKLIGHT_10));
 		printf("Desliga backlight\n\r");
 	}
 	else {
+		DWIN_Driver_SetScreen(PRINCIPAL);
 		DWIN_Driver_WriteRawBytes(CMD_AJUSTAR_BACKLIGHT_100, sizeof(CMD_AJUSTAR_BACKLIGHT_100));
 		printf("Religa backlight\n\r");
 	}

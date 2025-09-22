@@ -3,11 +3,11 @@
 <title>Static Call Graph - [STM32C071RB_VER_00\STM32C071RB_VER_00.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STM32C071RB_VER_00\STM32C071RB_VER_00.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Thu Sep 18 17:11:19 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Mon Sep 22 09:38:38 2025
 <BR><P>
-<H3>Maximum Stack Usage =        292 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        304 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-main &rArr; MX_TIM17_Init &rArr; HAL_TIM_Base_Init &rArr; HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
+main &rArr; App_Manager_Init &rArr; Gerenciador_Config_Validar_e_Restaurar &rArr; EEPROM_Driver_Read_Blocking &rArr; HAL_I2C_IsDeviceReady &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 <P>
 <H3>
 Mutually Recursive functions
@@ -180,9 +180,9 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
 <P><STRONG><a name="[44]"></a>__rt_ctype_table</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, ctype_o.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isspace
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_RAW
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Dwin
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strtol
@@ -200,11 +200,12 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[b9]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<BR><BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
 </UL>
 
-<P><STRONG><a name="[b6]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<P><STRONG><a name="[b7]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
 </UL>
 
 <P><STRONG><a name="[14f]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
@@ -222,12 +223,12 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
 
-<P><STRONG><a name="[a7]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
+<P><STRONG><a name="[a8]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM17_Init
 <LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM16_Init
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
 </UL>
 
 <P><STRONG><a name="[152]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
@@ -241,31 +242,31 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Senha
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Set_Senha
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
 </UL>
 
-<P><STRONG><a name="[a6]"></a>strchr</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, strchr.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<P><STRONG><a name="[a7]"></a>strchr</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, strchr.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_INT32
 <LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_INT
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Dwin
 </UL>
 
-<P><STRONG><a name="[9d]"></a>strlen</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, strlen.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<P><STRONG><a name="[9e]"></a>strlen</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, strlen.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
 <P><STRONG><a name="[118]"></a>strcmp</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, strcmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strcmp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 </UL>
 
 <P><STRONG><a name="[11c]"></a>strcpy</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, strcpy.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
 <P><STRONG><a name="[48]"></a>strcasecmp</STRONG> (Thumb, 38 bytes, Stack size 24 bytes, strcasecmp.o(.text))
@@ -273,7 +274,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tolower
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Dwin
 </UL>
 
@@ -282,7 +283,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__vfscanf_char
 </UL>
-<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
 </UL>
 
 <P><STRONG><a name="[4c]"></a>_scanf_int</STRONG> (Thumb, 330 bytes, Stack size 48 bytes, _scanf_int.o(.text))
@@ -331,10 +332,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_round
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
 </UL>
 
@@ -343,9 +344,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[57]"></a>__aeabi_frsub</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, fadd.o(.text), UNUSED)
@@ -355,9 +356,9 @@ Global Symbols
 <P><STRONG><a name="[72]"></a>__aeabi_fmul</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, fmul.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_fmul
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
 
@@ -366,9 +367,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_round
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
 
@@ -384,16 +385,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 </UL>
 
-<P><STRONG><a name="[91]"></a>__aeabi_fcmple</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmple.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<P><STRONG><a name="[92]"></a>__aeabi_fcmple</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmple.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[133]"></a>__aeabi_fcmplt</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmplt.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
 
-<P><STRONG><a name="[8d]"></a>__aeabi_fcmpge</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmpge.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<P><STRONG><a name="[8e]"></a>__aeabi_fcmpge</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmpge.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[134]"></a>__aeabi_fcmpgt</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, fcmpgt.o(.text))
@@ -405,7 +406,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
 </UL>
 
@@ -414,8 +415,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_float_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
 
@@ -424,15 +425,15 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 </UL>
 
-<P><STRONG><a name="[93]"></a>__aeabi_f2iz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, ffixi.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<P><STRONG><a name="[94]"></a>__aeabi_f2iz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, ffixi.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
 
-<P><STRONG><a name="[85]"></a>__aeabi_f2d</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, f2d.o(.text))
+<P><STRONG><a name="[84]"></a>__aeabi_f2d</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetFreq
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetTemp
@@ -629,7 +630,7 @@ Global Symbols
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[73]"></a>ADS1232_Init</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, ads1232_driver.o(.text.ADS1232_Init))
@@ -655,7 +656,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Read
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[79]"></a>ADS1232_Tare</STRONG> (Thumb, 1120 bytes, Stack size 88 bytes, ads1232_driver.o(.text.ADS1232_Tare))
@@ -670,48 +671,51 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[a9]"></a>App_Manager_GetFreqData</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetFreqData))
+<P><STRONG><a name="[aa]"></a>App_Manager_GetFreqData</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetFreqData))
 <BR><BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetFreq
 </UL>
 
-<P><STRONG><a name="[aa]"></a>App_Manager_GetScaleData</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetScaleData))
+<P><STRONG><a name="[ab]"></a>App_Manager_GetScaleData</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetScaleData))
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetPeso
 </UL>
 
-<P><STRONG><a name="[ab]"></a>App_Manager_GetTemperature</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetTemperature))
+<P><STRONG><a name="[ac]"></a>App_Manager_GetTemperature</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, app_manager.o(.text.App_Manager_GetTemperature))
 <BR><BR>[Called By]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetTemp
 </UL>
 
-<P><STRONG><a name="[7c]"></a>App_Manager_Init</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, app_manager.o(.text.App_Manager_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 232<LI>Call Chain = App_Manager_Init &rArr; Gerenciador_Config_Validar_e_Restaurar &rArr; EEPROM_Driver_Read_Blocking &rArr; HAL_I2C_IsDeviceReady &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
+<P><STRONG><a name="[7c]"></a>App_Manager_Init</STRONG> (Thumb, 288 bytes, Stack size 24 bytes, app_manager.o(.text.App_Manager_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = App_Manager_Init &rArr; Gerenciador_Config_Validar_e_Restaurar &rArr; EEPROM_Driver_Read_Blocking &rArr; HAL_I2C_IsDeviceReady &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 </UL>
-<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
+<BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Init
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Init
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Init
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Init
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Init
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Init
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Frequency_Init
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Init
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Init
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[87]"></a>App_Manager_Process</STRONG> (Thumb, 356 bytes, Stack size 32 bytes, app_manager.o(.text.App_Manager_Process))
+<P><STRONG><a name="[89]"></a>App_Manager_Process</STRONG> (Thumb, 356 bytes, Stack size 32 bytes, app_manager.o(.text.App_Manager_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 232<LI>Call Chain = App_Manager_Process &rArr; Gerenciador_Config_Run_FSM &rArr; EEPROM_Driver_Write_Async_Poll &rArr; HAL_I2C_Mem_Write &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_IsTxBusy
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_IsTxBusy
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
 <LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
@@ -719,40 +723,40 @@ Global Symbols
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_ConvertToGrams
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Read_Median_of_3
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmple
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Process
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmpge
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Cal_A
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_GetCurrentScreen
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmple
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Process
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmpge
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Cal_A
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_GetCurrentScreen
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Frequency_Get_Pulse_Count
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Frequency_Reset
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Frequency_Get_Pulse_Count
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Frequency_Reset
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9e]"></a>CLI_HandleError</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, cli_driver.o(.text.CLI_HandleError))
+<P><STRONG><a name="[9f]"></a>CLI_HandleError</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, cli_driver.o(.text.CLI_HandleError))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = CLI_HandleError &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_ErrorCallback
 </UL>
 
-<P><STRONG><a name="[a1]"></a>CLI_HandleRxCplt</STRONG> (Thumb, 552 bytes, Stack size 24 bytes, cli_driver.o(.text.CLI_HandleRxCplt))
+<P><STRONG><a name="[a2]"></a>CLI_HandleRxCplt</STRONG> (Thumb, 552 bytes, Stack size 24 bytes, cli_driver.o(.text.CLI_HandleRxCplt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = CLI_HandleRxCplt &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_ctype_table
 </UL>
 <BR>[Called By]<UL><LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
@@ -765,86 +769,86 @@ Global Symbols
 <P><STRONG><a name="[7d]"></a>CLI_Init</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, cli_driver.o(.text.CLI_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = CLI_Init &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[a5]"></a>CLI_Printf_Transmit</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, cli_driver.o(.text.CLI_Printf_Transmit))
+<P><STRONG><a name="[a6]"></a>CLI_Printf_Transmit</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, cli_driver.o(.text.CLI_Printf_Transmit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
 <BR>[Called By]<UL><LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fputc
 </UL>
 
-<P><STRONG><a name="[8b]"></a>CLI_Process</STRONG> (Thumb, 284 bytes, Stack size 24 bytes, cli_driver.o(.text.CLI_Process))
+<P><STRONG><a name="[8c]"></a>CLI_Process</STRONG> (Thumb, 284 bytes, Stack size 24 bytes, cli_driver.o(.text.CLI_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = CLI_Process &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcasecmp
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_ctype_table
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[88]"></a>CLI_TX_Pump</STRONG> (Thumb, 140 bytes, Stack size 16 bytes, cli_driver.o(.text.CLI_TX_Pump))
+<P><STRONG><a name="[8a]"></a>CLI_TX_Pump</STRONG> (Thumb, 140 bytes, Stack size 16 bytes, cli_driver.o(.text.CLI_TX_Pump))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = CLI_TX_Pump &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[27]"></a>Controller_DwinCallback</STRONG> (Thumb, 260 bytes, Stack size 8 bytes, controller.o(.text.Controller_DwinCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = Controller_DwinCallback &rArr; Set_Just_Time_Parser &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> app_manager.o(.text.App_Manager_Init)
 </UL>
-<P><STRONG><a name="[8e]"></a>Controller_GetCurrentScreen</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, controller.o(.text.Controller_GetCurrentScreen))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<P><STRONG><a name="[8f]"></a>Controller_GetCurrentScreen</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, controller.o(.text.Controller_GetCurrentScreen))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
 </UL>
 
 <P><STRONG><a name="[f]"></a>DMA1_Channel1_IRQHandler</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMA1_Channel1_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMA1_Channel1_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
 <P><STRONG><a name="[10]"></a>DMA1_Channel2_3_IRQHandler</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMA1_Channel2_3_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMA1_Channel2_3_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
 <P><STRONG><a name="[11]"></a>DMAMUX1_DMA1_CH4_5_IRQHandler</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.DMAMUX1_DMA1_CH4_5_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DMAMUX1_DMA1_CH4_5_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[b3]"></a>DWIN_Driver_HandleError</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleError))
+<P><STRONG><a name="[b4]"></a>DWIN_Driver_HandleError</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleError))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DWIN_Driver_HandleError
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -852,7 +856,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_ErrorCallback
 </UL>
 
-<P><STRONG><a name="[b4]"></a>DWIN_Driver_HandleRxEvent</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleRxEvent))
+<P><STRONG><a name="[b5]"></a>DWIN_Driver_HandleRxEvent</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, dwin_driver.o(.text.DWIN_Driver_HandleRxEvent))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = DWIN_Driver_HandleRxEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -864,95 +868,100 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_TxCpltCallback
 </UL>
 
-<P><STRONG><a name="[86]"></a>DWIN_Driver_Init</STRONG> (Thumb, 100 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_Init))
+<P><STRONG><a name="[7e]"></a>DWIN_Driver_Init</STRONG> (Thumb, 100 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = DWIN_Driver_Init &rArr; HAL_UARTEx_ReceiveToIdle_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[96]"></a>DWIN_Driver_IsTxBusy</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, dwin_driver.o(.text.DWIN_Driver_IsTxBusy))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<P><STRONG><a name="[97]"></a>DWIN_Driver_IsTxBusy</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, dwin_driver.o(.text.DWIN_Driver_IsTxBusy))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
 </UL>
 
-<P><STRONG><a name="[8a]"></a>DWIN_Driver_Process</STRONG> (Thumb, 256 bytes, Stack size 80 bytes, dwin_driver.o(.text.DWIN_Driver_Process))
+<P><STRONG><a name="[8b]"></a>DWIN_Driver_Process</STRONG> (Thumb, 256 bytes, Stack size 80 bytes, dwin_driver.o(.text.DWIN_Driver_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = DWIN_Driver_Process &rArr; HAL_UARTEx_ReceiveToIdle_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[b7]"></a>DWIN_Driver_SetScreen</STRONG> (Thumb, 232 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_SetScreen))
+<P><STRONG><a name="[7f]"></a>DWIN_Driver_SetScreen</STRONG> (Thumb, 232 bytes, Stack size 24 bytes, dwin_driver.o(.text.DWIN_Driver_SetScreen))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = DWIN_Driver_SetScreen
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_PIC
 </UL>
 
-<P><STRONG><a name="[95]"></a>DWIN_Driver_WriteInt</STRONG> (Thumb, 212 bytes, Stack size 32 bytes, dwin_driver.o(.text.DWIN_Driver_WriteInt))
+<P><STRONG><a name="[96]"></a>DWIN_Driver_WriteInt</STRONG> (Thumb, 212 bytes, Stack size 32 bytes, dwin_driver.o(.text.DWIN_Driver_WriteInt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = DWIN_Driver_WriteInt
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_INT
 </UL>
 
-<P><STRONG><a name="[94]"></a>DWIN_Driver_WriteInt32</STRONG> (Thumb, 244 bytes, Stack size 40 bytes, dwin_driver.o(.text.DWIN_Driver_WriteInt32))
+<P><STRONG><a name="[95]"></a>DWIN_Driver_WriteInt32</STRONG> (Thumb, 244 bytes, Stack size 40 bytes, dwin_driver.o(.text.DWIN_Driver_WriteInt32))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = DWIN_Driver_WriteInt32
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_INT32
 </UL>
 
 <P><STRONG><a name="[b8]"></a>DWIN_Driver_WriteRawBytes</STRONG> (Thumb, 280 bytes, Stack size 32 bytes, dwin_driver.o(.text.DWIN_Driver_WriteRawBytes))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = DWIN_Driver_WriteRawBytes
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_RAW
 </UL>
 
-<P><STRONG><a name="[9b]"></a>DWIN_Driver_WriteString</STRONG> (Thumb, 344 bytes, Stack size 96 bytes, dwin_driver.o(.text.DWIN_Driver_WriteString))
+<P><STRONG><a name="[9c]"></a>DWIN_Driver_WriteString</STRONG> (Thumb, 344 bytes, Stack size 96 bytes, dwin_driver.o(.text.DWIN_Driver_WriteString))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = DWIN_Driver_WriteString
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
-<P><STRONG><a name="[89]"></a>DWIN_TX_Pump</STRONG> (Thumb, 136 bytes, Stack size 16 bytes, dwin_driver.o(.text.DWIN_TX_Pump))
+<P><STRONG><a name="[80]"></a>DWIN_TX_Pump</STRONG> (Thumb, 136 bytes, Stack size 16 bytes, dwin_driver.o(.text.DWIN_TX_Pump))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = DWIN_TX_Pump &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_DisableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
 <P><STRONG><a name="[d4]"></a>Drv_ADS1232_DRDY_Callback</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, ads1232_driver.o(.text.Drv_ADS1232_DRDY_Callback))
@@ -960,15 +969,15 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[c4]"></a>EEPROM_Driver_GetAndClearErrorFlag</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, eeprom_driver.o(.text.EEPROM_Driver_GetAndClearErrorFlag))
-<BR><BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 </UL>
 
-<P><STRONG><a name="[7e]"></a>EEPROM_Driver_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, eeprom_driver.o(.text.EEPROM_Driver_Init))
+<P><STRONG><a name="[85]"></a>EEPROM_Driver_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, eeprom_driver.o(.text.EEPROM_Driver_Init))
 <BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
 <P><STRONG><a name="[c5]"></a>EEPROM_Driver_IsBusy</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, eeprom_driver.o(.text.EEPROM_Driver_IsBusy))
-<BR><BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 </UL>
 
 <P><STRONG><a name="[ba]"></a>EEPROM_Driver_Read_Blocking</STRONG> (Thumb, 84 bytes, Stack size 40 bytes, eeprom_driver.o(.text.EEPROM_Driver_Read_Blocking))
@@ -978,7 +987,7 @@ Global Symbols
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Mem_Read
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 </UL>
-<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
 </UL>
 
 <P><STRONG><a name="[bd]"></a>EEPROM_Driver_Write_Async_Poll</STRONG> (Thumb, 172 bytes, Stack size 40 bytes, eeprom_driver.o(.text.EEPROM_Driver_Write_Async_Poll))
@@ -989,7 +998,7 @@ Global Symbols
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 </UL>
 
 <P><STRONG><a name="[bf]"></a>EEPROM_Driver_Write_Async_Start</STRONG> (Thumb, 112 bytes, Stack size 32 bytes, eeprom_driver.o(.text.EEPROM_Driver_Write_Async_Start))
@@ -999,7 +1008,7 @@ Global Symbols
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Mem_Write
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 </UL>
 
 <P><STRONG><a name="[d]"></a>EXTI4_15_IRQHandler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.EXTI4_15_IRQHandler))
@@ -1009,7 +1018,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[a4]"></a>Error_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, main.o(.text.Error_Handler))
+<P><STRONG><a name="[a5]"></a>Error_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, main.o(.text.Error_Handler))
 <BR><BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PCD_MspInit
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_MspInit
@@ -1026,13 +1035,13 @@ Global Symbols
 <LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_I2C1_Init
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_CRC_Init
 <LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_ADC1_Init
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Init
 </UL>
 
-<P><STRONG><a name="[8f]"></a>Frequency_Get_Pulse_Count</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, pcb_frequency.o(.text.Frequency_Get_Pulse_Count))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<P><STRONG><a name="[90]"></a>Frequency_Get_Pulse_Count</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, pcb_frequency.o(.text.Frequency_Get_Pulse_Count))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[82]"></a>Frequency_Init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, pcb_frequency.o(.text.Frequency_Init))
@@ -1043,29 +1052,29 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[90]"></a>Frequency_Reset</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, pcb_frequency.o(.text.Frequency_Reset))
-<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<P><STRONG><a name="[91]"></a>Frequency_Reset</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, pcb_frequency.o(.text.Frequency_Reset))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[92]"></a>Gerenciador_Config_Get_Cal_A</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Cal_A))
+<P><STRONG><a name="[93]"></a>Gerenciador_Config_Get_Cal_A</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Cal_A))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Gerenciador_Config_Get_Cal_A
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
-<P><STRONG><a name="[9a]"></a>Gerenciador_Config_Get_Dados_Grao</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Dados_Grao))
+<P><STRONG><a name="[9b]"></a>Gerenciador_Config_Get_Dados_Grao</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Dados_Grao))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Gerenciador_Config_Get_Dados_Grao
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 </UL>
 
 <P><STRONG><a name="[119]"></a>Gerenciador_Config_Get_Grao_Ativo</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Grao_Ativo))
-<BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[11a]"></a>Gerenciador_Config_Get_Num_Graos</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Num_Graos))
-<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[c2]"></a>Gerenciador_Config_Get_Senha</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Senha))
@@ -1073,14 +1082,14 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 </UL>
 
-<P><STRONG><a name="[80]"></a>Gerenciador_Config_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Init))
+<P><STRONG><a name="[86]"></a>Gerenciador_Config_Init</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Init))
 <BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[98]"></a>Gerenciador_Config_Run_FSM</STRONG> (Thumb, 360 bytes, Stack size 24 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Run_FSM))
+<P><STRONG><a name="[99]"></a>Gerenciador_Config_Run_FSM</STRONG> (Thumb, 360 bytes, Stack size 24 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Run_FSM))
 <BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = Gerenciador_Config_Run_FSM &rArr; EEPROM_Driver_Write_Async_Poll &rArr; HAL_I2C_Mem_Write &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -1092,11 +1101,11 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_IsBusy
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[11b]"></a>Gerenciador_Config_Set_Grao_Ativo</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Set_Grao_Ativo))
-<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
 </UL>
 
 <P><STRONG><a name="[c7]"></a>Gerenciador_Config_Set_Senha</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Set_Senha))
@@ -1104,15 +1113,16 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
 </UL>
 
-<P><STRONG><a name="[81]"></a>Gerenciador_Config_Validar_e_Restaurar</STRONG> (Thumb, 784 bytes, Stack size 48 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Validar_e_Restaurar))
+<P><STRONG><a name="[87]"></a>Gerenciador_Config_Validar_e_Restaurar</STRONG> (Thumb, 760 bytes, Stack size 48 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Validar_e_Restaurar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = Gerenciador_Config_Validar_e_Restaurar &rArr; EEPROM_Driver_Read_Blocking &rArr; HAL_I2C_IsDeviceReady &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CRC_Calculate
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Read_Blocking
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -1126,11 +1136,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidiv
 </UL>
 <BR>[Called By]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_ADC1_Init
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[13a]"></a>HAL_ADC_GetValue</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32c0xx_hal_adc.o(.text.HAL_ADC_GetValue))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<BR><BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[c9]"></a>HAL_ADC_Init</STRONG> (Thumb, 564 bytes, Stack size 56 bytes, stm32c0xx_hal_adc.o(.text.HAL_ADC_Init))
@@ -1146,7 +1156,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = HAL_ADC_MspInit &rArr; HAL_RCCEx_PeriphCLKConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Init
 </UL>
@@ -1156,7 +1166,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[cd]"></a>HAL_ADC_Start</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, stm32c0xx_hal_adc.o(.text.HAL_ADC_Start))
@@ -1164,7 +1174,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Enable
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[ce]"></a>HAL_ADC_Stop</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, stm32c0xx_hal_adc.o(.text.HAL_ADC_Stop))
@@ -1172,7 +1182,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
+<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TempSensor_GetTemperature
 </UL>
 
 <P><STRONG><a name="[d1]"></a>HAL_CRCEx_Polynomial_Set</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, stm32c0xx_hal_crc_ex.o(.text.HAL_CRCEx_Polynomial_Set))
@@ -1184,8 +1194,8 @@ Global Symbols
 <P><STRONG><a name="[c6]"></a>HAL_CRC_Calculate</STRONG> (Thumb, 588 bytes, Stack size 36 bytes, stm32c0xx_hal_crc.o(.text.HAL_CRC_Calculate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = HAL_CRC_Calculate
 </UL>
-<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 </UL>
 
 <P><STRONG><a name="[cf]"></a>HAL_CRC_Init</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, stm32c0xx_hal_crc.o(.text.HAL_CRC_Init))
@@ -1213,10 +1223,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_DMA_Abort_IT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
 </UL>
 
-<P><STRONG><a name="[b2]"></a>HAL_DMA_IRQHandler</STRONG> (Thumb, 228 bytes, Stack size 40 bytes, stm32c0xx_hal_dma.o(.text.HAL_DMA_IRQHandler))
+<P><STRONG><a name="[b3]"></a>HAL_DMA_IRQHandler</STRONG> (Thumb, 228 bytes, Stack size 40 bytes, stm32c0xx_hal_dma.o(.text.HAL_DMA_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = HAL_DMA_IRQHandler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMAMUX1_DMA1_CH4_5_IRQHandler
@@ -1236,7 +1246,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = HAL_DMA_Start_IT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_DMA
-<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
 </UL>
 
 <P><STRONG><a name="[75]"></a>HAL_Delay</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, stm32c0xx_hal.o(.text.HAL_Delay))
@@ -1244,7 +1254,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
+<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Init
 </UL>
 
@@ -1297,13 +1308,13 @@ Global Symbols
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Stop
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Enable
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
-<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
+<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetDate
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_ExitInitMode
@@ -1314,11 +1325,11 @@ Global Symbols
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitOnFlagUntilTimeout
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitOnTXISFlagUntilTimeout
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_IsErrorOccurred
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
 <LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Write_Async_Poll
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Write_Async_Start
 </UL>
@@ -1382,7 +1393,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Init
 </UL>
@@ -1418,32 +1429,32 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 </UL>
 
-<P><STRONG><a name="[a2]"></a>HAL_NVIC_DisableIRQ</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_NVIC_DisableIRQ))
-<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<P><STRONG><a name="[a3]"></a>HAL_NVIC_DisableIRQ</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_NVIC_DisableIRQ))
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteRawBytes
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
 </UL>
 
-<P><STRONG><a name="[a3]"></a>HAL_NVIC_EnableIRQ</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_NVIC_EnableIRQ))
-<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<P><STRONG><a name="[a4]"></a>HAL_NVIC_EnableIRQ</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_NVIC_EnableIRQ))
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_MspInit
 <LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_DMA_Init
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteRawBytes
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
+<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
 </UL>
 
 <P><STRONG><a name="[e1]"></a>HAL_NVIC_SetPriority</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_NVIC_SetPriority))
@@ -1475,7 +1486,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = HAL_PCD_MspInit &rArr; HAL_RCCEx_PeriphCLKConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PCD_Init
 </UL>
@@ -1530,15 +1541,15 @@ Global Symbols
 <P><STRONG><a name="[136]"></a>HAL_RTC_GetDate</STRONG> (Thumb, 70 bytes, Stack size 16 bytes, stm32c0xx_hal_rtc.o(.text.HAL_RTC_GetDate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_RTC_GetDate
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
 <P><STRONG><a name="[135]"></a>HAL_RTC_GetTime</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, stm32c0xx_hal_rtc.o(.text.HAL_RTC_GetTime))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_RTC_GetTime
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
 <P><STRONG><a name="[eb]"></a>HAL_RTC_Init</STRONG> (Thumb, 212 bytes, Stack size 24 bytes, stm32c0xx_hal_rtc.o(.text.HAL_RTC_Init))
@@ -1555,7 +1566,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = HAL_RTC_MspInit &rArr; HAL_RCCEx_PeriphCLKConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
 </UL>
@@ -1567,7 +1578,7 @@ Global Symbols
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_ExitInitMode
 </UL>
 <BR>[Called By]<UL><LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_RTC_Init
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
 <P><STRONG><a name="[ef]"></a>HAL_RTC_SetTime</STRONG> (Thumb, 360 bytes, Stack size 40 bytes, stm32c0xx_hal_rtc.o(.text.HAL_RTC_SetTime))
@@ -1578,7 +1589,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_RTC_Init
 <LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_SetTime
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
 <P><STRONG><a name="[e0]"></a>HAL_SYSTICK_Config</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, stm32c0xx_hal_cortex.o(.text.HAL_SYSTICK_Config))
@@ -1624,7 +1635,7 @@ Global Symbols
 <P><STRONG><a name="[f1]"></a>HAL_TIM_Base_MspInit</STRONG> (Thumb, 184 bytes, Stack size 32 bytes, tim.o(.text.HAL_TIM_Base_MspInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
@@ -1723,19 +1734,19 @@ Global Symbols
 <LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
 
-<P><STRONG><a name="[b5]"></a>HAL_UARTEx_ReceiveToIdle_DMA</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32c0xx_hal_uart_ex.o(.text.HAL_UARTEx_ReceiveToIdle_DMA))
+<P><STRONG><a name="[b6]"></a>HAL_UARTEx_ReceiveToIdle_DMA</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32c0xx_hal_uart_ex.o(.text.HAL_UARTEx_ReceiveToIdle_DMA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = HAL_UARTEx_ReceiveToIdle_DMA &rArr; UART_Start_Receive_DMA &rArr; HAL_DMA_Start_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_DMA
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
 </UL>
 
 <P><STRONG><a name="[101]"></a>HAL_UARTEx_RxEventCallback</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UARTEx_RxEventCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_UARTEx_RxEventCallback &rArr; DWIN_Driver_HandleRxEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleRxEvent
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAReceiveCplt
@@ -1777,27 +1788,27 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[105]"></a>HAL_UART_AbortReceiveCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_AbortReceiveCpltCallback))
-<BR><BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
+<BR><BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceive_IT
 <LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMARxOnlyAbortCallback
 </UL>
 
-<P><STRONG><a name="[9f]"></a>HAL_UART_AbortReceive_IT</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_AbortReceive_IT))
+<P><STRONG><a name="[a0]"></a>HAL_UART_AbortReceive_IT</STRONG> (Thumb, 192 bytes, Stack size 16 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_AbortReceive_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = HAL_UART_AbortReceive_IT &rArr; HAL_DMA_Abort_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[104]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort_IT
 <LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_AbortReceiveCpltCallback
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Process
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_Init
 </UL>
 
 <P><STRONG><a name="[106]"></a>HAL_UART_ErrorCallback</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UART_ErrorCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = HAL_UART_ErrorCallback &rArr; CLI_HandleError &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
+<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_HandleError
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 <LI><a href="#[29]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAAbortOnError
@@ -1839,28 +1850,28 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Init
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 </UL>
 
-<P><STRONG><a name="[a0]"></a>HAL_UART_Receive_IT</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_Receive_IT))
+<P><STRONG><a name="[a1]"></a>HAL_UART_Receive_IT</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_Receive_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Start_Receive_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleError
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Init
 </UL>
 
 <P><STRONG><a name="[113]"></a>HAL_UART_RxCpltCallback</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UART_RxCpltCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = HAL_UART_RxCpltCallback &rArr; CLI_HandleRxCplt &rArr; HAL_UART_Receive_IT &rArr; UART_Start_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
+<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_HandleRxCplt
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMAReceiveCplt
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_RxISR_16BIT
@@ -1873,13 +1884,13 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMARxHalfCplt
 </UL>
 
-<P><STRONG><a name="[a8]"></a>HAL_UART_Transmit_DMA</STRONG> (Thumb, 176 bytes, Stack size 24 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_Transmit_DMA))
+<P><STRONG><a name="[a9]"></a>HAL_UART_Transmit_DMA</STRONG> (Thumb, 176 bytes, Stack size 24 bytes, stm32c0xx_hal_uart.o(.text.HAL_UART_Transmit_DMA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Start_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
+<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_TX_Pump
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_TX_Pump
 </UL>
 
 <P><STRONG><a name="[10a]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, stm32c0xx_it.o(.text.HAL_UART_TxCpltCallback))
@@ -1908,7 +1919,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_ConfigChannel
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1917,7 +1928,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = MX_CRC_Init &rArr; HAL_CRC_Init &rArr; HAL_CRCEx_Polynomial_Set
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_CRC_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1925,7 +1936,7 @@ Global Symbols
 <P><STRONG><a name="[11f]"></a>MX_DMA_Init</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, dma.o(.text.MX_DMA_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = MX_DMA_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1934,7 +1945,7 @@ Global Symbols
 <P><STRONG><a name="[120]"></a>MX_GPIO_Init</STRONG> (Thumb, 312 bytes, Stack size 64 bytes, gpio.o(.text.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1948,7 +1959,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2CEx_ConfigDigitalFilter
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2CEx_ConfigAnalogFilter
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1959,7 +1970,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetDate
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1968,7 +1979,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 116<LI>Call Chain = MX_TIM14_Init &rArr; HAL_TIM_Base_Init &rArr; HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1981,8 +1992,8 @@ Global Symbols
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Init
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1995,8 +2006,8 @@ Global Symbols
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Init
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2007,7 +2018,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_MasterConfigSynchronization
 <LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_SlaveConfigSynchro
 <LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2019,7 +2030,7 @@ Global Symbols
 <LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_SetRxFifoThreshold
 <LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_SetTxFifoThreshold
 <LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2031,7 +2042,7 @@ Global Symbols
 <LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_SetRxFifoThreshold
 <LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_SetTxFifoThreshold
 <LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2040,7 +2051,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = MX_USB_PCD_Init &rArr; HAL_PCD_Init &rArr; HAL_PCD_MspInit &rArr; HAL_RCCEx_PeriphCLKConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PCD_Init
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2057,7 +2068,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Start
 </UL>
-<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Init
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Init
 </UL>
 
 <P><STRONG><a name="[132]"></a>PWM_Servo_SetAngle</STRONG> (Thumb, 116 bytes, Stack size 24 bytes, pwm_servo_driver.o(.text.PWM_Servo_SetAngle))
@@ -2065,41 +2076,43 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fdiv
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmpgt
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fcmplt
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Process
+<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Servos_Process
 </UL>
 
 <P><STRONG><a name="[4]"></a>PendSV_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32c0xx_it.o(.text.PendSV_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[7f]"></a>RTC_Driver_Init</STRONG> (Thumb, 96 bytes, Stack size 64 bytes, rtc_driver.o(.text.RTC_Driver_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = RTC_Driver_Init &rArr; HAL_RTC_SetDate &rArr; RTC_ExitInitMode
+<P><STRONG><a name="[88]"></a>RTC_Driver_Init</STRONG> (Thumb, 168 bytes, Stack size 72 bytes, rtc_driver.o(.text.RTC_Driver_Init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = RTC_Driver_Init &rArr; DWIN_Driver_WriteString
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetDate
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 <LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetDate
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetTime
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
+<LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[97]"></a>RTC_Driver_Process</STRONG> (Thumb, 156 bytes, Stack size 48 bytes, rtc_driver.o(.text.RTC_Driver_Process))
+<P><STRONG><a name="[98]"></a>RTC_Driver_Process</STRONG> (Thumb, 156 bytes, Stack size 48 bytes, rtc_driver.o(.text.RTC_Driver_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = RTC_Driver_Process &rArr; DWIN_Driver_WriteString
 </UL>
 <BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetDate
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_GetTime
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_IsTxBusy
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_GetCurrentScreen
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_IsTxBusy
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_GetCurrentScreen
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[138]"></a>RTC_Driver_SetTime</STRONG> (Thumb, 52 bytes, Stack size 40 bytes, rtc_driver.o(.text.RTC_Driver_SetTime))
@@ -2107,7 +2120,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 </UL>
-<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
 </UL>
 
 <P><STRONG><a name="[ed]"></a>RTC_ExitInitMode</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, stm32c0xx_hal_rtc.o(.text.RTC_ExitInitMode))
@@ -2129,7 +2142,7 @@ Global Symbols
 <P><STRONG><a name="[3]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32c0xx_it.o(.text.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[83]"></a>Servos_Init</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, servo_controle.o(.text.Servos_Init))
+<P><STRONG><a name="[81]"></a>Servos_Init</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, servo_controle.o(.text.Servos_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = Servos_Init &rArr; PWM_Servo_Init &rArr; HAL_TIM_PWM_Start
 </UL>
 <BR>[Calls]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_Init
@@ -2137,12 +2150,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
-<P><STRONG><a name="[8c]"></a>Servos_Process</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, servo_controle.o(.text.Servos_Process))
+<P><STRONG><a name="[8d]"></a>Servos_Process</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, servo_controle.o(.text.Servos_Process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = Servos_Process &rArr; PWM_Servo_SetAngle &rArr; __aeabi_ui2f &rArr; _float_epilogue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Servo_SetAngle
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 </UL>
 
 <P><STRONG><a name="[fd]"></a>Servos_Tick_ms</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, servo_controle.o(.text.Servos_Tick_ms))
@@ -2166,7 +2179,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32c071xx.o(RESET)
 </UL>
-<P><STRONG><a name="[84]"></a>TempSensor_GetTemperature</STRONG> (Thumb, 168 bytes, Stack size 32 bytes, temp_sensor.o(.text.TempSensor_GetTemperature))
+<P><STRONG><a name="[83]"></a>TempSensor_GetTemperature</STRONG> (Thumb, 168 bytes, Stack size 32 bytes, temp_sensor.o(.text.TempSensor_GetTemperature))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = TempSensor_GetTemperature &rArr; HAL_ADC_ConfigChannel &rArr; __aeabi_uidiv
 </UL>
 <BR>[Calls]<UL><LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_GetValue
@@ -2180,7 +2193,7 @@ Global Symbols
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 </UL>
 
@@ -2214,13 +2227,13 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Start_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
+<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
 </UL>
 
 <P><STRONG><a name="[112]"></a>UART_Start_Receive_IT</STRONG> (Thumb, 296 bytes, Stack size 20 bytes, stm32c0xx_hal_uart.o(.text.UART_Start_Receive_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = UART_Start_Receive_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
+<BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 </UL>
 
 <P><STRONG><a name="[13b]"></a>UART_WaitOnFlagUntilTimeout</STRONG> (Thumb, 448 bytes, Stack size 40 bytes, stm32c0xx_hal_uart.o(.text.UART_WaitOnFlagUntilTimeout))
@@ -2256,16 +2269,16 @@ Global Symbols
 <P><STRONG><a name="[33]"></a>fputc</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, retarget.o(.text.fputc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = fputc &rArr; CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
+<BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Printf_Transmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printfa.o(i.__0printf)
 </UL>
 <P><STRONG><a name="[20]"></a>main</STRONG> (Thumb, 188 bytes, Stack size 56 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 292<LI>Call Chain = main &rArr; MX_TIM17_Init &rArr; HAL_TIM_Base_Init &rArr; HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
+<BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = main &rArr; App_Manager_Init &rArr; Gerenciador_Config_Validar_e_Restaurar &rArr; EEPROM_Driver_Read_Blocking &rArr; HAL_I2C_IsDeviceReady &rArr; I2C_WaitOnFlagUntilTimeout &rArr; I2C_IsErrorOccurred
 </UL>
-<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Process
 <LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Retarget_Init
@@ -2299,13 +2312,13 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Tela_ON_OFF
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Init
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_RAW
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_INT32
@@ -2315,8 +2328,8 @@ Global Symbols
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetTemp
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetPeso
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Dwin
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Write_Async_Poll
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Write_Async_Start
 </UL>
@@ -2331,10 +2344,10 @@ Global Symbols
 
 <P><STRONG><a name="[15b]"></a>__1snprintf</STRONG> (Thumb, 0 bytes, Stack size 40 bytes, printfa.o(i.__0snprintf), UNUSED)
 
-<P><STRONG><a name="[9c]"></a>__2snprintf</STRONG> (Thumb, 0 bytes, Stack size 40 bytes, printfa.o(i.__0snprintf))
+<P><STRONG><a name="[9d]"></a>__2snprintf</STRONG> (Thumb, 0 bytes, Stack size 40 bytes, printfa.o(i.__0snprintf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = __2snprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 </UL>
 
 <P><STRONG><a name="[15c]"></a>__c89snprintf</STRONG> (Thumb, 0 bytes, Stack size 40 bytes, printfa.o(i.__0snprintf), UNUSED)
@@ -2351,7 +2364,8 @@ Global Symbols
 <P><STRONG><a name="[137]"></a>__2sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0sprintf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2sprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<BR>[Called By]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Process
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 </UL>
 
 <P><STRONG><a name="[15f]"></a>__c89sprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0sprintf), UNUSED)
@@ -2384,19 +2398,19 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_Init
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADS1232_Tare
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Just_Time_Parser
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_VP_Senha
+<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_De_Senha
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetFreq
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetPeso
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Help
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Validar_e_Restaurar
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Run_FSM
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_Init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Write_Async_Poll
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EEPROM_Driver_Read_Blocking
 </UL>
@@ -2560,7 +2574,7 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = Cmd_Dwin &rArr; strcasecmp
 </UL>
 <BR>[Calls]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcasecmp
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
+<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_ctype_table
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -2570,8 +2584,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Cmd_GetPeso &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
-<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetScaleData
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetScaleData
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli_driver.o(.rodata.s_command_table)
@@ -2579,8 +2593,8 @@ Local Symbols
 <P><STRONG><a name="[39]"></a>Cmd_GetTemp</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, cli_driver.o(.text.Cmd_GetTemp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = Cmd_GetTemp &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetTemperature
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetTemperature
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli_driver.o(.rodata.s_command_table)
@@ -2589,8 +2603,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = Cmd_GetFreq &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetFreqData
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
+<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;App_Manager_GetFreqData
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli_driver.o(.rodata.s_command_table)
@@ -2598,7 +2612,7 @@ Local Symbols
 <P><STRONG><a name="[3b]"></a>Handle_Dwin_PIC</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, cli_driver.o(.text.Handle_Dwin_PIC))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Handle_Dwin_PIC &rArr; atoi &rArr; strtol &rArr; _strtoul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -2607,8 +2621,8 @@ Local Symbols
 <P><STRONG><a name="[3c]"></a>Handle_Dwin_INT</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, cli_driver.o(.text.Handle_Dwin_INT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = Handle_Dwin_INT &rArr; atoi &rArr; strtol &rArr; _strtoul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt
+<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atoi
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strtol
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -2618,8 +2632,8 @@ Local Symbols
 <P><STRONG><a name="[3d]"></a>Handle_Dwin_INT32</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, cli_driver.o(.text.Handle_Dwin_INT32))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = Handle_Dwin_INT32 &rArr; atol &rArr; strtol &rArr; _strtoul
 </UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
+<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteInt32
+<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strchr
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;atol
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strtol
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -2636,10 +2650,10 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> cli_driver.o(.rodata.s_dwin_table)
 </UL>
-<P><STRONG><a name="[ac]"></a>Lidar_Com_Entrada_De_Senha</STRONG> (Thumb, 328 bytes, Stack size 40 bytes, controller.o(.text.Lidar_Com_Entrada_De_Senha))
+<P><STRONG><a name="[ad]"></a>Lidar_Com_Entrada_De_Senha</STRONG> (Thumb, 328 bytes, Stack size 40 bytes, controller.o(.text.Lidar_Com_Entrada_De_Senha))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Lidar_Com_Entrada_De_Senha &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Senha
@@ -2648,29 +2662,30 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[ad]"></a>Lidar_Com_VP_Senha</STRONG> (Thumb, 360 bytes, Stack size 32 bytes, controller.o(.text.Lidar_Com_VP_Senha))
+<P><STRONG><a name="[ae]"></a>Lidar_Com_VP_Senha</STRONG> (Thumb, 360 bytes, Stack size 32 bytes, controller.o(.text.Lidar_Com_VP_Senha))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Lidar_Com_VP_Senha &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Set_Senha
 </UL>
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[ae]"></a>Tela_ON_OFF</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, controller.o(.text.Tela_ON_OFF))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = Tela_ON_OFF &rArr; DWIN_Driver_WriteRawBytes
+<P><STRONG><a name="[af]"></a>Tela_ON_OFF</STRONG> (Thumb, 72 bytes, Stack size 16 bytes, controller.o(.text.Tela_ON_OFF))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = Tela_ON_OFF &rArr; DWIN_Driver_WriteRawBytes
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteRawBytes
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[af]"></a>Set_Just_Time_Parser</STRONG> (Thumb, 380 bytes, Stack size 48 bytes, controller.o(.text.Set_Just_Time_Parser))
+<P><STRONG><a name="[b0]"></a>Set_Just_Time_Parser</STRONG> (Thumb, 380 bytes, Stack size 48 bytes, controller.o(.text.Set_Just_Time_Parser))
 <BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = Set_Just_Time_Parser &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
@@ -2681,22 +2696,23 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[b0]"></a>Lidar_Com_Entrada_Tela_Graos</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, controller.o(.text.Lidar_Com_Entrada_Tela_Graos))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = Lidar_Com_Entrada_Tela_Graos &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
+<P><STRONG><a name="[b1]"></a>Lidar_Com_Entrada_Tela_Graos</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, controller.o(.text.Lidar_Com_Entrada_Tela_Graos))
+<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = Lidar_Com_Entrada_Tela_Graos &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 <LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Grao_Ativo
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Num_Graos
 </UL>
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[b1]"></a>Lidar_Com_Selecao_De_Grao</STRONG> (Thumb, 152 bytes, Stack size 8 bytes, controller.o(.text.Lidar_Com_Selecao_De_Grao))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = Lidar_Com_Selecao_De_Grao &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
+<P><STRONG><a name="[b2]"></a>Lidar_Com_Selecao_De_Grao</STRONG> (Thumb, 144 bytes, Stack size 8 bytes, controller.o(.text.Lidar_Com_Selecao_De_Grao))
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = Lidar_Com_Selecao_De_Grao &rArr; Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Num_Graos
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Set_Grao_Ativo
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -2704,18 +2720,18 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[99]"></a>Atualizar_Display_Grao_Selecionado</STRONG> (Thumb, 208 bytes, Stack size 96 bytes, controller.o(.text.Atualizar_Display_Grao_Selecionado))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
+<P><STRONG><a name="[9a]"></a>Atualizar_Display_Grao_Selecionado</STRONG> (Thumb, 208 bytes, Stack size 104 bytes, controller.o(.text.Atualizar_Display_Grao_Selecionado))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = Atualizar_Display_Grao_Selecionado &rArr; DWIN_Driver_WriteString
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Dados_Grao
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gerenciador_Config_Get_Dados_Grao
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
-<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
+<BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Selecao_De_Grao
+<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lidar_Com_Entrada_Tela_Graos
 </UL>
 
 <P><STRONG><a name="[144]"></a>_fp_digits</STRONG> (Thumb, 344 bytes, Stack size 64 bytes, printfa.o(i._fp_digits), UNUSED)

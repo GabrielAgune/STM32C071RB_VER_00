@@ -11,8 +11,8 @@
 
 #include "app_manager.h"
 #include "rtc_driver.h"
-#include "dwin_driver.h"   // (V8.3) Para Enums de Tela
-#include "controller.h" // (V8.3) Para GetCurrentScreen
+#include "dwin_driver.h"   
+#include "controller.h" 
 #include "servo_controle.h"
 #include "ads1232_driver.h"
 #include "pcb_frequency.h"
@@ -38,13 +38,13 @@ extern volatile bool g_ads_data_ready;
 //================================================================================
 typedef enum {
     TASK_DISPLAY_IDLE,
-    TASK_DISPLAY_CHECK_SCREEN, // (V8.4) Checa a tela
+    TASK_DISPLAY_CHECK_SCREEN, 
 } TaskDisplay_State_t;
 
 static TaskDisplay_State_t s_display_state = TASK_DISPLAY_IDLE;
 static uint32_t s_display_last_tick = 0;
 static const uint32_t DISPLAY_UPDATE_INTERVAL_MS = 1000;
-static uint8_t s_display_temp_counter = 0; // (V8.5) Sub-contador para coleta de dados bloqueante
+static uint8_t s_display_temp_counter = 0; 
 
 //================================================================================
 // Protótipos das Tarefas (Funções Privadas)
@@ -60,39 +60,70 @@ static bool Check_Stability(float new_grams);
 //================================================================================
 void App_Manager_Init(void)
 {
-    // (Sequência de Init V1.0 original, sem alterações)
+		
+		
     CLI_Init(&huart1);
     printf("Sistema Integrado - Log de Inicializacao:\r\n");
     printf("1. CLI/Debug UART... OK\r\n");
+		DWIN_Driver_Init(&huart2, Controller_DwinCallback);
+    printf("Interface de Usuario... Iniciando sequencia de splash.\r\n");
+		
+		DWIN_Driver_SetScreen(LOGO);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1000);
+		
+		Servos_Init();   
+		DWIN_Driver_SetScreen(BOOT_CHECK_SERVOS);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1200);
+		
+		Frequency_Init(); 
+		DWIN_Driver_SetScreen(BOOT_CHECK_CAPACI);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1200);
+		
+		printf("4. Modulos de Hardware (ADC, Servos, Frequencia)... OK\r\n");
+		
+		ADS1232_Init();
+		ADS1232_Tare();
+		memset(&s_scale_output, 0, sizeof(s_scale_output));
+    printf("   ... Tara concluida.\r\n");
+		DWIN_Driver_SetScreen(BOOT_BALANCE);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1000);
+		
+		s_temperatura_mcu = TempSensor_GetTemperature(); 
+    printf("Temperatura inicial: %.2f C\r\n", s_temperatura_mcu);
+		DWIN_Driver_SetScreen(BOOT_THERMOMETER);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1000);
+		
     EEPROM_Driver_Init(&hi2c1);
-    RTC_Driver_Init(&hrtc);
-    printf("2. Drivers I2C e RTC... OK\r\n");
-    
-    Gerenciador_Config_Init(&hcrc);
+		Gerenciador_Config_Init(&hcrc);
     printf("3. Gerenciador de Configuracoes... ");
     if (!Gerenciador_Config_Validar_e_Restaurar()) {
         printf("[FALHA]\r\nERRO FATAL: Nao foi possivel carregar/restaurar configuracoes.\r\n");
+				DWIN_Driver_SetScreen(ERROR);
+				DWIN_TX_Pump();
+				return;
     } else {
         printf("[OK]\r\n");
     }
-    
-    ADS1232_Init();
-    Frequency_Init(); // Usa TIM2 Counter Mode
-    Servos_Init();    // Usa TIM16/17 PWM
-    printf("4. Modulos de Hardware (ADC, Servos, Frequencia)... OK\r\n");
-    
-    printf("5. Executando tara da balanca (pode demorar alguns segundos)...\r\n");
-    ADS1232_Tare();
-    
-    memset(&s_scale_output, 0, sizeof(s_scale_output));
-    printf("   ... Tara concluida.\r\n");
-    
-    s_temperatura_mcu = TempSensor_GetTemperature(); // Lê uma vez no boot
-    printf("Temperatura inicial: %.2f C\r\n", s_temperatura_mcu);
+		DWIN_Driver_SetScreen(BOOT_MEMORY);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1100);
+		
+    RTC_Driver_Init(&hrtc);
+		DWIN_Driver_SetScreen(BOOT_CLOCK);
+		DWIN_TX_Pump(); 
+		HAL_Delay(1100);
+    printf("2. Drivers I2C e RTC... OK\r\n");
+		
         
-    DWIN_Driver_Init(&huart2, Controller_DwinCallback);
-    printf("6. Interface de Usuario... Iniciando sequencia de splash.\r\n");
+    
     printf("\r\n>>> INICIALIZACAO COMPLETA (V8.2 Robusta) <<<\r\n\r\n");
+		DWIN_Driver_SetScreen(PRINCIPAL);
+		DWIN_TX_Pump(); 
 }
 
 //================================================================================
@@ -188,7 +219,7 @@ static void Task_Update_Display_FSM(void)
     if (s_display_state == TASK_DISPLAY_IDLE)
     {
         if (tick_atual - s_display_last_tick < DISPLAY_UPDATE_INTERVAL_MS) {
-            return; // Não é hora (1s)
+            return; 
         }
         
         s_display_last_tick = tick_atual; 
@@ -206,7 +237,7 @@ static void Task_Update_Display_FSM(void)
         // 1. Verifica a tela PRIMEIRO.
         uint16_t tela_atual = Controller_GetCurrentScreen();
 
-        if (tela_atual == TELA_MONITOR_SYSTEM) // Tela 56
+        if (tela_atual == TELA_MONITOR_SYSTEM)
         {
             // *** INÍCIO CORREÇÃO V8.6 (Proposta do Usuário) ***
             
