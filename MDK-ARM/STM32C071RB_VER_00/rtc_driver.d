@@ -38,4 +38,6 @@ stm32c071rb_ver_00/rtc_driver.o: ..\Core\Src\Drivers\rtc_driver.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\Application\controller.h
+  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\Application\controller.h \
+  ..\Core\Inc\Modules\gerenciador_configuracoes.h \
+  ..\Core\Inc\Drivers\eeprom_driver.h

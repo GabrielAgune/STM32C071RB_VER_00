@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32C071xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32C0xx/Include;../Drivers/CMSIS/Include;../Core/Inc/Application;../Core/Inc/Drivers;../Core/Inc/Modules</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc;../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32C0xx/Include;../Drivers/CMSIS/Include;../Core/Inc/Application;../Core/Inc/Drivers;../Core/Inc/Modules;..\Core\Inc\Application\Handle</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -744,6 +744,31 @@
               <FileName>controller.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\controller.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>App/Handle</GroupName>
+          <Files>
+            <File>
+              <FileName>dwin_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\dwin_parser.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\rtc_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>display_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\display_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>autenticacao_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\autenticacao_handler.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,5 +1,6 @@
 stm32c071rb_ver_00/controller.o: ..\Core\Src\Application\controller.c \
-  ..\Core\Inc\main.h ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
+  ..\Core\Inc\Application\controller.h ..\Core\Inc\main.h \
+  ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c071xx.h \
@@ -37,7 +38,11 @@ stm32c071rb_ver_00/controller.o: ..\Core\Src\Application\controller.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\Application\controller.h ..\Core\Inc\Drivers\dwin_driver.h \
-  ..\Core\Inc\rtc.h ..\Core\Inc\Drivers\rtc_driver.h \
+  ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\rtc.h \
+  ..\Core\Inc\Drivers\rtc_driver.h \
   ..\Core\Inc\Modules\gerenciador_configuracoes.h \
-  ..\Core\Inc\Drivers\eeprom_driver.h
+  ..\Core\Inc\Drivers\eeprom_driver.h \
+  ..\Core\Inc\Application\Handle\autenticacao_handler.h \
+  ..\Core\Inc\Application\Handle\dwin_parser.h \
+  ..\Core\Inc\Application\Handle\rtc_handler.h \
+  ..\Core\Inc\Application\Handle\display_handler.h
