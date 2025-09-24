@@ -40,4 +40,10 @@ stm32c071rb_ver_00/rtc_driver.o: ..\Core\Src\Drivers\rtc_driver.c \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
   ..\Core\Inc\Drivers\dwin_driver.h ..\Core\Inc\Application\controller.h \
   ..\Core\Inc\Modules\gerenciador_configuracoes.h \
-  ..\Core\Inc\Drivers\eeprom_driver.h
+  ..\Core\Inc\Drivers\eeprom_driver.h \
+  ..\Core\Inc\Application\Handle\autenticacao_handler.h \
+  ..\Core\Inc\Application\Handle\dwin_parser.h \
+  ..\Core\Inc\Application\Handle\rtc_handler.h \
+  ..\Core\Inc\Application\Handle\display_handler.h \
+  ..\Core\Inc\Application\relato.h \
+  ..\Core\Inc\Application\Handle\graos_handler.h

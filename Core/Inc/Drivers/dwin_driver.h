@@ -79,7 +79,7 @@ enum
 	NR_REPETICOES     = 0x3020,
 	DECIMALS          = 0x3030,
 	DES_HAB_PRINT     = 0x3040,
-	SENHA             = 0x3060,
+	SET_SENHA         = 0x3060,
 	DIAGNOSTIC        = 0x3070,
 	USER              = 0x3080,
 	COMPANY           = 0x3090,
@@ -242,4 +242,6 @@ bool DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size);
 void DWIN_Driver_HandleTxCplt(UART_HandleTypeDef *huart);
 void DWIN_Driver_HandleRxEvent(UART_HandleTypeDef *huart, uint16_t size);
 void DWIN_Driver_HandleError(UART_HandleTypeDef *huart);
+bool display_qr_code(const char* data_string);
+bool DWIN_Driver_Write_QR_String(uint16_t vp_address, const char* text, uint16_t max_len);
 #endif // __DWIN_DRIVER_H

@@ -55,10 +55,12 @@
 "stm32c071rb_ver_00\app_manager.o"
 "stm32c071rb_ver_00\retarget.o"
 "stm32c071rb_ver_00\controller.o"
+"stm32c071rb_ver_00\relato.o"
 "stm32c071rb_ver_00\dwin_parser.o"
 "stm32c071rb_ver_00\rtc_handler.o"
 "stm32c071rb_ver_00\display_handler.o"
 "stm32c071rb_ver_00\autenticacao_handler.o"
+"stm32c071rb_ver_00\graos_handler.o"
 --library_type=microlib --strict --scatter "STM32C071RB_VER_00\STM32C071RB_VER_00.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

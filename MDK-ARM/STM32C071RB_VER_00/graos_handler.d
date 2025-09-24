@@ -1,4 +1,6 @@
-stm32c071rb_ver_00/controller.o: ..\Core\Src\Application\controller.c \
+stm32c071rb_ver_00/graos_handler.o: \
+  ..\Core\Src\Application\Handle\graos_handler.c \
+  ..\Core\Inc\Application\Handle\graos_handler.h \
   ..\Core\Inc\Application\controller.h ..\Core\Inc\main.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h \
@@ -46,5 +48,4 @@ stm32c071rb_ver_00/controller.o: ..\Core\Src\Application\controller.c \
   ..\Core\Inc\Application\Handle\dwin_parser.h \
   ..\Core\Inc\Application\Handle\rtc_handler.h \
   ..\Core\Inc\Application\Handle\display_handler.h \
-  ..\Core\Inc\Application\relato.h \
-  ..\Core\Inc\Application\Handle\graos_handler.h
+  ..\Core\Inc\Application\relato.h

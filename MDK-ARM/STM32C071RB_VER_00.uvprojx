@@ -745,6 +745,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\controller.c</FilePath>
             </File>
+            <File>
+              <FileName>relato.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\relato.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -769,6 +774,11 @@
               <FileName>autenticacao_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\Handle\autenticacao_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>graos_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\graos_handler.c</FilePath>
             </File>
           </Files>
         </Group>

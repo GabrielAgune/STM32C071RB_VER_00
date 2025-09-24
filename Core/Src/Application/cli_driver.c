@@ -9,6 +9,7 @@
 #include "cli_driver.h"
 #include "dwin_driver.h"
 #include "app_manager.h" 
+#include "relato.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -44,6 +45,7 @@ static void Cmd_GetPeso(char* args); // <-- Modificado
 static void Cmd_GetTemp(char* args);
 static void Cmd_GetFreq(char* args);
 static void Cmd_Service(char* args);
+static void Cmd_Who_Am_I(char* args);
 static void Handle_Dwin_PIC(char* sub_args);
 static void Handle_Dwin_INT(char* sub_args);
 static void Handle_Dwin_INT32(char* sub_args);
@@ -73,7 +75,7 @@ static volatile bool s_dma_tx_busy = false;
 static const cli_command_t s_command_table[] = {
     { "HELP", Cmd_Help }, { "?", Cmd_Help }, { "DWIN", Cmd_Dwin },
     { "PESO", Cmd_GetPeso }, { "TEMP", Cmd_GetTemp }, { "FREQ", Cmd_GetFreq },
-		{ "SERVICE", Cmd_Service},
+		{ "SERVICE", Cmd_Service}, { "WHO_AM_I", Cmd_Who_Am_I},
 };
 static const size_t NUM_COMMANDS = sizeof(s_command_table) / sizeof(s_command_table[0]);
 
@@ -84,13 +86,14 @@ static const dwin_subcommand_t s_dwin_table[] = {
 static const size_t NUM_DWIN_SUBCOMMANDS = sizeof(s_dwin_table) / sizeof(s_dwin_table[0]);
 
 static const char HELP_TEXT[] =
-    "========================== CLI de Diagnostico (V8.2) ======================|\r\n"
+    "============================= CLI de Diagnostico ==========================|\r\n"
     "| HELP ou ?                | Mostra esta ajuda.                            |\r\n"
     "| PESO                     | Mostra a leitura atual da balanca.            |\r\n"
     "| TEMP                     | Mostra a leitura do sensor de temperatura.    |\r\n"
     "| FREQ                     | Mostra a ultima leitura de frequencia.        |\r\n"
+		"| SERVICE                  | Entra na tela de servico.                     |\r\n"
     "| DWIN PIC <id>            | Muda a tela (ex: DWIN PIC 1).                 |\r\n"
-    "| DWIN INT <addr_h> <val>  | Escreve int16 no VP (ex: DWIN INT 2190 1234).  |\r\n"
+    "| DWIN INT <addr_h> <val>  | Escreve int16 no VP (ex: DWIN INT 2190 1234). |\r\n"
     "| DWIN RAW <bytes_hex>     | Envia bytes crus para o DWIN (ex: 5AA5...).   |\r\n"
     "===========================================================================|\r\n";
 
@@ -284,6 +287,7 @@ static void Cmd_Help(char* args) {
     printf("%s", HELP_TEXT); 
 }
 
+
 static void Cmd_Service(char* args)
 {
 		DWIN_Driver_SetScreen(TELA_SERVICO);
@@ -327,6 +331,11 @@ static void Cmd_Dwin(char* args) {
         }
     }
     printf("Subcomando DWIN desconhecido: \"%s\"", sub_cmd);
+}
+
+static void Cmd_Who_Am_I(char* args)
+{
+	Who_am_i();
 }
 
 static void Handle_Dwin_PIC(char* sub_args) {

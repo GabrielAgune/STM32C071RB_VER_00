@@ -6,6 +6,11 @@
 #include "rtc.h"
 #include "rtc_driver.h" 
 #include "gerenciador_configuracoes.h"
+#include "autenticacao_handler.h"
+#include "rtc_handler.h"
+#include "display_handler.h"
+#include "graos_handler.h"
+#include "relato.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

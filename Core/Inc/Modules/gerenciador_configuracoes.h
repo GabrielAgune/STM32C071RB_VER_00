@@ -14,6 +14,11 @@
 #define MAX_NOME_GRAO_LEN 16
 #define MAX_SENHA_LEN 10
 #define MAX_VALIDADE_LEN 10
+#define MAX_USUARIOS 10
+#define HARDWARE "1.00"
+#define FIRMWARE "0.00.001"
+#define SERIAL "123456789"
+
 
 //==============================================================================
 // Estruturas de Dados
@@ -28,6 +33,11 @@ typedef struct {
 } Config_Grao_t;
 
 typedef struct {
+	char Nome[20];
+	char Empresa[20];
+} Config_Usuario_t;
+
+typedef struct {
     uint32_t versao_struct;
     uint8_t indice_idioma_selecionado;
     uint8_t indice_grao_ativo;
@@ -36,10 +46,16 @@ typedef struct {
     
     float fat_cal_a_gain;
     float fat_cal_a_zero;
+		
+		uint16_t nr_repetition;
+		uint16_t nr_decimals;
 
     Config_Grao_t graos[MAX_GRAOS];
+		Config_Usuario_t usuarios[MAX_USUARIOS];
     uint32_t crc;
 } Config_Aplicacao_t;
+
+
 
 //==============================================================================
 // Mapeamento de Memória Dinâmico e Seguro
@@ -70,6 +86,14 @@ bool Gerenciador_Config_Get_Indice_Idioma(uint8_t* indice);
 bool Gerenciador_Config_Set_Grao_Ativo(uint8_t novo_indice);
 bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo);
 bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero);
+uint16_t Gerenciador_Config_Get_NR_Repetition(void);
+uint16_t Gerenciador_Config_Get_NR_Decimals(void);
+bool Gerenciador_Config_Get_Usuario(char* usuario, uint8_t tamanho_usuario);
+bool Gerenciador_Config_Set_Usuario(const char* novo_usuario);
+bool Gerenciador_Config_Get_Company(char* empresa, uint8_t tamanho_empresa);
+bool Gerenciador_Config_Set_Company(const char* nova_empresa);
+bool Gerenciador_Config_Set_NR_Repetitions(uint16_t nr_repetitions);
+bool Gerenciador_Config_Set_NR_Decimals(uint16_t nr_decimals);
 bool Gerenciador_Config_Set_Cal_A(float gain, float zero);
 void Gerenciador_Config_Run_FSM(void);
 

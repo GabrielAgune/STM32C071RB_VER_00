@@ -1,0 +1,21 @@
+#ifndef RELATO_H
+#define RELATO_H
+
+#include "main.h"
+#include "gerenciador_configuracoes.h"
+#include "rtc_driver.h"
+#include "stm32c0xx_hal.h"
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+extern void Who_am_i(void);
+
+extern void Assinatura(void);
+extern void Cabecalho(void);
+
+extern void Relatorio_Printer (void);
+
+void Gerar_String_Relatorio_Para_QR(char* buffer, size_t buffer_size);
+
+#endif /* RELATO_H */

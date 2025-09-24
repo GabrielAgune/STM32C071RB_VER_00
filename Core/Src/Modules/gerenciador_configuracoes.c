@@ -286,6 +286,8 @@ static void Carregar_Configuracao_Padrao(void)
     s_config_cache.senha_sistema[MAX_SENHA_LEN] = '\0';
     s_config_cache.fat_cal_a_gain = 1.0f;
     s_config_cache.fat_cal_a_zero = 0.0f;
+		s_config_cache.nr_decimals = 2;
+		s_config_cache.nr_repetition = 5;
 		
     for (int i = 0; i < MAX_GRAOS; i++)
     {
@@ -346,6 +348,45 @@ bool Gerenciador_Config_Set_Cal_A(float gain, float zero)
     return true;
 }
 
+bool Gerenciador_Config_Set_NR_Repetitions(uint16_t nr_repetitions)
+{
+    if (s_storage_fsm.is_saving) return false; 
+    
+    s_config_cache.nr_repetition = nr_repetitions;
+    s_storage_fsm.dirty = true;
+    return true;
+}
+
+bool Gerenciador_Config_Set_NR_Decimals(uint16_t nr_decimals)
+{
+    if (s_storage_fsm.is_saving) return false; 
+    
+    s_config_cache.nr_decimals = nr_decimals;
+    s_storage_fsm.dirty = true;
+    return true;
+}
+
+bool Gerenciador_Config_Set_Usuario(const char* novo_usuario)
+{
+    if (novo_usuario == NULL) return false;
+    if (s_storage_fsm.is_saving) return false; // Rejeita se já estiver salvando
+    
+    strncpy(s_config_cache.usuarios[0].Nome, novo_usuario, 20);
+    s_config_cache.usuarios[0].Nome[19] = '\0';
+    s_storage_fsm.dirty = true;
+    return true;
+}
+
+bool Gerenciador_Config_Set_Company(const char* nova_empresa)
+{
+    if (nova_empresa == NULL) return false;
+    if (s_storage_fsm.is_saving) return false; // Rejeita se já estiver salvando
+    
+    strncpy(s_config_cache.usuarios[0].Empresa, nova_empresa, 20);
+    s_config_cache.usuarios[0].Empresa[19] = '\0';
+    s_storage_fsm.dirty = true;
+    return true;
+}
 
 //================================================================================
 // FUNÇÕES "GET" (REFATORADAS V8.2) - Agora leem do Cache RAM (instantâneo)
@@ -398,7 +439,25 @@ bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero)
     return true;
 }
 
+uint16_t Gerenciador_Config_Get_NR_Repetition(void) { return s_config_cache.nr_repetition; }
 
+uint16_t Gerenciador_Config_Get_NR_Decimals(void) { return s_config_cache.nr_decimals; }
+
+bool Gerenciador_Config_Get_Usuario(char* usuario, uint8_t tamanho_usuario)
+{
+	if (usuario == NULL || tamanho_usuario == 0) return false;
+    strncpy(usuario, s_config_cache.usuarios[0].Nome, tamanho_usuario - 1);
+    usuario[tamanho_usuario - 1] = '\0'; // Garante terminação nula
+    return true;
+}
+
+bool Gerenciador_Config_Get_Company(char* empresa, uint8_t tamanho_empresa)
+{
+	if (empresa == NULL || tamanho_empresa == 0) return false;
+    strncpy(empresa, s_config_cache.usuarios[0].Empresa, tamanho_empresa - 1);
+    empresa[tamanho_empresa - 1] = '\0'; // Garante terminação nula
+    return true;
+}
 //================================================================================
 // Funções Internas de CRC e Carregamento (Usadas apenas no Boot)
 //================================================================================

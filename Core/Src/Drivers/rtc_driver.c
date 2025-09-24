@@ -35,7 +35,7 @@ void RTC_Driver_Init(RTC_HandleTypeDef* hrtc)
         RTC_DateTypeDef sDate = {0};
         sTime.Hours = 0; sTime.Minutes = 0; sTime.Seconds = 0;
         HAL_RTC_SetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
-        sDate.Date = 8; sDate.Month = RTC_MONTH_SEPTEMBER; sDate.Year = 25; 
+        sDate.Date = 24; sDate.Month = RTC_MONTH_SEPTEMBER; sDate.Year = 25; 
         sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
         HAL_RTC_SetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
 				
@@ -59,7 +59,7 @@ void RTC_Driver_Process(void)
     uint32_t tick_atual = HAL_GetTick();
 
     if (tick_atual - s_last_update_tick < 1000) {
-        return; // Não é hora
+        return; 
     }
     
     // Reseta o timer IMEDIATAMENTE (corrige o "pulo" de segundos)
@@ -74,7 +74,7 @@ void RTC_Driver_Process(void)
         tela_atual != TELA_SET_JUST_TIME && 
         tela_atual != TELA_ADJUST_TIME)
     {
-        return; // Não estamos numa tela que mostra o relógio. Economiza barramento UART.
+        return; 
     }
     // **** FIM DA LÓGICA V8.3 ****
 
@@ -114,4 +114,28 @@ void RTC_Driver_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
         // Força a atualização imediata no display no próximo ciclo de Process()
         s_last_update_tick = 0; 
     }
+}
+
+void RTC_Driver_Get_Date(void)
+{
+		RTC_TimeTypeDef sTime = {0};
+    RTC_DateTypeDef sDate = {0};
+
+    HAL_RTC_GetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
+    HAL_RTC_GetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
+
+    printf("%02d/%02d/%02d", sDate.Date, sDate.Month, sDate.Year);
+		
+		
+}
+void RTC_Driver_Get_Time(void)
+{
+		RTC_TimeTypeDef sTime = {0};
+    RTC_DateTypeDef sDate = {0};
+
+    HAL_RTC_GetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
+    HAL_RTC_GetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
+
+    printf("%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+    
 }

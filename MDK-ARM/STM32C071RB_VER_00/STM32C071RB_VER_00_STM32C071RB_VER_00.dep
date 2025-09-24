@@ -51,16 +51,22 @@ I (..\Core\Inc\usart.h)(0x689F6061)
 I (..\Core\Inc\usb.h)(0x689F6061)
 I (..\Core\Inc\gpio.h)(0x689F605E)
 I (..\Core\Inc\Application\app_manager.h)(0x68CC3710)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
 I (..\Core\Inc\Drivers\ads1232_driver.h)(0x68C968DC)
 I (..\Core\Inc\Drivers\pwm_servo_driver.h)(0x6878E444)
 I (..\Core\Inc\Drivers\pcb_frequency.h)(0x68A5BE13)
 I (..\Core\Inc\Drivers\temp_sensor.h)(0x68C7FFBA)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
-I (..\Core\Inc\Application\controller.h)(0x68D18ECF)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 I (..\Core\Inc\Application\retarget.h)(0x68836F5D)
 F (../Core/Src/gpio.c)(0x68C9A310)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/gpio.o -MMD)
@@ -473,7 +479,7 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
 I (..\Core\Inc\stm32c0xx_it.h)(0x68C9A313)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
 I (..\Core\Inc\Drivers\ads1232_driver.h)(0x68C968DC)
@@ -1650,7 +1656,7 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-F (..\Core\Src\Drivers\dwin_driver.c)(0x68CBF4FA)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/dwin_driver.o -MMD)
+F (..\Core\Src\Drivers\dwin_driver.c)(0x68D42E95)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/dwin_driver.o -MMD)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -1690,7 +1696,7 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 F (..\Core\Src\Drivers\eeprom_driver.c)(0x68CC5D80)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/eeprom_driver.o -MMD)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
@@ -1814,8 +1820,8 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-F (..\Core\Src\Drivers\rtc_driver.c)(0x68D18099)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/rtc_driver.o -MMD)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
+F (..\Core\Src\Drivers\rtc_driver.c)(0x68D418B0)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/rtc_driver.o -MMD)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
 I (..\Core\Inc\rtc.h)(0x689F6061)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
@@ -1856,10 +1862,16 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
-I (..\Core\Inc\Application\controller.h)(0x68D18ECF)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
 F (..\Core\Src\Drivers\temp_sensor.c)(0x68C7FFBA)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/temp_sensor.o -MMD)
 I (..\Core\Inc\Drivers\temp_sensor.h)(0x68C7FFBA)
 I (..\Core\Inc\main.h)(0x68C9A314)
@@ -1902,8 +1914,8 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
 I (..\Core\Inc\adc.h)(0x689F6060)
-F (..\Core\Src\Modules\gerenciador_configuracoes.c)(0x68D18099)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/gerenciador_configuracoes.o -MMD)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+F (..\Core\Src\Modules\gerenciador_configuracoes.c)(0x68D3FFE9)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/gerenciador_configuracoes.o -MMD)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -2033,7 +2045,7 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
 I (..\Core\Inc\Drivers\pwm_servo_driver.h)(0x6878E444)
 I (..\Core\Inc\Application\app_eventos.h)(0x68839C56)
-F (..\Core\Src\Application\cli_driver.c)(0x68D18266)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/cli_driver.o -MMD)
+F (..\Core\Src\Application\cli_driver.c)(0x68D3F577)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/cli_driver.o -MMD)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -2073,7 +2085,7 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Core\Inc\Application\app_manager.h)(0x68CC3710)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Core\Inc\i2c.h)(0x689F6061)
@@ -2086,10 +2098,16 @@ I (..\Core\Inc\Drivers\ads1232_driver.h)(0x68C968DC)
 I (..\Core\Inc\Drivers\pwm_servo_driver.h)(0x6878E444)
 I (..\Core\Inc\Drivers\pcb_frequency.h)(0x68A5BE13)
 I (..\Core\Inc\Drivers\temp_sensor.h)(0x68C7FFBA)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
-I (..\Core\Inc\Application\controller.h)(0x68D18ECF)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
 F (..\Core\Src\Application\app_manager.c)(0x68D18349)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/app_manager.o -MMD)
 I (..\Core\Inc\Application\app_manager.h)(0x68CC3710)
 I (..\Core\Inc\main.h)(0x68C9A314)
@@ -2136,16 +2154,22 @@ I (..\Core\Inc\usart.h)(0x689F6061)
 I (..\Core\Inc\crc.h)(0x689F6061)
 I (..\Core\Inc\rtc.h)(0x689F6061)
 I (..\Core\Inc\tim.h)(0x68C966FA)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
 I (..\Core\Inc\Drivers\ads1232_driver.h)(0x68C968DC)
 I (..\Core\Inc\Drivers\pwm_servo_driver.h)(0x6878E444)
 I (..\Core\Inc\Drivers\pcb_frequency.h)(0x68A5BE13)
 I (..\Core\Inc\Drivers\temp_sensor.h)(0x68C7FFBA)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
-I (..\Core\Inc\Application\controller.h)(0x68D18ECF)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 F (..\Core\Src\Application\retarget.c)(0x68C873B3)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/retarget.o -MMD)
 I (..\Core\Inc\Application\retarget.h)(0x68836F5D)
@@ -2189,8 +2213,8 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
-F (..\Core\Src\Application\controller.c)(0x68D18ECF)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/controller.o -MMD)
-I (..\Core\Inc\Application\controller.h)(0x68D18ECF)
+F (..\Core\Src\Application\controller.c)(0x68D44C6D)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/controller.o -MMD)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -2230,21 +2254,68 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Core\Inc\rtc.h)(0x689F6061)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
 I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
 I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
-I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D18D66)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+F (..\Core\Src\Application\relato.c)(0x68D42CBC)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/relato.o -MMD)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\main.h)(0x68C9A314)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h)(0x6810B070)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c071xx.h)(0x6810B070)
+I (..\Drivers\CMSIS\Include\core_cm0plus.h)(0x6810B070)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\system_stm32c0xx.h)(0x6810B070)
+I (..\Core\Inc\stm32c0xx_hal_conf.h)(0x68C9A314)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rcc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_def.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_rcc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rcc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_gpio.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_gpio_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_dma.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_dma_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_cortex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_adc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_adc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_adc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_crc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_crc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_exti.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_flash.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_flash_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_i2c.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_i2c_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pwr.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pwr_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rtc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rtc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_tim.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_tim_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
+I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\rtc.h)(0x689F6061)
 F (..\Core\Src\Application\Handle\dwin_parser.c)(0x68D186ED)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/dwin_parser.o -MMD)
 I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 F (..\Core\Src\Application\Handle\rtc_handler.c)(0x68D1934A)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/rtc_handler.o -MMD)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
 I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
-I (..\Core\Inc\Drivers\rtc_driver.h)(0x68C86CC2)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
 I (..\Core\Inc\rtc.h)(0x689F6061)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
@@ -2285,9 +2356,9 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
-F (..\Core\Src\Application\Handle\display_handler.c)(0x68D18D66)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/display_handler.o -MMD)
-I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D18D66)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+F (..\Core\Src\Application\Handle\display_handler.c)(0x68D44A86)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/display_handler.o -MMD)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
 I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h)(0x6810B070)
@@ -2326,10 +2397,17 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
+I (..\Core\Inc\main.h)(0x68C9A314)
+I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\rtc.h)(0x689F6061)
 F (..\Core\Src\Application\Handle\autenticacao_handler.c)(0x68D18E85)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/autenticacao_handler.o -MMD)
 I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
 I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
-I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D18099)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -2370,4 +2448,56 @@ I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
-I (..\Core\Inc\Drivers\dwin_driver.h)(0x68CBEF40)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
+F (..\Core\Src\Application\Handle\graos_handler.c)(0x68D27E21)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/graos_handler.o -MMD)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\controller.h)(0x68D3F419)
+I (..\Core\Inc\main.h)(0x68C9A314)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h)(0x6810B070)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c071xx.h)(0x6810B070)
+I (..\Drivers\CMSIS\Include\core_cm0plus.h)(0x6810B070)
+I (..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\system_stm32c0xx.h)(0x6810B070)
+I (..\Core\Inc\stm32c0xx_hal_conf.h)(0x68C9A314)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rcc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_def.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_rcc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rcc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_gpio.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_gpio_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_dma.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_dma_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_cortex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_adc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_adc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_adc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_crc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_crc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_exti.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_flash.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_flash_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_i2c.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_i2c_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pwr.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pwr_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rtc.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_rtc_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_tim.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_tim_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_uart_ex.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h)(0x6810B06F)
+I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h)(0x6810B06F)
+I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
+I (..\Core\Inc\rtc.h)(0x689F6061)
+I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D3F0C7)
+I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
+I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D18E85)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
+I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D1874A)
+I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D440DA)
+I (..\Core\Inc\Application\relato.h)(0x68D429B0)

@@ -289,29 +289,46 @@ bool DWIN_Driver_WriteString(uint16_t vp_address, const char* text, uint16_t max
     {
         return false;
     }
+    
     size_t text_len = strlen(text);
     if (text_len > max_len)
     {
         text_len = max_len;
     }
-    uint8_t frame_payload_len = 3u + (uint8_t)text_len;
+
+    // 1. Aumentar o payload em 2 bytes para os terminadores 0xFF 0xFF
+    //    (3u = 0x82 + VP_H + VP_L)
+    uint8_t frame_payload_len = 3u + (uint8_t)text_len + 2u; 
+
+    // 2. O tamanho total do frame agora reflete os 2 bytes extras
+    //    (3u = 0x5A + 0xA5 + LEN)
     uint16_t total_frame_size = 3u + frame_payload_len;
+
     if (total_frame_size > sizeof(s_tx_dma_buffer))
     {
-        return false; // String muito grande para o buffer local
+        return false; // String (com terminadores) muito grande para o buffer local
     }
+
     uint8_t temp_frame_buffer[sizeof(s_tx_dma_buffer)];
+
+    // 3. Construir o cabeçalho (Header e Comando)
     temp_frame_buffer[0] = 0x5A;
     temp_frame_buffer[1] = 0xA5;
-    temp_frame_buffer[2] = frame_payload_len;
-    temp_frame_buffer[3] = 0x82;
+    temp_frame_buffer[2] = frame_payload_len; // Envia o novo tamanho (já somado +2)
+    temp_frame_buffer[3] = 0x82; // Comando de escrita
     temp_frame_buffer[4] = (uint8_t)(vp_address >> 8);
     temp_frame_buffer[5] = (uint8_t)(vp_address & 0xFF);
+
+    // 4. Copiar a string
     memcpy(&temp_frame_buffer[6], text, text_len);
 
+    // 5. Adicionar os terminadores 0xFF 0xFF após a string
+    temp_frame_buffer[6 + text_len] = 0xFF;
+    temp_frame_buffer[6 + text_len + 1] = 0xFF;
+
+    // 6. Enviar o frame completo (total_frame_size já está correto)
     return DWIN_TX_Queue_Send_Bytes(temp_frame_buffer, total_frame_size);
 }
-
 bool DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size)
 {
     if ((s_huart == NULL) || (data == NULL) || (size == 0u))
@@ -319,6 +336,63 @@ bool DWIN_Driver_WriteRawBytes(const uint8_t* data, uint16_t size)
         return false;
     }
     return DWIN_TX_Queue_Send_Bytes(data, size);
+}
+
+bool display_qr_code(const char* data_string)
+{
+    // Endereço VP que você configurou no DGUS para o controle "QR Code"
+    const uint16_t qr_code_vp = 0x2180; 
+    
+    // Tamanho máximo de dados para o QR Code, conforme manual DWIN
+    const uint16_t max_qr_len = 458; 
+
+    if (data_string == NULL)
+    {
+        return false;
+    }
+    printf("%s", data_string); // Este printf para debug pode ser mantido ou removido
+
+    // Chame a NOVA função específica para QR Code
+    return DWIN_Driver_Write_QR_String(qr_code_vp, data_string, max_qr_len);
+}
+
+bool DWIN_Driver_Write_QR_String(uint16_t vp_address, const char* text, uint16_t max_len)
+{
+    if ((s_huart == NULL) || (text == NULL) || (max_len == 0u))
+    {
+        return false;
+    }
+    
+    size_t text_len = strlen(text);
+    if (text_len > max_len)
+    {
+        text_len = max_len;
+    }
+
+    // O payload é apenas o comando (0x82) + Endereço VP (2 bytes) + dados da string
+    uint8_t frame_payload_len = 3u + (uint8_t)text_len; 
+    uint16_t total_frame_size = 3u + frame_payload_len;
+
+    if (total_frame_size > sizeof(s_tx_dma_buffer)) // Use o nome do seu buffer de tx
+    {
+        return false; 
+    }
+
+    uint8_t temp_frame_buffer[total_frame_size];
+
+    // Construir o cabeçalho
+    temp_frame_buffer[0] = 0x5A;
+    temp_frame_buffer[1] = 0xA5;
+    temp_frame_buffer[2] = frame_payload_len;
+    temp_frame_buffer[3] = 0x82; // Comando de escrita
+    temp_frame_buffer[4] = (uint8_t)(vp_address >> 8);
+    temp_frame_buffer[5] = (uint8_t)(vp_address & 0xFF);
+
+    // Copiar a string
+    memcpy(&temp_frame_buffer[6], text, text_len);
+
+    // Enviar o frame completo (sem terminadores 0xFF 0xFF)
+    return DWIN_TX_Queue_Send_Bytes(temp_frame_buffer, total_frame_size);
 }
 
 //------------------------------------------------------------------------------

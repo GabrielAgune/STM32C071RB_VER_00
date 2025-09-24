@@ -26,5 +26,8 @@ void RTC_Driver_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
  */
  // void Set_Just_Time(const uint8_t* rx_buffer, uint16_t rx_len); // Movido para controller.c
 
+void RTC_Driver_Get_Date(void);
+
+void RTC_Driver_Get_Time(void);
 
 #endif // RTC_DRIVER_H
