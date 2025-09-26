@@ -61,13 +61,13 @@ I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
 I (..\Core\Inc\Application\controller.h)(0x68D3F419)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D67FA1)
 I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
-I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 I (..\Core\Inc\Application\retarget.h)(0x68836F5D)
 F (../Core/Src/gpio.c)(0x68C9A310)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/gpio.o -MMD)
@@ -2094,13 +2094,13 @@ I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
 I (..\Core\Inc\Application\controller.h)(0x68D3F419)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D67FA1)
 I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
-I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
 F (..\Core\Src\Application\app_manager.c)(0x68D6D5BD)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/app_manager.o -MMD)
 I (..\Core\Inc\Application\app_manager.h)(0x68D6A49C)
 I (..\Core\Inc\main.h)(0x68C9A314)
@@ -2157,13 +2157,13 @@ I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Modules\servo_controle.h)(0x68C7FFBA)
 I (..\Core\Inc\Application\controller.h)(0x68D3F419)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D67FA1)
 I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
-I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
 I (..\Core\Inc\Application\cli_driver.h)(0x68C828E9)
 F (..\Core\Src\Application\retarget.c)(0x68C873B3)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/retarget.o -MMD)
 I (..\Core\Inc\Application\retarget.h)(0x68836F5D)
@@ -2253,13 +2253,13 @@ I (..\Core\Inc\rtc.h)(0x689F6061)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
 I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D67FA1)
 I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
-I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
 F (..\Core\Src\Application\relato.c)(0x68D6805C)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/relato.o -MMD)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
 I (..\Core\Inc\main.h)(0x68C9A314)
@@ -2401,8 +2401,8 @@ I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
 I (..\Core\Inc\rtc.h)(0x689F6061)
-F (..\Core\Src\Application\Handle\autenticacao_handler.c)(0x68D6DCBB)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/autenticacao_handler.o -MMD)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+F (..\Core\Src\Application\Handle\autenticacao_handler.c)(0x68D6DD2E)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/autenticacao_handler.o -MMD)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
 I (..\Core\Inc\Drivers\dwin_driver.h)(0x68D42E95)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h)(0x6810B06F)
@@ -2453,9 +2453,9 @@ I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
 I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
-F (..\Core\Src\Application\Handle\graos_handler.c)(0x68D27E21)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/graos_handler.o -MMD)
-I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D1974F)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
+F (..\Core\Src\Application\Handle\graos_handler.c)(0x68D6DDDD)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/graos_handler.o -MMD)
+I (..\Core\Inc\Application\Handle\graos_handler.h)(0x68D6DDDD)
 I (..\Core\Inc\Application\controller.h)(0x68D3F419)
 I (..\Core\Inc\main.h)(0x68C9A314)
 I (..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h)(0x6810B06F)
@@ -2501,10 +2501,10 @@ I (..\Core\Inc\rtc.h)(0x689F6061)
 I (..\Core\Inc\Drivers\rtc_driver.h)(0x68D67FA1)
 I (..\Core\Inc\Modules\gerenciador_configuracoes.h)(0x68D3F3E8)
 I (..\Core\Inc\Drivers\eeprom_driver.h)(0x68D18079)
-I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DAC8)
+I (..\Core\Inc\Application\Handle\autenticacao_handler.h)(0x68D6DD2E)
+I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\rtc_handler.h)(0x68D67FA1)
 I (..\Core\Inc\Application\Handle\display_handler.h)(0x68D6A3E2)
-I (..\Core\Inc\Application\Handle\dwin_parser.h)(0x68D1854A)
 I (..\Core\Inc\Application\Handle\medicao_handler.h)(0x68D69FF7)
 I (..\Core\Inc\Application\relato.h)(0x68D5321F)
 F (..\Core\Src\Application\Handle\medicao_handler.c)(0x68D6A016)(-xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc -I ../Drivers/STM32C0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32C0xx/Include -I ../Drivers/CMSIS/Include -I ../Core/Inc/Application -I ../Core/Inc/Drivers -I ../Core/Inc/Modules -I ../Core/Inc/Application/Handle-I./RTE/_STM32C071RB_VER_00-IC:/Users/gabriel.agune/AppData/Local/arm/packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-D__UVISION_VERSION="542" -DSTM32C071xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32C071xx-o stm32c071rb_ver_00/medicao_handler.o -MMD)

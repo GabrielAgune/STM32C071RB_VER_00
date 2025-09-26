@@ -1,16 +1,5 @@
-// ===== ARQUIVO REESCRITO: autenticacao_handler.c =====
 
 #include "autenticacao_handler.h"
-
-// INCLUDES ADICIONAIS NECESSÁRIOS PARA CONTROLAR A UI
-#include "dwin_driver.h"
-#include "controller.h"
-
-// Includes de dependência interna
-#include "dwin_parser.h"
-#include "gerenciador_configuracoes.h"
-#include <stdio.h>
-#include <string.h>
 
 //================================================================================
 // Definições Internas (Tipos de Resultado e Estado)
