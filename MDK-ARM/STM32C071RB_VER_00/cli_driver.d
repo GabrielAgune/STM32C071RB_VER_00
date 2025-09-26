@@ -53,5 +53,6 @@ stm32c071rb_ver_00/cli_driver.o: ..\Core\Src\Application\cli_driver.c \
   ..\Core\Inc\Application\Handle\dwin_parser.h \
   ..\Core\Inc\Application\Handle\rtc_handler.h \
   ..\Core\Inc\Application\Handle\display_handler.h \
+  ..\Core\Inc\Application\Handle\medicao_handler.h \
   ..\Core\Inc\Application\relato.h \
   ..\Core\Inc\Application\Handle\graos_handler.h

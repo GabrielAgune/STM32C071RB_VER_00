@@ -9,6 +9,7 @@
 #include "cli_driver.h"
 #include "dwin_driver.h"
 #include "app_manager.h" 
+#include "medicao_handler.h"
 #include "relato.h"
 #include <stdio.h>
 #include <string.h>
@@ -70,6 +71,7 @@ static volatile uint16_t s_tx_fifo_tail = 0;
 static uint8_t s_cli_tx_dma_buffer[CLI_TX_DMA_BUFFER_SIZE]; 
 static volatile bool s_dma_tx_busy = false; 
 
+DadosMedicao_t dados_atuais;
 
 // --- Tabelas de Comando (Instâncias) ---
 static const cli_command_t s_command_table[] = {
@@ -297,26 +299,22 @@ static void Cmd_Service(char* args)
  * @brief (ATUALIZADO V8.2) Usa a nova struct App_ScaleData_t
  */
 static void Cmd_GetPeso(char* args) {
-    App_ScaleData_t data; // <-- USA A NOVA STRUCT (de app_manager.h)
-    App_Manager_GetScaleData(&data);
-    
+    Medicao_Get_UltimaMedicao(&dados_atuais);
     printf("Dados da Balanca:\r\n");
-    printf("  - Peso: %.2f g\r\n", data.grams_display);
-    printf("  - Estavel: %s\r\n", data.is_stable ? "SIM" : "NAO");
-    printf("  - ADC Counts (mediana): %.0f\r\n", data.raw_counts_median);
+    printf("  - Peso: %.2f g\r\n", dados_atuais.Peso);
 }
 
 static void Cmd_GetTemp(char* args) {
-    float temperatura = App_Manager_GetTemperature();
+		Medicao_Get_UltimaMedicao(&dados_atuais);
+    float temperatura = dados_atuais.Temp_Instru;
     printf("Temperatura interna do MCU: %.2f C\r\n", temperatura);
 }
 
 static void Cmd_GetFreq(char* args) {
-    FreqData_t data;
-    App_Manager_GetFreqData(&data);
+		Medicao_Get_UltimaMedicao(&dados_atuais);
     printf("Dados de Frequencia:\r\n");
-    printf("  - Pulsos (em 1s): %lu\r\n", (unsigned long)data.pulsos);
-    printf("  - Escala A (calc): %.2f\r\n", data.escala_a);
+    printf("  - Pulsos (em 1s): %.1f\r\n", dados_atuais.Frequencia);
+    printf("  - Escala A (calc): %.2f\r\n", dados_atuais.Escala_A);
 }
 
 static void Cmd_Dwin(char* args) {

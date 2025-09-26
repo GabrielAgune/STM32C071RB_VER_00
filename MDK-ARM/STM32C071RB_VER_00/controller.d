@@ -46,5 +46,6 @@ stm32c071rb_ver_00/controller.o: ..\Core\Src\Application\controller.c \
   ..\Core\Inc\Application\Handle\dwin_parser.h \
   ..\Core\Inc\Application\Handle\rtc_handler.h \
   ..\Core\Inc\Application\Handle\display_handler.h \
+  ..\Core\Inc\Application\Handle\medicao_handler.h \
   ..\Core\Inc\Application\relato.h \
   ..\Core\Inc\Application\Handle\graos_handler.h

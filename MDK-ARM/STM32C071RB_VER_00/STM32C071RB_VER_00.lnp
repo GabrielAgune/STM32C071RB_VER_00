@@ -61,6 +61,7 @@
 "stm32c071rb_ver_00\display_handler.o"
 "stm32c071rb_ver_00\autenticacao_handler.o"
 "stm32c071rb_ver_00\graos_handler.o"
+"stm32c071rb_ver_00\medicao_handler.o"
 --library_type=microlib --strict --scatter "STM32C071RB_VER_00\STM32C071RB_VER_00.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

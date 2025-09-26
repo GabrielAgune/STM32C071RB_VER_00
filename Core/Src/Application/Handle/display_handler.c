@@ -62,6 +62,8 @@ void Print(uint16_t received_value)
 		Config_Grao_t Dados_Grao;
 		uint8_t indice_grao; 
 		Gerenciador_Config_Get_Grao_Ativo(&indice_grao); 
+		DadosMedicao_t dados_atuais;
+    Medicao_Get_UltimaMedicao(&dados_atuais);
 		
 		
 		if (Gerenciador_Config_Get_NR_Decimals() == 1 && estado_print)
@@ -69,7 +71,7 @@ void Print(uint16_t received_value)
 			if (Gerenciador_Config_Get_Dados_Grao(indice_grao, &Dados_Grao)) 
 			{
 				DWIN_Driver_WriteString(GRAO_A_MEDIR, Dados_Grao.nome, MAX_NOME_GRAO_LEN);
-				DWIN_Driver_WriteInt(UMIDADE_1_CASA, 237);
+				DWIN_Driver_WriteInt(UMIDADE_1_CASA, (int16_t)((dados_atuais.Umidade)*100)/10);
 				DWIN_Driver_WriteInt(CURVA, Dados_Grao.id_curva);
 				DWIN_Driver_WriteInt(UMI_MIN, (Dados_Grao.umidade_min)*10);
 				DWIN_Driver_WriteInt(UMI_MAX, (Dados_Grao.umidade_max)*10);
@@ -82,7 +84,7 @@ void Print(uint16_t received_value)
 			if (Gerenciador_Config_Get_Dados_Grao(indice_grao, &Dados_Grao)) 
 			{
 				DWIN_Driver_WriteString(GRAO_A_MEDIR, Dados_Grao.nome, MAX_NOME_GRAO_LEN);
-				DWIN_Driver_WriteInt(UMIDADE_2_CASAS, 2754);
+				DWIN_Driver_WriteInt(UMIDADE_2_CASAS, (int16_t)((dados_atuais.Umidade)*100));
 				DWIN_Driver_WriteInt(CURVA, Dados_Grao.id_curva);
 				DWIN_Driver_WriteInt(UMI_MIN, (Dados_Grao.umidade_min)*10);
 				DWIN_Driver_WriteInt(UMI_MAX, (Dados_Grao.umidade_max)*10);
@@ -190,4 +192,10 @@ void About(void)
 {
 	DWIN_Driver_WriteString(0x4096, "G620_Teste_Gab", strlen("G620_Teste_Gab"));
 	DWIN_Driver_SetScreen(TELA_ABOUT_SYSTEM);
+}
+
+void Model(void)
+{
+	DWIN_Driver_WriteString(0x4096, "G620_Teste_Gab", strlen("G620_Teste_Gab"));
+	DWIN_Driver_SetScreen(TELA_MODEL_OEM);
 }

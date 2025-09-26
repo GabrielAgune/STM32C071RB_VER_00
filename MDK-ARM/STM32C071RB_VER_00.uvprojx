@@ -780,6 +780,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\Application\Handle\graos_handler.c</FilePath>
             </File>
+            <File>
+              <FileName>medicao_handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Application\Handle\medicao_handler.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

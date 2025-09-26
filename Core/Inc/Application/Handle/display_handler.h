@@ -4,6 +4,7 @@
 #include "dwin_driver.h"
 #include "gerenciador_configuracoes.h"
 #include "dwin_parser.h"
+#include "medicao_handler.h"
 #include "relato.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -23,6 +24,8 @@ void Print(uint16_t received_value);
 void Type_User(const uint8_t* dwin_data, uint16_t len, uint16_t received_value);
 void Type_Company(const uint8_t* dwin_data, uint16_t len, uint16_t received_value);
 void About(void);
+
+void Model(void);
 
 
 #endif // DISPLAY_HANDLER_H

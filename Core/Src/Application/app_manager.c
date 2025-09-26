@@ -18,6 +18,7 @@
 #include "pcb_frequency.h"
 #include "temp_sensor.h"
 #include "gerenciador_configuracoes.h"
+#include "medicao_handler.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>   
@@ -27,9 +28,9 @@
 // Variáveis de Estado Globais do Módulo
 //================================================================================
 
-static App_ScaleData_t s_scale_output; 
-static FreqData_t s_freq_data;
-static float s_temperatura_mcu = 0.0f;
+//static App_ScaleData_t s_scale_output; 
+//static FreqData_t s_freq_data;
+//static float s_temperatura_mcu = 0.0f;
 
 extern volatile bool g_ads_data_ready; 
 
@@ -45,6 +46,8 @@ static TaskDisplay_State_t s_display_state = TASK_DISPLAY_IDLE;
 static uint32_t s_display_last_tick = 0;
 static const uint32_t DISPLAY_UPDATE_INTERVAL_MS = 1000;
 static uint8_t s_display_temp_counter = 0; 
+static uint32_t s_freq_last_tick = 0;
+static const uint32_t FREQ_UPDATE_INTERVAL_MS = 1000;
 
 //================================================================================
 // Protótipos das Tarefas (Funções Privadas)
@@ -52,6 +55,7 @@ static uint8_t s_display_temp_counter = 0;
 static void Task_Handle_High_Frequency_Polling(void);
 static void Task_Handle_Scale(void); 
 static void Task_Update_Display_FSM(void);
+static void Task_Update_Frequency(void);
 static float Calcular_Escala_A(uint32_t frequencia_hz);
 static bool Check_Stability(float new_grams); 
 
@@ -60,7 +64,9 @@ static bool Check_Stability(float new_grams);
 //================================================================================
 void App_Manager_Init(void)
 {
-		
+		Medicao_Init();
+		Medicao_Set_Densidade(71.0);
+		Medicao_Set_Umidade(25.73);
 		
     CLI_Init(&huart1);
     printf("Sistema Integrado - Log de Inicializacao:\r\n");
@@ -86,14 +92,14 @@ void App_Manager_Init(void)
 		
 		ADS1232_Init();
 		ADS1232_Tare();
-		memset(&s_scale_output, 0, sizeof(s_scale_output));
     printf("   ... Tara concluida.\r\n");
 		DWIN_Driver_SetScreen(BOOT_BALANCE);
 		DWIN_TX_Pump(); 
 		HAL_Delay(1000);
 		
-		s_temperatura_mcu = TempSensor_GetTemperature(); 
-    printf("Temperatura inicial: %.2f C\r\n", s_temperatura_mcu);
+		float temp_inicial = TempSensor_GetTemperature(); 
+    Medicao_Set_Temp_Instru(temp_inicial);
+    printf("Temperatura inicial: %.2f C\r\n", temp_inicial);
 		DWIN_Driver_SetScreen(BOOT_THERMOMETER);
 		DWIN_TX_Pump(); 
 		HAL_Delay(1000);
@@ -134,6 +140,8 @@ void App_Manager_Process(void)
     // 1. Tarefas de alta frequência
     Task_Handle_High_Frequency_Polling();
     
+		Task_Update_Frequency();
+		
     // 2. Tarefa da Balança
     Task_Handle_Scale();
     
@@ -190,9 +198,9 @@ static void Task_Handle_Scale(void)
     {
         g_ads_data_ready = false;
         int32_t leitura_adc_mediana = ADS1232_Read_Median_of_3(); 
-        s_scale_output.raw_counts_median = (float)leitura_adc_mediana;
-        s_scale_output.grams_display = ADS1232_ConvertToGrams(leitura_adc_mediana); 
-        s_scale_output.is_stable = Check_Stability(s_scale_output.grams_display);
+        float gramas = ADS1232_ConvertToGrams(leitura_adc_mediana); 
+        
+        Medicao_Set_Peso(gramas);
     }
 }
 
@@ -218,69 +226,68 @@ static void Task_Update_Display_FSM(void)
 
     if (s_display_state == TASK_DISPLAY_IDLE)
     {
-        if (tick_atual - s_display_last_tick < DISPLAY_UPDATE_INTERVAL_MS) {
-            return; 
-        }
-        
+        if (tick_atual - s_display_last_tick < DISPLAY_UPDATE_INTERVAL_MS) return;
         s_display_last_tick = tick_atual; 
-
-        if (DWIN_Driver_IsTxBusy()) 
-        {
-             return; 
-        }
-        
+        if (DWIN_Driver_IsTxBusy()) return; 
         s_display_state = TASK_DISPLAY_CHECK_SCREEN; 
     }
 
     if (s_display_state == TASK_DISPLAY_CHECK_SCREEN)
     {
-        // 1. Verifica a tela PRIMEIRO.
         uint16_t tela_atual = Controller_GetCurrentScreen();
 
         if (tela_atual == TELA_MONITOR_SYSTEM)
         {
-            // *** INÍCIO CORREÇÃO V8.6 (Proposta do Usuário) ***
-            
-            // 1. ATUALIZAÇÕES RÁPIDAS (A CADA 1 SEGUNDO)
-            // Lemos a freq e resetamos o contador a cada 1s para o cálculo ficar correto.
-            s_freq_data.pulsos = Frequency_Get_Pulse_Count(); 
-            Frequency_Reset(); 
-            
-            // Usa a temperatura lida anteriormente (s_temperatura_mcu) para o cálculo
-            if (s_temperatura_mcu > 0) { 
-                s_freq_data.escala_a = Calcular_Escala_A(s_freq_data.pulsos);
-            } else {
-                s_freq_data.escala_a = 0.0f;
-            }
+            // MODIFICADO: Busca os dados mais recentes do handler de medição
+            DadosMedicao_t dados_atuais;
+            Medicao_Get_UltimaMedicao(&dados_atuais);
 
-            // Envia dados rápidos (Freq/Escala) a cada 1 segundo
-            int32_t frequencia_para_dwin = (int32_t)((s_freq_data.pulsos / 1000.0f) * 10.0f);
+            // Envia os dados para o display
+            int32_t frequencia_para_dwin = (int32_t)((dados_atuais.Frequencia / 1000.0f) * 10.0f);
             DWIN_Driver_WriteInt32(FREQUENCIA, frequencia_para_dwin); 
             
-            int32_t escala_a_para_dwin = (int32_t)(s_freq_data.escala_a * 10.0f);
+            int32_t escala_a_para_dwin = (int32_t)(dados_atuais.Escala_A * 10.0f);
             DWIN_Driver_WriteInt32(ESCALA_A, escala_a_para_dwin); 
 
-            // 2. ATUALIZAÇÃO LENTA (A CADA 5 SEGUNDOS)
-            // O ADC (Temp) bloqueia por 100ms. Execute apenas a cada 5 segundos.
+            // Lógica da temperatura (atualiza o valor no handler)
             s_display_temp_counter++;
-            if (s_display_temp_counter >= 5) { // Roda a cada 5 chamadas (5 segundos)
+            if (s_display_temp_counter >= 5) {
                 s_display_temp_counter = 0;
+                float temp_mcu = TempSensor_GetTemperature();
+                Medicao_Set_Temp_Instru(temp_mcu); // Atualiza no handler
                 
-                s_temperatura_mcu = TempSensor_GetTemperature(); // <-- BLOQUEIO DE 100ms (Agora só a cada 5s)
-                
-                int16_t temperatura_para_dwin = (int16_t)(s_temperatura_mcu * 10.0f);
+                // Envia para o display
+                int16_t temperatura_para_dwin = (int16_t)(temp_mcu * 10.0f);
                 DWIN_Driver_WriteInt(TEMP_INSTRU, temperatura_para_dwin); 
             }
-            // *** FIM CORREÇÃO V8.6 ***
         }
         else
         {
-             // Não estamos na tela do monitor. Reseta o contador lento.
              s_display_temp_counter = 0;
         }
 
-        // 3. Sequência completa. Volta para ocioso.
         s_display_state = TASK_DISPLAY_IDLE; 
+    }
+}
+
+static void Task_Update_Frequency(void)
+{
+    // Roda esta tarefa a cada 1 segundo
+    if (HAL_GetTick() - s_freq_last_tick >= FREQ_UPDATE_INTERVAL_MS)
+    {
+        s_freq_last_tick = HAL_GetTick();
+
+        uint32_t pulsos = Frequency_Get_Pulse_Count(); 
+        Frequency_Reset(); 
+        
+        // MODIFICADO: Armazena a frequência no handler
+        // Frequência em Hz é o número de pulsos contados em 1 segundo
+        Medicao_Set_Frequencia((float)pulsos);
+        
+        float escala_a = Calcular_Escala_A(pulsos);
+        
+        // MODIFICADO: Armazena a Escala A no handler
+        Medicao_Set_Escala_A(escala_a);
     }
 }
 
@@ -298,19 +305,6 @@ void App_Manager_Handle_New_Password(const char* new_password) {
     printf("APP: Nova senha definida (na RAM, pendente de salvamento).\r\n");
 }
 
-void App_Manager_GetScaleData(App_ScaleData_t* data) {
-    if (data != NULL) { 
-        *data = s_scale_output; 
-    }
-}
-
-void App_Manager_GetFreqData(FreqData_t* data) {
-    if (data != NULL) { *data = s_freq_data; }
-}
-
-float App_Manager_GetTemperature(void) {
-    return s_temperatura_mcu;
-}
 
 // Definindo o flag g_ads_data_ready que será usado externamente
 volatile bool g_ads_data_ready = false;
