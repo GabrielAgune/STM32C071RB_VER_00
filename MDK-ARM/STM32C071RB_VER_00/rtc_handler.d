@@ -1,8 +1,7 @@
 stm32c071rb_ver_00/rtc_handler.o: \
   ..\Core\Src\Application\Handle\rtc_handler.c \
   ..\Core\Inc\Application\Handle\rtc_handler.h \
-  ..\Core\Inc\Application\Handle\dwin_parser.h \
-  ..\Core\Inc\Drivers\rtc_driver.h ..\Core\Inc\rtc.h ..\Core\Inc\main.h \
+  ..\Core\Inc\Drivers\dwin_driver.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_system.h \
   ..\Drivers\CMSIS\Device\ST\STM32C0xx\Include\stm32c0xx.h \
@@ -41,4 +40,5 @@ stm32c071rb_ver_00/rtc_handler.o: \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_ll_usb.h \
   ..\Drivers\STM32C0xx_HAL_Driver\Inc\stm32c0xx_hal_pcd_ex.h \
-  ..\Core\Inc\Drivers\dwin_driver.h
+  ..\Core\Inc\Drivers\rtc_driver.h ..\Core\Inc\rtc.h ..\Core\Inc\main.h \
+  ..\Core\Inc\Application\Handle\dwin_parser.h

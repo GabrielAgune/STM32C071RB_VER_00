@@ -3,7 +3,7 @@
 <title>Static Call Graph - [STM32C071RB_VER_00\STM32C071RB_VER_00.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STM32C071RB_VER_00\STM32C071RB_VER_00.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Fri Sep 26 15:39:29 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Fri Sep 26 16:24:15 2025
 <BR><P>
 <H3>Maximum Stack Usage =        344 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -297,7 +297,6 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__vfscanf_char
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 </UL>
 
 <P><STRONG><a name="[4e]"></a>_scanf_int</STRONG> (Thumb, 330 bytes, Stack size 48 bytes, _scanf_int.o(.text))
@@ -857,7 +856,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[27]"></a>Controller_DwinCallback</STRONG> (Thumb, 416 bytes, Stack size 8 bytes, controller.o(.text.Controller_DwinCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = Controller_DwinCallback &rArr; RTC_Handle_Set_Date_And_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
+<BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = Controller_DwinCallback &rArr; RTC_Handle_Set_Time &rArr; RTC_Handle_Set_Date_And_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Navegacao
@@ -1037,7 +1036,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 </UL>
@@ -2382,7 +2380,6 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 </UL>
 
 <P><STRONG><a name="[108]"></a>RTC_ExitInitMode</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, stm32c0xx_hal_rtc.o(.text.RTC_ExitInitMode))
@@ -2395,8 +2392,8 @@ Global Symbols
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
 </UL>
 
-<P><STRONG><a name="[c5]"></a>RTC_Handle_Set_Date_And_Time</STRONG> (Thumb, 320 bytes, Stack size 112 bytes, rtc_handler.o(.text.RTC_Handle_Set_Date_And_Time))
-<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = RTC_Handle_Set_Date_And_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
+<P><STRONG><a name="[c5]"></a>RTC_Handle_Set_Date_And_Time</STRONG> (Thumb, 336 bytes, Stack size 104 bytes, rtc_handler.o(.text.RTC_Handle_Set_Date_And_Time))
+<BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = RTC_Handle_Set_Date_And_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_WriteString
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
@@ -2410,17 +2407,14 @@ Global Symbols
 <LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2snprintf
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
+<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
+<LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[be]"></a>RTC_Handle_Set_Time</STRONG> (Thumb, 108 bytes, Stack size 48 bytes, rtc_handler.o(.text.RTC_Handle_Set_Time))
-<BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = RTC_Handle_Set_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
+<P><STRONG><a name="[be]"></a>RTC_Handle_Set_Time</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, rtc_handler.o(.text.RTC_Handle_Set_Time))
+<BR><BR>[Stack]<UL><LI>Max Depth = 320<LI>Call Chain = RTC_Handle_Set_Time &rArr; RTC_Handle_Set_Date_And_Time &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;puts
-<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Parse_String_Payload_Robust
-<LI><a href="#[151]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Driver_SetTime
-<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sscanf
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 </UL>
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
@@ -2688,7 +2682,6 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display_Handle_ON_OFF
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Habilita_print
@@ -2782,7 +2775,6 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Entrada_Tela
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
