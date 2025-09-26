@@ -1,6 +1,5 @@
 #include "rtc_driver.h"
 #include "dwin_driver.h" 
-#include "controller.h"
 #include <stdio.h>       
 #include <string.h>      
 
@@ -23,33 +22,6 @@ void RTC_Driver_Init(RTC_HandleTypeDef* hrtc)
         HAL_RTC_SetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
     }
     printf("RTC Driver inicializado.\r\n");
-}
-
-void RTC_Driver_Process(void)
-{
-    // ... (Sua função Process pode continuar a mesma, ela é ótima) ...
-    uint32_t tick_atual = HAL_GetTick();
-    if (tick_atual - s_last_update_tick < 1000) return;
-    s_last_update_tick = tick_atual; 
-
-    uint16_t tela_atual = Controller_GetCurrentScreen();
-    if (tela_atual != PRINCIPAL && tela_atual != TELA_SET_JUST_TIME && tela_atual != TELA_ADJUST_TIME)
-    {
-        return; 
-    }
-
-    if (DWIN_Driver_IsTxBusy()) return;
-
-    RTC_TimeTypeDef sTime = {0};
-    RTC_DateTypeDef sDate = {0};
-    HAL_RTC_GetTime(s_hrtc, &sTime, RTC_FORMAT_BIN);
-    HAL_RTC_GetDate(s_hrtc, &sDate, RTC_FORMAT_BIN);
-
-    sprintf(s_time_buffer, "%02d:%02d:%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
-    sprintf(s_date_buffer, "%02d/%02d/%02d", sDate.Date, sDate.Month, sDate.Year);
-
-    DWIN_Driver_WriteString(HORA_SISTEMA, s_time_buffer, 8);
-    DWIN_Driver_WriteString(DATA_SISTEMA, s_date_buffer, 8);
 }
 
 // --- NOVAS FUNÇÕES E CORREÇÕES ---

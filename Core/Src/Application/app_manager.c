@@ -56,6 +56,7 @@ static void Task_Handle_High_Frequency_Polling(void);
 static void Task_Handle_Scale(void); 
 static void Task_Update_Display_FSM(void);
 static void Task_Update_Frequency(void);
+static void Task_Update_Clock(void);
 static float Calcular_Escala_A(uint32_t frequencia_hz);
 static bool Check_Stability(float new_grams); 
 
@@ -148,8 +149,7 @@ void App_Manager_Process(void)
     // 3. FSM de Atualização de Display (V8.6)
     Task_Update_Display_FSM();
     
-    // 4. Tarefa de atualização do RTC (V8.3)
-    RTC_Driver_Process();
+    Task_Update_Clock();
     
     // 5. FSM de Armazenamento
     Gerenciador_Config_Run_FSM(); 
@@ -288,6 +288,24 @@ static void Task_Update_Frequency(void)
         
         // MODIFICADO: Armazena a Escala A no handler
         Medicao_Set_Escala_A(escala_a);
+    }
+}
+
+static void Task_Update_Clock(void) {
+    static uint32_t last_tick = 0;
+    if (HAL_GetTick() - last_tick < 1000) return;
+    last_tick = HAL_GetTick();
+
+    if (Controller_GetCurrentScreen() == PRINCIPAL) {
+        char time_buf[9];
+        char date_buf[9];
+        uint8_t h, m, s, d, mo, y;
+        if (RTC_Driver_GetTime(&h, &m, &s) && RTC_Driver_GetDate(&d, &mo, &y)) {
+            sprintf(time_buf, "%02d:%02d:%02d", h, m, s);
+            sprintf(date_buf, "%02d/%02d/%02d", d, mo, y);
+            DWIN_Driver_WriteString(HORA_SISTEMA, time_buf, 8);
+            DWIN_Driver_WriteString(DATA_SISTEMA, date_buf, 8);
+        }
     }
 }
 

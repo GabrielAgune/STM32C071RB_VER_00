@@ -305,8 +305,7 @@ static void Cmd_GetPeso(char* args) {
 }
 
 static void Cmd_GetTemp(char* args) {
-		Medicao_Get_UltimaMedicao(&dados_atuais);
-    float temperatura = dados_atuais.Temp_Instru;
+    float temperatura = TempSensor_GetTemperature();
     printf("Temperatura interna do MCU: %.2f C\r\n", temperatura);
 }
 
