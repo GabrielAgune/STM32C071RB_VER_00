@@ -74,12 +74,12 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
 						case PRINT							:		Print(received_value);                                                                 break;
             case OFF								:		Display_Handle_ON_OFF(received_value);                                                 break;
 						
-            case SENHA_CONFIG				:		Auth_Handle_Login(data, len);                                                          break;
+            case SENHA_CONFIG				:		Auth_ProcessLoginEvent(data, len);                                                     break;
             case SET_TIME						:		RTC_Handle_Set_Time(data, len);                                                        break;
 						case NR_REPETICOES      :   Set_Repeticoes(received_value);                                                        break;
 						case DECIMALS           :   Set_Decimals(received_value);                                                          break;
 						case DES_HAB_PRINT      :   Habilita_print(received_value);                                                        break;
-						case SET_SENHA					:		Auth_Handle_Set_Password(data, len);                                                   break;
+						case SET_SENHA					:		Auth_ProcessSetPasswordEvent(data, len);                                               break;
 						//auto diagnoses
 						case USER               :   Type_User(data, len, received_value);                                                  break;
 						case COMPANY            :   Type_Company(data, len, received_value);                                               break;

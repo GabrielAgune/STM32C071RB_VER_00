@@ -3,7 +3,7 @@
 <title>Static Call Graph - [STM32C071RB_VER_00\STM32C071RB_VER_00.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image STM32C071RB_VER_00\STM32C071RB_VER_00.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Fri Sep 26 15:06:53 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6230001: Last Updated: Fri Sep 26 15:34:39 2025
 <BR><P>
 <H3>Maximum Stack Usage =        344 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -267,19 +267,19 @@ Global Symbols
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Atualizar_Display_Grao_Selecionado
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
 </UL>
 
 <P><STRONG><a name="[ae]"></a>strcmp</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, strcmp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strcmp
 </UL>
-<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 </UL>
 
 <P><STRONG><a name="[b0]"></a>strcpy</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, strcpy.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<BR><BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 </UL>
 
 <P><STRONG><a name="[4a]"></a>strcasecmp</STRONG> (Thumb, 38 bytes, Stack size 24 bytes, strcasecmp.o(.text))
@@ -762,8 +762,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[14d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Relatorio_Printer
 </UL>
 
-<P><STRONG><a name="[ab]"></a>Auth_Handle_Login</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, autenticacao_handler.o(.text.Auth_Handle_Login))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Auth_Handle_Login &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
+<P><STRONG><a name="[ab]"></a>Auth_ProcessLoginEvent</STRONG> (Thumb, 152 bytes, Stack size 32 bytes, autenticacao_handler.o(.text.Auth_ProcessLoginEvent))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Auth_ProcessLoginEvent &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
@@ -775,8 +775,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 </UL>
 
-<P><STRONG><a name="[af]"></a>Auth_Handle_Set_Password</STRONG> (Thumb, 184 bytes, Stack size 32 bytes, autenticacao_handler.o(.text.Auth_Handle_Set_Password))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Auth_Handle_Set_Password &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
+<P><STRONG><a name="[af]"></a>Auth_ProcessSetPasswordEvent</STRONG> (Thumb, 168 bytes, Stack size 24 bytes, autenticacao_handler.o(.text.Auth_ProcessSetPasswordEvent))
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Auth_ProcessSetPasswordEvent &rArr; puts &rArr; fputc &rArr; CLI_Printf_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DWIN_Driver_SetScreen
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
@@ -867,13 +867,13 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Decimals
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Entrada_Tela
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display_Handle_ON_OFF
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;About
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Print
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Habilita_print
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -969,12 +969,12 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Decimals
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Entrada_Tela
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display_Handle_ON_OFF
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;About
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Print
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Handle_Dwin_PIC
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_Service
 </UL>
@@ -1037,10 +1037,10 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_Company
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 </UL>
 
 <P><STRONG><a name="[87]"></a>DWIN_TX_Pump</STRONG> (Thumb, 136 bytes, Stack size 16 bytes, dwin_driver.o(.text.DWIN_TX_Pump))
@@ -1204,7 +1204,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 </UL>
 
 <P><STRONG><a name="[db]"></a>Gerenciador_Config_Get_Usuario</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Get_Usuario))
@@ -1259,7 +1259,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
 </UL>
-<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 </UL>
 
 <P><STRONG><a name="[e0]"></a>Gerenciador_Config_Set_Usuario</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, gerenciador_configuracoes.o(.text.Gerenciador_Config_Set_Usuario))
@@ -2692,7 +2692,7 @@ Global Symbols
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display_Handle_ON_OFF
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Type_User
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Habilita_print
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Who_am_i
@@ -2783,9 +2783,9 @@ Global Symbols
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Navegacao
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Date_And_Time
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Graos_Handle_Entrada_Tela
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Set_Password
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessSetPasswordEvent
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_Handle_Set_Time
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_Handle_Login
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Auth_ProcessLoginEvent
 <LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Controller_DwinCallback
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CLI_Process
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Cmd_GetFreq

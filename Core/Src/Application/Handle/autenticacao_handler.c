@@ -1,8 +1,31 @@
+// ===== ARQUIVO REESCRITO: autenticacao_handler.c =====
+
 #include "autenticacao_handler.h"
 
+// INCLUDES ADICIONAIS NECESSÁRIOS PARA CONTROLAR A UI
+#include "dwin_driver.h"
+#include "controller.h"
+
+// Includes de dependência interna
+#include "dwin_parser.h"
+#include "gerenciador_configuracoes.h"
+#include <stdio.h>
+#include <string.h>
+
 //================================================================================
-// Definições e Variáveis Estáticas (Movidas do controller.c)
+// Definições Internas (Tipos de Resultado e Estado)
 //================================================================================
+
+// O enum de resultado agora é 'static', um detalhe de implementação interno.
+typedef enum {
+    AUTH_RESULT_OK,
+    AUTH_RESULT_FAIL,
+    AUTH_RESULT_PASSWORD_MISMATCH,
+    AUTH_RESULT_PASSWORD_TOO_SHORT,
+    AUTH_RESULT_PENDING_CONFIRMATION,
+    AUTH_RESULT_ERROR
+} AuthResult_t;
+
 typedef enum {
     ESTADO_SENHA_OCIOSO,
     ESTADO_SENHA_AGUARDANDO_CONFIRMACAO
@@ -12,18 +35,75 @@ static EstadoSenha_t s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
 static char s_nova_senha_temporaria[MAX_SENHA_LEN + 1];
 
 //================================================================================
-// Implementação
+// Protótipos das Funções de Lógica Pura (Estáticas)
+//================================================================================
+static AuthResult_t auth_handle_login_logic(const uint8_t* dwin_data, uint16_t len);
+static AuthResult_t auth_handle_set_password_logic(const uint8_t* dwin_data, uint16_t len);
+
+
+//================================================================================
+// Funções Públicas (Processadores de Evento)
 //================================================================================
 
-/**
- * @brief (V8.3) Trata a entrada de senha usando o parser robusto.
- * Lógica movida do controller.c
- */
-void Auth_Handle_Login(const uint8_t* dwin_data, uint16_t len)
+void Auth_ProcessLoginEvent(const uint8_t* dwin_data, uint16_t len)
+{
+    // 1. Executa a lógica de negócio pura
+    AuthResult_t result = auth_handle_login_logic(dwin_data, len);
+
+    // 2. Traduz o resultado em uma ação de UI (o switch que estava no controller)
+    switch (result)
+    {
+        case AUTH_RESULT_OK:
+            DWIN_Driver_SetScreen(TELA_CONFIGURAR);
+            break;
+        case AUTH_RESULT_FAIL:
+            DWIN_Driver_SetScreen(SENHA_ERRADA);
+            break;
+        case AUTH_RESULT_ERROR:
+        default:
+            DWIN_Driver_SetScreen(MSG_ERROR);
+            break;
+    }
+}
+
+void Auth_ProcessSetPasswordEvent(const uint8_t* dwin_data, uint16_t len)
+{
+    // 1. Executa a lógica de negócio pura
+    AuthResult_t result = auth_handle_set_password_logic(dwin_data, len);
+    
+    // 2. Traduz o resultado em uma ação de UI
+    switch (result)
+    {
+        case AUTH_RESULT_OK:
+            DWIN_Driver_SetScreen(TELA_CONFIGURAR);
+            break;
+        case AUTH_RESULT_PENDING_CONFIRMATION:
+            DWIN_Driver_SetScreen(TELA_SET_PASS_AGAIN);
+            break;
+        case AUTH_RESULT_PASSWORD_TOO_SHORT:
+            DWIN_Driver_SetScreen(SENHA_MIN_4_CARAC);
+            break;
+        case AUTH_RESULT_PASSWORD_MISMATCH:
+            DWIN_Driver_SetScreen(SENHAS_DIFERENTES);
+            break;
+        case AUTH_RESULT_ERROR:
+        default:
+            DWIN_Driver_SetScreen(MSG_ERROR);
+            break;
+    }
+}
+
+
+//================================================================================
+// Implementação da Lógica Pura (Funções Estáticas)
+//================================================================================
+
+// Esta é a função que foi refatorada no passo anterior, agora renomeada e tornada 'static'
+static AuthResult_t auth_handle_login_logic(const uint8_t* dwin_data, uint16_t len)
 {
     if (len <= 7) { 
         printf("Auth: Frame de senha muito curto.\r\n");
-        return;
+        return AUTH_RESULT_ERROR;
     }
     
     char senha_digitada[MAX_SENHA_LEN + 1];
@@ -32,39 +112,33 @@ void Auth_Handle_Login(const uint8_t* dwin_data, uint16_t len)
 
     if (!DWIN_Parse_String_Payload_Robust(payload, payload_len, senha_digitada, sizeof(senha_digitada))) {
         printf("Auth: Falha no parser robusto da senha.\r\n");
-        return;
+        return AUTH_RESULT_ERROR;
     }
 
     if (strlen(senha_digitada) == 0) {
         printf("Auth: Senha vazia recebida.\r\n");
-        DWIN_Driver_SetScreen(SENHA_ERRADA); 
-        return;
+        return AUTH_RESULT_FAIL;
     }
 
     char senha_armazenada[MAX_SENHA_LEN + 1] = {0};
     if (!Gerenciador_Config_Get_Senha(senha_armazenada, sizeof(senha_armazenada))) {
-        DWIN_Driver_SetScreen(MSG_ERROR); 
-        return;
+        return AUTH_RESULT_ERROR;
     }
     senha_armazenada[MAX_SENHA_LEN] = '\0';
 
     if (strcmp(senha_digitada, senha_armazenada) == 0) {
-        printf("Auth: Senha correta! Acessando menu de servico.\r\n");
-        DWIN_Driver_SetScreen(TELA_CONFIGURAR); 
+        printf("Auth: Senha correta!\r\n");
+        return AUTH_RESULT_OK;
     } else {
-        printf("Auth: Senha incorreta. Digitado: '%s' | Esperado: '%s'\r\n", senha_digitada, senha_armazenada);
-        DWIN_Driver_SetScreen(SENHA_ERRADA); 
+        printf("Auth: Senha incorreta. Digitado: '%s'\r\n", senha_digitada);
+        return AUTH_RESULT_FAIL;
     }
 }
 
-
-/**
- * @brief (V8.3) Trata a nova senha usando o parser robusto.
- * Lógica movida do controller.c
- */
-void Auth_Handle_Set_Password(const uint8_t* dwin_data, uint16_t len)
+// O mesmo padrão para a segunda função
+static AuthResult_t auth_handle_set_password_logic(const uint8_t* dwin_data, uint16_t len)
 {
-    if (len <= 7) return; 
+    if (len <= 7) return AUTH_RESULT_ERROR;
 
     char senha_recebida[MAX_SENHA_LEN + 1];
     const uint8_t* payload = &dwin_data[6];
@@ -72,50 +146,39 @@ void Auth_Handle_Set_Password(const uint8_t* dwin_data, uint16_t len)
 
     if (!DWIN_Parse_String_Payload_Robust(payload, payload_len, senha_recebida, sizeof(senha_recebida))) {
          printf("Auth: Falha no parser de nova senha.\r\n");
-        return;
+        return AUTH_RESULT_ERROR;
     }
 
     if (strlen(senha_recebida) == 0) {
         printf("Auth: Nova senha vazia descartada.\r\n");
-        return;
+        return AUTH_RESULT_ERROR;
     }
 
     switch (s_estado_senha_atual)
     {
         case ESTADO_SENHA_OCIOSO:
-            printf("Auth: Recebida primeira senha para alteracao.\r\n");
             if (strlen(senha_recebida) < 4) {
-                printf("Auth: Nova senha muito curta.\r\n");
-                DWIN_Driver_SetScreen(SENHA_MIN_4_CARAC); 
+                return AUTH_RESULT_PASSWORD_TOO_SHORT;
             } else {
                 strcpy(s_nova_senha_temporaria, senha_recebida);
-                printf("Auth: Primeira senha OK. Aguardando confirmacao.\r\n");
                 s_estado_senha_atual = ESTADO_SENHA_AGUARDANDO_CONFIRMACAO;
-                DWIN_Driver_SetScreen(TELA_SET_PASS_AGAIN); 
+                return AUTH_RESULT_PENDING_CONFIRMATION;
             }
-            break;
         
         case ESTADO_SENHA_AGUARDANDO_CONFIRMACAO:
-            printf("Auth: Recebida senha de confirmacao.\r\n");
+            s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
             if (strcmp(s_nova_senha_temporaria, senha_recebida) == 0) {
-                printf("Auth: Senhas coincidem. Salvando nova senha...\r\n");
-                
-                bool sucesso = Gerenciador_Config_Set_Senha(s_nova_senha_temporaria); 
-
-                if (sucesso) printf("Auth: Nova senha definida na RAM. Sera salva em breve.\r\n");
-                else printf("Auth: ERRO ao definir a nova senha (FSM ocupada?)\r\n");
-                
-                s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
-                DWIN_Driver_SetScreen(TELA_CONFIGURAR); 
+                if (Gerenciador_Config_Set_Senha(s_nova_senha_temporaria)) {
+                    return AUTH_RESULT_OK;
+                } else {
+                    return AUTH_RESULT_ERROR;
+                }
             } else {
-                printf("Auth: Senhas nao coincidem.\r\n");
-                s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
-                DWIN_Driver_SetScreen(SENHAS_DIFERENTES); 
+                return AUTH_RESULT_PASSWORD_MISMATCH;
             }
-            break;
 
         default:
             s_estado_senha_atual = ESTADO_SENHA_OCIOSO;
-            break;
+            return AUTH_RESULT_ERROR;
     }
 }
