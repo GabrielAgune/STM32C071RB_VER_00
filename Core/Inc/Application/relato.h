@@ -16,6 +16,6 @@ extern void Cabecalho(void);
 
 extern void Relatorio_Printer (void);
 
-void Gerar_String_Relatorio_Para_QR(char* buffer, size_t buffer_size);
+
 
 #endif /* RELATO_H */

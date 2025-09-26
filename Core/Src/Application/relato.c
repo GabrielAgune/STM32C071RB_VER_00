@@ -9,7 +9,7 @@ const char Linha[] = "--------------------------------\n\r";
 void Who_am_i(void)
 {
   printf(Dupla);
-  printf("             G5000\n\r");
+  printf("         G620_Teste_Gab\n\r");
   printf("     (c) GEHAKA, 2004-2025\n\r");
   printf(Linha);
   printf("CPU      =           STM32C071RB\n\r");
@@ -23,11 +23,20 @@ void Who_am_i(void)
 
 void Assinatura(void)
 {
+	uint8_t hours, minutes, seconds;
+	uint8_t day, month, year; 
+	
 	printf("\n\r");
   printf("\n\r");
   printf(Linha);
-	printf("Assinatura              ");	RTC_Driver_Get_Time();	printf("\n\r");
-	printf("Responsavel             ");	RTC_Driver_Get_Date();	printf("\n\r");
+	if (RTC_Driver_GetTime(&hours, &minutes, &seconds))
+	{
+		printf("Assinatura              %02d:%02d:%02d\n\r", hours, minutes, seconds);
+	}
+	if (RTC_Driver_GetDate(&day, &month, &year))
+	{
+		printf("Responsavel             %02d/%02d/%02d\n\r", day, month, year);
+	}
 	printf ("\n\r");
   printf ("\n\r");
   printf ("\n\r");
@@ -37,7 +46,7 @@ void Assinatura(void)
 void Cabecalho(void)
 {
   printf(Dupla);
- 	printf("GEHAKA                     G4800\n\r");
+ 	printf("GEHAKA            G620_Teste_Gab\n\r");
   printf(Linha);
 	printf("Versao Firmware= %15s\n\r", FIRMWARE);
  	printf("Numero de Serie= %15s\n\r", SERIAL);
@@ -76,58 +85,4 @@ void Relatorio_Printer (void)
   	printf(Linha);
 
   	Assinatura();
-}
-
-void Gerar_String_Relatorio_Para_QR(char* buffer, size_t buffer_size)
-{	
-    Config_Grao_t dados_grao;
-    uint8_t indice_grao_ativo;
-    uint16_t casas_decimais = 0;
-    
-    // 1. A mesma lógica para obter os dados de configuração
-    if (Gerenciador_Config_Get_Grao_Ativo(&indice_grao_ativo) &&
-        Gerenciador_Config_Get_Dados_Grao(indice_grao_ativo, &dados_grao)) {
-        
-        casas_decimais = Gerenciador_Config_Get_NR_Decimals(); 
-    } else {
-        snprintf(buffer, buffer_size, "ERRO: Nao foi possivel carregar dados do grao.");
-        return;
-    }
-
-    // 2. Ponteiros para construir a string de forma segura e incremental
-    char* ptr = buffer;
-    size_t remaining_size = buffer_size;
-    int len = 0;
-
-    // 3. Adiciona o conteúdo de cada printf() ao buffer usando snprintf
-
-    // ATENÇÃO: Substitua o texto abaixo pelo conteúdo exato que sua função Cabecalho() imprime.
-    len = snprintf(ptr, remaining_size, "--- Relatorio de Umidade ---\n");
-    ptr += len; remaining_size -= len;
-
-    len = snprintf(ptr, remaining_size, "Produto: %s\n", dados_grao.nome);
-    ptr += len; remaining_size -= len;
-
-    len = snprintf(ptr, remaining_size, "Versao Equacao: %lu\n", (unsigned long)dados_grao.id_curva);
-    ptr += len; remaining_size -= len;
-
-    len = snprintf(ptr, remaining_size, "Validade Curva: %s\n", dados_grao.validade);
-    ptr += len; remaining_size -= len;
-		
-		len = snprintf(ptr, remaining_size, "Temp. Amostra: %.1f 'C\n", 22.0);
-    ptr += len; remaining_size -= len;
-		
-		len = snprintf(ptr, remaining_size, "Densidade: %.1f Kg/hL\n", 71.0);
-    ptr += len; remaining_size -= len;
-		
-		len = snprintf(ptr, remaining_size, "--------------------------\n");
-    ptr += len; remaining_size -= len;
-
-    len = snprintf(ptr, remaining_size, "Umidade: %.*f %%\n", (int)casas_decimais, 27.432);
-    ptr += len; remaining_size -= len;
-
-    len = snprintf(ptr, remaining_size, "--------------------------\n");
-    ptr += len; remaining_size -= len;
-		
-		printf("Qr_Code Carregado");
 }

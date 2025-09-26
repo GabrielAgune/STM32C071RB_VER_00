@@ -61,4 +61,5 @@ void App_Manager_GetScaleData(App_ScaleData_t* data);
 void App_Manager_GetFreqData(FreqData_t* data);
 float App_Manager_GetTemperature(void);
 
+
 #endif // APP_MANAGER_H

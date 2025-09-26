@@ -62,16 +62,13 @@ void Print(uint16_t received_value)
 		Config_Grao_t Dados_Grao;
 		uint8_t indice_grao; 
 		Gerenciador_Config_Get_Grao_Ativo(&indice_grao); 
-		char relatorio_para_qr[512];
-		
-
-		Gerar_String_Relatorio_Para_QR(relatorio_para_qr, sizeof(relatorio_para_qr));
 		
 		
-		if (Gerenciador_Config_Get_NR_Decimals() == 1)
+		if (Gerenciador_Config_Get_NR_Decimals() == 1 && estado_print)
 		{	
 			if (Gerenciador_Config_Get_Dados_Grao(indice_grao, &Dados_Grao)) 
 			{
+				DWIN_Driver_WriteString(GRAO_A_MEDIR, Dados_Grao.nome, MAX_NOME_GRAO_LEN);
 				DWIN_Driver_WriteInt(UMIDADE_1_CASA, 237);
 				DWIN_Driver_WriteInt(CURVA, Dados_Grao.id_curva);
 				DWIN_Driver_WriteInt(UMI_MIN, (Dados_Grao.umidade_min)*10);
@@ -80,10 +77,11 @@ void Print(uint16_t received_value)
 			}
 		}
 		
-		if (Gerenciador_Config_Get_NR_Decimals() == 2)
+		if (Gerenciador_Config_Get_NR_Decimals() == 2 && estado_print)
 		{
 			if (Gerenciador_Config_Get_Dados_Grao(indice_grao, &Dados_Grao)) 
 			{
+				DWIN_Driver_WriteString(GRAO_A_MEDIR, Dados_Grao.nome, MAX_NOME_GRAO_LEN);
 				DWIN_Driver_WriteInt(UMIDADE_2_CASAS, 2754);
 				DWIN_Driver_WriteInt(CURVA, Dados_Grao.id_curva);
 				DWIN_Driver_WriteInt(UMI_MIN, (Dados_Grao.umidade_min)*10);
@@ -94,7 +92,10 @@ void Print(uint16_t received_value)
 	}
 	else
 	{
-		Relatorio_Printer();
+		if (estado_print)
+		{
+			Relatorio_Printer();
+		}
 	}
 }
 
@@ -171,11 +172,18 @@ void Type_Company(const uint8_t* dwin_data, uint16_t len, uint16_t received_valu
 	}
 }
 
-void Handle_QR(uint16_t received_value)
+void Habilita_print(uint16_t received_value)
 {
-		char relatorio_para_qr[512];
-		Gerar_String_Relatorio_Para_QR(relatorio_para_qr, sizeof(relatorio_para_qr));
-		display_qr_code(relatorio_para_qr);
+	if (received_value == 0x001)
+	{
+		estado_print = true;
+		printf("%s\n\r", estado_print ? "true" : "false");
+	}
+	else
+	{
+		estado_print = false;
+		printf("%s\n\r", estado_print ? "true" : "false");
+	}
 }
 
 void About(void)

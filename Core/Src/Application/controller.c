@@ -78,7 +78,7 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
             case SET_TIME						:		RTC_Handle_Set_Time(data, len);                                                        break;
 						case NR_REPETICOES      :   Set_Repeticoes(received_value);                                                        break;
 						case DECIMALS           :   Set_Decimals(received_value);                                                          break;
-
+						case DES_HAB_PRINT      :   Habilita_print(received_value);                                                        break;
 						case SET_SENHA					:		Auth_Handle_Set_Password(data, len);                                                   break;
 						//auto diagnoses
 						case USER               :   Type_User(data, len, received_value);                                                  break;
@@ -87,8 +87,7 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
 						
 						
 						case MONITOR						:		Controller_SetScreen(TELA_MONITOR_SYSTEM);                                             break;
-						case 0x5040             : 	Handle_QR(received_value);																														 break;
-						
+						case SET_DATE_TIME      :   RTC_Handle_Set_Date_And_Time(data, len);                                               break;
 						
 						
 						

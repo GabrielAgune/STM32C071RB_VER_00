@@ -10,4 +10,6 @@
  */
 void RTC_Handle_Set_Time(const uint8_t* dwin_data, uint16_t len);
 
+void RTC_Handle_Set_Date_And_Time(const uint8_t* dwin_data, uint16_t len);
+
 #endif // RTC_HANDLER_H

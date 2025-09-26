@@ -70,7 +70,7 @@ void App_Manager_Init(void)
 		
 		DWIN_Driver_SetScreen(LOGO);
 		DWIN_TX_Pump(); 
-		HAL_Delay(1000);
+		HAL_Delay(5000);
 		
 		Servos_Init();   
 		DWIN_Driver_SetScreen(BOOT_CHECK_SERVOS);

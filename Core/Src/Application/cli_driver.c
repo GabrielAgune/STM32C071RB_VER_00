@@ -88,6 +88,7 @@ static const size_t NUM_DWIN_SUBCOMMANDS = sizeof(s_dwin_table) / sizeof(s_dwin_
 static const char HELP_TEXT[] =
     "============================= CLI de Diagnostico ==========================|\r\n"
     "| HELP ou ?                | Mostra esta ajuda.                            |\r\n"
+		"| WHO_AM_I                 | Exibe especificacoes do sistema.              |\r\n"
     "| PESO                     | Mostra a leitura atual da balanca.            |\r\n"
     "| TEMP                     | Mostra a leitura do sensor de temperatura.    |\r\n"
     "| FREQ                     | Mostra a ultima leitura de frequencia.        |\r\n"
