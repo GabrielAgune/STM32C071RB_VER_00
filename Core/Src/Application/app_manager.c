@@ -278,7 +278,7 @@ static void Task_Update_Display_FSM(void)
     {
         uint16_t tela_atual = Controller_GetCurrentScreen();
 
-        if (tela_atual == TELA_MONITOR_SYSTEM)
+        if (tela_atual == TELA_MONITOR_SYSTEM || tela_atual == TELA_ADJUST_CAPA)
         {
             // MODIFICADO: Busca os dados mais recentes do handler de medição
             DadosMedicao_t dados_atuais;

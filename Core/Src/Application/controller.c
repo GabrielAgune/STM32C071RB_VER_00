@@ -89,6 +89,7 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
 						case MONITOR						:		Controller_SetScreen(TELA_MONITOR_SYSTEM);                                             break;
 						case SET_DATE_TIME      :   RTC_Handle_Set_Date_And_Time(data, len);                                               break;
 						case MODEL_OEM          :   Display_ShowModel();                                                                   break;
+						case ADJUST_CAPA        :   Display_Adj_Capa(received_value);                                                      break;
 						case DIAGNOSTIC         :   App_Manager_Run_Self_Diagnostics(TELA_AUTO_DIAGNOSIS);                                 break;
 						
 						case TECLAS							:		Graos_Handle_Navegacao(received_value);           																		 break;

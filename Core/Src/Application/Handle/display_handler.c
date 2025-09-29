@@ -156,6 +156,12 @@ void Display_SetCompany(const uint8_t* dwin_data, uint16_t len, uint16_t receive
     }
 }
 
+void Display_Adj_Capa(uint16_t received_value)
+{
+	DWIN_Driver_WriteString(VP_MESSAGES, "AdjustFrequency: 3000.0KHz+/-2.0", strlen("AdjustFrequency: 3000.0KHz+/-2.0"));
+	Controller_SetScreen(TELA_MONITOR_SYSTEM);
+}
+
 
 void Display_ShowAbout(void)
 {
