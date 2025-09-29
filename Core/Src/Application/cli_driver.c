@@ -11,6 +11,7 @@
 #include "app_manager.h" 
 #include "medicao_handler.h"
 #include "relato.h"
+#include "rtc_driver.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -46,7 +47,9 @@ static void Cmd_GetPeso(char* args); // <-- Modificado
 static void Cmd_GetTemp(char* args);
 static void Cmd_GetFreq(char* args);
 static void Cmd_Service(char* args);
+static void Cmd_Set_Time(char* args);
 static void Cmd_Who_Am_I(char* args);
+static void Cmd_Set_Date(char* args);
 static void Handle_Dwin_PIC(char* sub_args);
 static void Handle_Dwin_INT(char* sub_args);
 static void Handle_Dwin_INT32(char* sub_args);
@@ -77,7 +80,8 @@ DadosMedicao_t dados_atuais;
 static const cli_command_t s_command_table[] = {
     { "HELP", Cmd_Help }, { "?", Cmd_Help }, { "DWIN", Cmd_Dwin },
     { "PESO", Cmd_GetPeso }, { "TEMP", Cmd_GetTemp }, { "FREQ", Cmd_GetFreq },
-		{ "SERVICE", Cmd_Service}, { "WHO_AM_I", Cmd_Who_Am_I},
+		{ "SERVICE", Cmd_Service}, { "WHO_AM_I", Cmd_Who_Am_I}, { "TIME", Cmd_Set_Time},
+		{ "DATE", Cmd_Set_Date},
 };
 static const size_t NUM_COMMANDS = sizeof(s_command_table) / sizeof(s_command_table[0]);
 
@@ -329,6 +333,64 @@ static void Cmd_Dwin(char* args) {
         }
     }
     printf("Subcomando DWIN desconhecido: \"%s\"", sub_cmd);
+}
+
+static void Cmd_Set_Time(char* args)
+{ 
+    if (args == NULL) {
+        printf("Erro: Faltam argumentos. Uso: TIME HH:MM:SS\r\n");
+        return;
+    }
+    uint8_t h = 0, m = 0, s = 0;
+    int items_scanned = sscanf(args, "%hhu:%hhu:%hhu", &h, &m, &s);
+    if (items_scanned == 3) 
+    {
+        if (h < 24 && m < 60 && s < 60) 
+        {
+            if (RTC_Driver_SetTime(h, m, s)) {
+                printf("OK. RTC atualizado para %02u:%02u:%02u\r\n", h, m, s);
+            } else {
+                printf("Erro: Falha ao setar a hora no hardware do RTC.\r\n");
+            }
+        } 
+        else 
+        {
+            printf("Erro: Valores de hora invalidos. Use HH(0-23):MM(0-59):SS(0-59).\r\n");
+        }
+    } 
+    else 
+    {
+        printf("Erro: Formato invalido. Uso: TIME HH:MM:SS\r\n");
+    }
+}
+
+static void Cmd_Set_Date(char* args)
+{ 
+    if (args == NULL) {
+        printf("Erro: Faltam argumentos. Uso: DATE DD/MM/AA\r\n");
+        return;
+    }
+    uint8_t d = 0, m = 0, a = 0;
+    int items_scanned = sscanf(args, "%hhu/%hhu/%hhu", &d, &m, &a);
+    if (items_scanned == 3) 
+    {
+        if (d < 31 && m < 12) 
+        {
+            if (RTC_Driver_SetDate(d, m, a)) {
+                printf("OK. RTC atualizado para %02u/%02u/%02u\r\n", d, m, a);
+            } else {
+                printf("Erro: Falha ao setar a data no hardware do RTC.\r\n");
+            }
+        } 
+        else 
+        {
+            printf("Erro: Valores de data invalidos. Use DD(1-31):MM(1-12):AA(00-99).\r\n");
+        }
+    } 
+    else 
+    {
+        printf("Erro: Formato invalido. Uso: DATE HH:MM:SS\r\n");
+    }
 }
 
 static void Cmd_Who_Am_I(char* args)

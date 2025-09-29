@@ -65,72 +65,114 @@ static bool Check_Stability(float new_grams);
 //================================================================================
 void App_Manager_Init(void)
 {
-		Medicao_Init();
-		Medicao_Set_Densidade(71.0);
-		Medicao_Set_Umidade(25.73);
-		
+		// Etapa 1: Inicializa módulos essenciais de comunicação e software
     CLI_Init(&huart1);
-    printf("Sistema Integrado - Log de Inicializacao:\r\n");
-    printf("1. CLI/Debug UART... OK\r\n");
-		DWIN_Driver_Init(&huart2, Controller_DwinCallback);
-    printf("Interface de Usuario... Iniciando sequencia de splash.\r\n");
-		
-		DWIN_Driver_SetScreen(LOGO);
-		DWIN_TX_Pump(); 
-		HAL_Delay(5000);
-		
-		Servos_Init();   
-		DWIN_Driver_SetScreen(BOOT_CHECK_SERVOS);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1200);
-		
-		Frequency_Init(); 
-		DWIN_Driver_SetScreen(BOOT_CHECK_CAPACI);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1200);
-		
-		printf("4. Modulos de Hardware (ADC, Servos, Frequencia)... OK\r\n");
-		
-		ADS1232_Init();
-		ADS1232_Tare();
-    printf("   ... Tara concluida.\r\n");
-		DWIN_Driver_SetScreen(BOOT_BALANCE);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1000);
-		
-		float temp_inicial = TempSensor_GetTemperature(); 
-    Medicao_Set_Temp_Instru(temp_inicial);
-    printf("Temperatura inicial: %.2f C\r\n", temp_inicial);
-		DWIN_Driver_SetScreen(BOOT_THERMOMETER);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1000);
-		
+    DWIN_Driver_Init(&huart2, Controller_DwinCallback);
     EEPROM_Driver_Init(&hi2c1);
-		Gerenciador_Config_Init(&hcrc);
-    printf("3. Gerenciador de Configuracoes... ");
+    Gerenciador_Config_Init(&hcrc);
+    RTC_Driver_Init(&hrtc);
+    Medicao_Init();
+
+    // Etapa 2: Inicializa os drivers de hardware
+    Servos_Init();   
+    Frequency_Init(); 
+    ADS1232_Init();
+
+    // Etapa 3: Carrega configurações (ainda é bloqueante, mas necessário no boot)
+    printf("Sistema Integrado - Log de Inicializacao:\r\n");
+    printf("1. Modulos de Software e Drivers... OK\r\n");
+
+    printf("2. Gerenciador de Configuracoes... ");
     if (!Gerenciador_Config_Validar_e_Restaurar()) {
-        printf("[FALHA]\r\nERRO FATAL: Nao foi possivel carregar/restaurar configuracoes.\r\n");
-				DWIN_Driver_SetScreen(ERROR);
-				DWIN_TX_Pump();
-				return;
+        printf("[AVISO] Restaurado com configs de fabrica.\r\n");
     } else {
         printf("[OK]\r\n");
     }
-		DWIN_Driver_SetScreen(BOOT_MEMORY);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1100);
+
+    // Pré-configura alguns valores iniciais no handler de medição
+    Medicao_Set_Densidade(71.0);
+    Medicao_Set_Umidade(25.73);
+		char nr_serial_buffer[17]; // Cria um buffer local para receber o dado
+		Gerenciador_Config_Get_Serial(nr_serial_buffer, sizeof(nr_serial_buffer));
 		
-    RTC_Driver_Init(&hrtc);
-		DWIN_Driver_SetScreen(BOOT_CLOCK);
-		DWIN_TX_Pump(); 
-		HAL_Delay(1100);
-    printf("2. Drivers I2C e RTC... OK\r\n");
+		DWIN_Driver_Init(&huart2, Controller_DwinCallback);
+		DWIN_Driver_WriteString(VP_HARDWARE, HARDWARE, strlen(HARDWARE));
+		DWIN_Driver_WriteString(VP_FIRMWARE, FIRMWARE, strlen(FIRMWARE));
+		DWIN_Driver_WriteString(VP_FIRM_IHM, FIRM_IHM, strlen(FIRM_IHM));
+		DWIN_Driver_WriteString(VP_SERIAL, nr_serial_buffer, sizeof(nr_serial_buffer));
 		
-        
+		printf("Enviando informacoes iniciais para o display...\r\n");
+    while (DWIN_Driver_IsTxBusy())
+    {
+        DWIN_TX_Pump(); // Chama o "carteiro" repetidamente até a bandeja de saída ficar vazia
+    }
+    printf("... informacoes enviadas. Inicializacao completa.\r\n");
+  
+}
+
+bool App_Manager_Run_Self_Diagnostics(uint8_t return_tela)
+{
+    printf("\r\n>>> INICIANDO AUTODIAGNOSTICO <<<\r\n");
+
+    // Tela de Logo inicial
+    DWIN_Driver_SetScreen(LOGO);
+		DWIN_TX_Pump(); 
+    HAL_Delay(3000); // Delay menor para a logo
+
+    // 1. Teste dos Servos
+    printf("Diagnostico: Verificando Servos...\r\n");
+    DWIN_Driver_SetScreen(BOOT_CHECK_SERVOS);
+    DWIN_TX_Pump(); 
+    // Futuramente, você pode adicionar um pequeno movimento nos servos aqui para um teste real
+    HAL_Delay(1200);
+
+    // 2. Teste do Medidor de Capacitância (Frequência)
+    printf("Diagnostico: Verificando Medidor de Frequencia...\r\n");
+    DWIN_Driver_SetScreen(BOOT_CHECK_CAPACI);
+    DWIN_TX_Pump(); 
+    HAL_Delay(1200);
+
+    // 3. Teste da Balança
+    printf("Diagnostico: Verificando Balanca...\r\n");
+    DWIN_Driver_SetScreen(BOOT_BALANCE);
+    DWIN_TX_Pump(); 
+    ADS1232_Tare(); // A própria tara já é um bom teste de diagnóstico
+    HAL_Delay(1000);
+
+    // 4. Teste do Termômetro Interno
+    printf("Diagnostico: Verificando Termometro...\r\n");
+    DWIN_Driver_SetScreen(BOOT_THERMOMETER);
+    DWIN_TX_Pump(); 
+    float temp_inicial = TempSensor_GetTemperature(); 
+    Medicao_Set_Temp_Instru(temp_inicial);
+    printf("   ... Temperatura: %.2f C\r\n", temp_inicial);
+    HAL_Delay(1000);
+
+    // 5. Teste de Memória EEPROM
+    printf("Diagnostico: Verificando Memoria EEPROM...\r\n");
+    DWIN_Driver_SetScreen(BOOT_MEMORY);
+    DWIN_TX_Pump(); 
+    if (!EEPROM_Driver_IsReady()) {
+        printf("   ... FALHA! EEPROM nao responde.\r\n");
+        DWIN_Driver_SetScreen(MSG_ERROR); // Uma tela de erro específica para EEPROM seria ideal
+        DWIN_TX_Pump();
+        return false; // Falha no diagnóstico
+    }
+    printf("   ... EEPROM OK.\r\n");
+    HAL_Delay(1100);
+
+    // 6. Teste do RTC
+    printf("Diagnostico: Verificando RTC...\r\n");
+    DWIN_Driver_SetScreen(BOOT_CLOCK);
+    DWIN_TX_Pump(); 
+    // O RTC já foi inicializado, aqui apenas mostramos a tela
+    HAL_Delay(1100);
+
+    printf(">>> AUTODIAGNOSTICO COMPLETO <<<\r\n\r\n");
+    DWIN_Driver_SetScreen(return_tela);
+    DWIN_TX_Pump(); 
     
-    printf("\r\n>>> INICIALIZACAO COMPLETA (V8.2 Robusta) <<<\r\n\r\n");
-		DWIN_Driver_SetScreen(PRINCIPAL);
-		DWIN_TX_Pump(); 
+    return true; // Todos os testes passaram
 }
 
 //================================================================================

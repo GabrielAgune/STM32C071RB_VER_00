@@ -1,6 +1,11 @@
 #ifndef RTC_HANDLER_H
 #define RTC_HANDLER_H
 
+#include "dwin_driver.h"
+#include "rtc_driver.h"
+#include "dwin_parser.h"
+#include <stdio.h>
+#include <string.h>
 #include <stdint.h>
 
 /**

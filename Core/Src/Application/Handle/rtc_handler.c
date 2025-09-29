@@ -1,27 +1,16 @@
 
 #include "rtc_handler.h"
 
-// Includes para controlar a UI e o driver de hardware
-#include "dwin_driver.h"
-#include "rtc_driver.h"
-
-// Includes de dependência interna
-#include "dwin_parser.h"
-#include <stdio.h>
-#include <string.h>
-
 //================================================================================
 // Definições Internas
 //================================================================================
 
-// Enum para os resultados da lógica de ajuste do RTC
 typedef enum {
     RTC_SET_OK,
     RTC_SET_FAIL_PARSE,
     RTC_SET_FAIL_HW
 } RtcSetResult_t;
 
-// Struct para passar os dados parseados entre as funções lógicas e de UI
 typedef struct {
     uint8_t day;
     uint8_t month;
@@ -37,7 +26,7 @@ typedef struct {
 //================================================================================
 
 static RtcSetResult_t rtc_handle_set_date_and_time_logic(const uint8_t* dwin_data, uint16_t len, RtcData_t* out_data);
-static RtcSetResult_t rtc_handle_set_time_logic(const uint8_t* dwin_data, uint16_t len);
+static RtcSetResult_t rtc_handle_set_time_logic(const uint8_t* dwin_data, uint16_t len, RtcData_t* out_data);
 static void rtc_update_display(const RtcData_t* data);
 
 //================================================================================
@@ -46,29 +35,33 @@ static void rtc_update_display(const RtcData_t* data);
 
 void RTC_Handle_Set_Time(const uint8_t* dwin_data, uint16_t len)
 {
-    // A lógica para esta função é um subconjunto da função completa abaixo,
-    // então por simplicidade vamos manter a mais completa.
-    // Se precisar de ambas, o padrão seria o mesmo.
-    RTC_Handle_Set_Date_And_Time(dwin_data, len);
+    RtcData_t parsed_data;
+
+    // 1. Chama a NOVA função de lógica que só mexe na hora
+    RtcSetResult_t result = rtc_handle_set_time_logic(dwin_data, len, &parsed_data);
+
+    // 2. Age sobre o resultado
+    if (result == RTC_SET_OK) {
+        printf("RTC Handler: HORA atualizada com sucesso. Atualizando display.\r\n");
+        rtc_update_display(&parsed_data);
+    } else {
+        printf("RTC Handler: Falha ao atualizar HORA. Nenhum feedback para o usuario.\r\n");
+    }
 }
 
 void RTC_Handle_Set_Date_And_Time(const uint8_t* dwin_data, uint16_t len)
 {
     RtcData_t parsed_data;
-    
-    // 1. Executa a lógica de negócio
+		
     RtcSetResult_t result = rtc_handle_set_date_and_time_logic(dwin_data, len, &parsed_data);
 
-    // 2. Age sobre o resultado
     if (result == RTC_SET_OK)
     {
-        // 2a. A lógica foi bem-sucedida, então atualizamos a UI para refletir os novos dados.
         printf("RTC Handler: RTC atualizado com sucesso. Atualizando display.\r\n");
         rtc_update_display(&parsed_data);
     }
     else
     {
-        // 2b. A lógica falhou, apenas registramos no log. Nenhuma ação de UI.
         printf("RTC Handler: Falha ao atualizar RTC. Nenhum feedback para o usuario.\r\n");
     }
 }
@@ -83,8 +76,8 @@ static RtcSetResult_t rtc_handle_set_date_and_time_logic(const uint8_t* dwin_dat
     char parsed_string[32] = {0};
     
     // 1. Extrair a string do payload DWIN
-    const uint8_t* payload = &dwin_data[8];
-    uint16_t payload_len = len - 8;
+    const uint8_t* payload = &dwin_data[6];
+    uint16_t payload_len = len - 6;
     if (!DWIN_Parse_String_Payload_Robust(payload, payload_len, parsed_string, sizeof(parsed_string))) {
         printf("RTC Logic: Falha ao extrair string.\r\n");
         return RTC_SET_FAIL_PARSE;
@@ -128,7 +121,44 @@ static RtcSetResult_t rtc_handle_set_date_and_time_logic(const uint8_t* dwin_dat
     return RTC_SET_OK;
 }
 
-// (A função rtc_handle_set_time_logic pode ser omitida se a função completa acima for suficiente)
+static RtcSetResult_t rtc_handle_set_time_logic(const uint8_t* dwin_data, uint16_t len, RtcData_t* out_data)
+{
+    char parsed_string[32] = {0};
+
+    // CORREÇÃO: O payload da string começa no índice 8.
+    const uint8_t* payload = &dwin_data[8];
+    uint16_t payload_len = len - 8;
+    if (!DWIN_Parse_String_Payload_Robust(payload, payload_len, parsed_string, sizeof(parsed_string))) {
+        printf("RTC Logic (TimeOnly): Falha ao extrair string.\r\n");
+        return RTC_SET_FAIL_PARSE;
+    }
+    printf("RTC Logic (TimeOnly): Recebido string '%s'\r\n", parsed_string);
+
+    uint8_t h=0, min=0, s=0;
+
+    // Tenta extrair APENAS a hora da string
+    if (sscanf(parsed_string, "%hhu:%hhu:%hhu", &h, &min, &s) != 3) {
+        printf("RTC Logic (TimeOnly): Formato de string invalido. Esperado HH:MM:SS.\r\n");
+        return RTC_SET_FAIL_PARSE;
+    }
+
+    // Aplica a nova hora ao hardware
+    if (!RTC_Driver_SetTime(h, min, s)) {
+        return RTC_SET_FAIL_HW;
+    }
+
+    // Busca a data atual do hardware para poder atualizar o display corretamente
+    uint8_t d, m, y;
+    if (!RTC_Driver_GetDate(&d, &m, &y)) {
+        return RTC_SET_FAIL_HW; // Se não conseguir ler a data, retorna erro.
+    }
+    
+    // Preenche a struct de saída com a data atual e a nova hora
+    out_data->day = d; out_data->month = m; out_data->year = y;
+    out_data->hour = h; out_data->minute = min; out_data->second = s;
+
+    return RTC_SET_OK;
+}
 
 /**
  * @brief Função dedicada a enviar os dados de data/hora para o display

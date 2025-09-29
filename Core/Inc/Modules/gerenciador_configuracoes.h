@@ -17,7 +17,8 @@
 #define MAX_USUARIOS 10
 #define HARDWARE "1.00"
 #define FIRMWARE "0.00.001"
-#define SERIAL "123456789"
+#define FIRM_IHM "0.00.02"
+
 
 
 //==============================================================================
@@ -52,6 +53,7 @@ typedef struct {
 
     Config_Grao_t graos[MAX_GRAOS];
 		Config_Usuario_t usuarios[MAX_USUARIOS];
+		char nr_serial[16];
     uint32_t crc;
 } Config_Aplicacao_t;
 
@@ -88,6 +90,8 @@ bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo);
 bool Gerenciador_Config_Get_Cal_A(float* gain, float* zero);
 uint16_t Gerenciador_Config_Get_NR_Repetition(void);
 uint16_t Gerenciador_Config_Get_NR_Decimals(void);
+bool Gerenciador_Config_Get_Serial(char* serial, uint8_t tamanho_buffer);
+bool Gerenciador_Config_Set_Serial(const char* novo_serial);
 bool Gerenciador_Config_Get_Usuario(char* usuario, uint8_t tamanho_usuario);
 bool Gerenciador_Config_Set_Usuario(const char* novo_usuario);
 bool Gerenciador_Config_Get_Company(char* empresa, uint8_t tamanho_empresa);
@@ -95,6 +99,7 @@ bool Gerenciador_Config_Set_Company(const char* nova_empresa);
 bool Gerenciador_Config_Set_NR_Repetitions(uint16_t nr_repetitions);
 bool Gerenciador_Config_Set_NR_Decimals(uint16_t nr_decimals);
 bool Gerenciador_Config_Set_Cal_A(float gain, float zero);
+void Gerenciador_Config_Get_Config_Snapshot(Config_Aplicacao_t* config_out);
 void Gerenciador_Config_Run_FSM(void);
 
 #endif // GERENCIADOR_CONFIGURACOES_H

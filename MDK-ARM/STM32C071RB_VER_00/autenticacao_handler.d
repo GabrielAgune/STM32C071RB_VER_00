@@ -45,8 +45,15 @@ stm32c071rb_ver_00/autenticacao_handler.o: \
   ..\Core\Inc\Modules\gerenciador_configuracoes.h \
   ..\Core\Inc\Drivers\eeprom_driver.h \
   ..\Core\Inc\Application\Handle\rtc_handler.h \
-  ..\Core\Inc\Application\Handle\display_handler.h \
   ..\Core\Inc\Application\Handle\dwin_parser.h \
+  ..\Core\Inc\Application\Handle\display_handler.h \
   ..\Core\Inc\Application\Handle\medicao_handler.h \
   ..\Core\Inc\Application\relato.h \
-  ..\Core\Inc\Application\Handle\graos_handler.h
+  ..\Core\Inc\Application\Handle\graos_handler.h \
+  ..\Core\Inc\Application\app_manager.h ..\Core\Inc\i2c.h \
+  ..\Core\Inc\usart.h ..\Core\Inc\crc.h ..\Core\Inc\tim.h \
+  ..\Core\Inc\Drivers\ads1232_driver.h \
+  ..\Core\Inc\Drivers\pwm_servo_driver.h \
+  ..\Core\Inc\Drivers\pcb_frequency.h ..\Core\Inc\Drivers\temp_sensor.h \
+  ..\Core\Inc\Modules\servo_controle.h \
+  ..\Core\Inc\Application\cli_driver.h

@@ -71,24 +71,25 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
 				
 						case DESCARTA_AMOSTRA		:		printf("Botao Descarta Amostra Pressionado\n\r");                                      break;
 						case SELECT_GRAIN				:		Graos_Handle_Entrada_Tela();                                                        	 break;
-						case PRINT							:		Print(received_value);                                                                 break;
+						case PRINT							:		Display_ProcessPrintEvent(received_value);                                             break;
             case OFF								:		Display_Handle_ON_OFF(received_value);                                                 break;
 						
             case SENHA_CONFIG				:		Auth_ProcessLoginEvent(data, len);                                                     break;
             case SET_TIME						:		RTC_Handle_Set_Time(data, len);                                                        break;
-						case NR_REPETICOES      :   Set_Repeticoes(received_value);                                                        break;
-						case DECIMALS           :   Set_Decimals(received_value);                                                          break;
-						case DES_HAB_PRINT      :   Habilita_print(received_value);                                                        break;
+						case NR_REPETICOES      :   Display_SetRepeticoes(received_value);                                                 break;
+						case DECIMALS           :   Display_SetDecimals(received_value);                                                   break;
+						case DES_HAB_PRINT      :   Display_SetPrintingEnabled(received_value == 0x01);                                    break;
 						case SET_SENHA					:		Auth_ProcessSetPasswordEvent(data, len);                                               break;
 						//auto diagnoses
-						case USER               :   Type_User(data, len, received_value);                                                  break;
-						case COMPANY            :   Type_Company(data, len, received_value);                                               break;
-						case ABOUT_SYS          :   About();                                                                               break;
+						case USER               :   Display_SetUser(data, len, received_value);                                            break;
+						case COMPANY            :   Display_SetCompany(data, len, received_value);                                         break;
+						case ABOUT_SYS          :   Display_ShowAbout();                                                                   break;
 						
 						
 						case MONITOR						:		Controller_SetScreen(TELA_MONITOR_SYSTEM);                                             break;
 						case SET_DATE_TIME      :   RTC_Handle_Set_Date_And_Time(data, len);                                               break;
-						case MODEL_OEM          :   Model();                                                                               break;
+						case MODEL_OEM          :   Display_ShowModel();                                                                   break;
+						case DIAGNOSTIC         :   App_Manager_Run_Self_Diagnostics(TELA_AUTO_DIAGNOSIS);                                 break;
 						
 						case TECLAS							:		Graos_Handle_Navegacao(received_value);           																		 break;
 						case ESCAPE							:		Handle_Escape_Navigation();																												     break;
@@ -107,6 +108,7 @@ static void Handle_Escape_Navigation(void)
     if (s_current_screen_id == TELA_MONITOR_SYSTEM) 
     {
          Controller_SetScreen(PRINCIPAL); 
+				 DWIN_Driver_SetScreen(TELA_SERVICO);
          printf("CONTROLLER: Saindo do Monitor -> Tela de Servico.\r\n");
     }
     

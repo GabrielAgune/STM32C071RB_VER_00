@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "gerenciador_configuracoes.h"
+#include "medicao_handler.h"
 #include "rtc_driver.h"
 #include "stm32c0xx_hal.h"
 #include <stdio.h>

@@ -10,6 +10,7 @@
 #include "rtc_handler.h"
 #include "display_handler.h"
 #include "graos_handler.h"
+#include "app_manager.h"
 #include "relato.h"
 #include <string.h>
 #include <stdlib.h>

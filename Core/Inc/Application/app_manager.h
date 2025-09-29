@@ -56,7 +56,7 @@ void App_Manager_Process(void);
 // Funções de Callback para serem chamadas pela UI/Controller
 void App_Manager_Handle_Start_Process(void);
 void App_Manager_Handle_New_Password(const char* new_password);
-
+bool App_Manager_Run_Self_Diagnostics(uint8_t return_tela);
 
 
 #endif // APP_MANAGER_H

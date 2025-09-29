@@ -32,8 +32,6 @@ bool RTC_Driver_SetDate(uint8_t day, uint8_t month, uint8_t year)
     new_date.Date    = day;
     new_date.Month   = month;
     new_date.Year    = year;
-    // O dia da semana pode ser ignorado ou calculado se necessário
-    // new_date.WeekDay = ...; 
 
     if (HAL_RTC_SetDate(s_hrtc, &new_date, RTC_FORMAT_BIN) == HAL_OK) {
         s_last_update_tick = 0; // Força atualização no display

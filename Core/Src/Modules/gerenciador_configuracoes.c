@@ -288,6 +288,7 @@ static void Carregar_Configuracao_Padrao(void)
     s_config_cache.fat_cal_a_zero = 0.0f;
 		s_config_cache.nr_decimals = 2;
 		s_config_cache.nr_repetition = 5;
+		sprintf(s_config_cache.nr_serial, "%s", "22010101001001");
 		
     for (int i = 0; i < MAX_GRAOS; i++)
     {
@@ -302,7 +303,6 @@ static void Carregar_Configuracao_Padrao(void)
     // O CRC será calculado pela FSM antes de salvar.
 }
 
-// (Removida: Gerenciador_Config_Forcar_Restauracao_Padrao(). Substituída pela lógica acima).
 
 //================================================================================
 // FUNÇÕES "SET" (REFATORADAS V8.2) - Agora são assíncronas
@@ -388,9 +388,26 @@ bool Gerenciador_Config_Set_Company(const char* nova_empresa)
     return true;
 }
 
+bool Gerenciador_Config_Set_Serial(const char* novo_serial)
+{
+    if (novo_serial == NULL) return false;
+    if (s_storage_fsm.is_saving) return false; // Rejeita se já estiver salvando
+    
+    strncpy(s_config_cache.nr_serial, novo_serial, 16);
+    s_config_cache.nr_serial[15] = '\0'; // Garante terminação nula
+    s_storage_fsm.dirty = true; // <-- A mágica acontece aqui!
+    return true;
+}
+
 //================================================================================
 // FUNÇÕES "GET" (REFATORADAS V8.2) - Agora leem do Cache RAM (instantâneo)
 //================================================================================
+
+void Gerenciador_Config_Get_Config_Snapshot(Config_Aplicacao_t* config_out)
+{
+    if (config_out == NULL) return;
+    memcpy(config_out, &s_config_cache, sizeof(Config_Aplicacao_t));
+}
 
 bool Gerenciador_Config_Get_Indice_Idioma(uint8_t* indice)
 {
@@ -456,6 +473,14 @@ bool Gerenciador_Config_Get_Company(char* empresa, uint8_t tamanho_empresa)
 	if (empresa == NULL || tamanho_empresa == 0) return false;
     strncpy(empresa, s_config_cache.usuarios[0].Empresa, tamanho_empresa - 1);
     empresa[tamanho_empresa - 1] = '\0'; // Garante terminação nula
+    return true;
+}
+
+bool Gerenciador_Config_Get_Serial(char* serial, uint8_t tamanho_buffer)
+{
+    if (serial == NULL || tamanho_buffer == 0) return false;
+    strncpy(serial, s_config_cache.nr_serial, tamanho_buffer - 1);
+    serial[tamanho_buffer - 1] = '\0'; // Garante terminação nula
     return true;
 }
 //================================================================================
