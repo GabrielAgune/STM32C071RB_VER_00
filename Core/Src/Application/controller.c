@@ -68,29 +68,36 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
         //================================================================
         switch (vp_address) {
 
-				
+						//Tela inicial
 						case DESCARTA_AMOSTRA		:		printf("Botao Descarta Amostra Pressionado\n\r");                                      break;
 						case SELECT_GRAIN				:		Graos_Handle_Entrada_Tela();                                                        	 break;
 						case PRINT							:		Display_ProcessPrintEvent(received_value);                                             break;
             case OFF								:		Display_Handle_ON_OFF(received_value);                                                 break;
 						
+						//Menu Configurar
             case SENHA_CONFIG				:		Auth_ProcessLoginEvent(data, len);                                                     break;
             case SET_TIME						:		RTC_Handle_Set_Time(data, len);                                                        break;
 						case NR_REPETICOES      :   Display_SetRepeticoes(received_value);                                                 break;
 						case DECIMALS           :   Display_SetDecimals(received_value);                                                   break;
 						case DES_HAB_PRINT      :   Display_SetPrintingEnabled(received_value == 0x01);                                    break;
 						case SET_SENHA					:		Auth_ProcessSetPasswordEvent(data, len);                                               break;
-						//auto diagnoses
+						case DIAGNOSTIC         :   App_Manager_Run_Self_Diagnostics(TELA_AUTO_DIAGNOSIS);                                 break;
 						case USER               :   Display_SetUser(data, len, received_value);                                            break;
 						case COMPANY            :   Display_SetCompany(data, len, received_value);                                         break;
 						case ABOUT_SYS          :   Display_ShowAbout();                                                                   break;
 						
-						
-						case MONITOR						:		Controller_SetScreen(TELA_MONITOR_SYSTEM);                                             break;
+						//Menu Servico
+						case PRESET_PRODUCT     :   Display_Preset(received_value);                                                        break;
 						case SET_DATE_TIME      :   RTC_Handle_Set_Date_And_Time(data, len);                                               break;
-						case MODEL_OEM          :   Display_ShowModel();                                                                   break;
+						case MODEL_OEM          :   Display_ShowModel();                                                                   break;						
+						case ADJUST_SCALE       :                                                                                          break;
+						case ADJUST_TERMO       :                                                                                          break;
 						case ADJUST_CAPA        :   Display_Adj_Capa(received_value);                                                      break;
-						case DIAGNOSTIC         :   App_Manager_Run_Self_Diagnostics(TELA_AUTO_DIAGNOSIS);                                 break;
+						case SET_SERIAL         :   Display_Set_Serial(data, len, received_value);                                         break;
+						case SET_UNITS          :                                                                                          break;
+						case MONITOR						:		Controller_SetScreen(TELA_MONITOR_SYSTEM);                                             break;
+						case SERVICE_REPORT     :                                                                                          break;
+						case SYSTEM_BURNIN      :                                                                                          break;
 						
 						case TECLAS							:		Graos_Handle_Navegacao(received_value);           																		 break;
 						case ESCAPE							:		Handle_Escape_Navigation();																												     break;
@@ -106,7 +113,7 @@ void Controller_DwinCallback(const uint8_t* data, uint16_t len)
 static void Handle_Escape_Navigation(void)
 {
 
-    if (s_current_screen_id == TELA_MONITOR_SYSTEM) 
+    if (s_current_screen_id != PRINCIPAL) 
     {
          Controller_SetScreen(PRINCIPAL); 
 				 DWIN_Driver_SetScreen(TELA_SERVICO);

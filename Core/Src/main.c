@@ -110,13 +110,13 @@ int main(void)
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
 	Retarget_Init(&huart1, &huart2); 
+	
 	App_Manager_Init();
+	
 	if (!App_Manager_Run_Self_Diagnostics(PRINCIPAL))
   {
-      // Se o diagnóstico falhar, podemos parar aqui em um estado de erro.
-      // Isso impede que a aplicação principal rode com um hardware defeituoso.
       printf("ERRO FATAL DURANTE O AUTODIAGNOSTICO!\r\n");
-      while(1) { /* Loop de erro */ }
+      while(1) {}
   }
 	HAL_TIM_Base_Start_IT(&htim14);
   /* USER CODE END 2 */

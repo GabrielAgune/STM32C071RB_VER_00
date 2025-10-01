@@ -104,7 +104,7 @@ void App_Manager_Init(void)
 		printf("Enviando informacoes iniciais para o display...\r\n");
     while (DWIN_Driver_IsTxBusy())
     {
-        DWIN_TX_Pump(); // Chama o "carteiro" repetidamente até a bandeja de saída ficar vazia
+        DWIN_TX_Pump(); // Chama repetidamente até a bandeja de saída ficar vazia
     }
     printf("... informacoes enviadas. Inicializacao completa.\r\n");
   
@@ -180,20 +180,16 @@ bool App_Manager_Run_Self_Diagnostics(uint8_t return_tela)
 //================================================================================
 void App_Manager_Process(void)
 {
-    // 1. Tarefas de alta frequência
     Task_Handle_High_Frequency_Polling();
     
 		Task_Update_Frequency();
 		
-    // 2. Tarefa da Balança
     Task_Handle_Scale();
     
-    // 3. FSM de Atualização de Display (V8.6)
     Task_Update_Display_FSM();
     
     Task_Update_Clock();
     
-    // 5. FSM de Armazenamento
     Gerenciador_Config_Run_FSM(); 
 }
 
@@ -314,7 +310,6 @@ static void Task_Update_Display_FSM(void)
 
 static void Task_Update_Frequency(void)
 {
-    // Roda esta tarefa a cada 1 segundo
     if (HAL_GetTick() - s_freq_last_tick >= FREQ_UPDATE_INTERVAL_MS)
     {
         s_freq_last_tick = HAL_GetTick();
@@ -322,13 +317,10 @@ static void Task_Update_Frequency(void)
         uint32_t pulsos = Frequency_Get_Pulse_Count(); 
         Frequency_Reset(); 
         
-        // MODIFICADO: Armazena a frequência no handler
-        // Frequência em Hz é o número de pulsos contados em 1 segundo
         Medicao_Set_Frequencia((float)pulsos);
         
         float escala_a = Calcular_Escala_A(pulsos);
         
-        // MODIFICADO: Armazena a Escala A no handler
         Medicao_Set_Escala_A(escala_a);
     }
 }

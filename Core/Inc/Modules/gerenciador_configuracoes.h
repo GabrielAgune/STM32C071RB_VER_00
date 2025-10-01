@@ -15,6 +15,7 @@
 #define MAX_SENHA_LEN 10
 #define MAX_VALIDADE_LEN 10
 #define MAX_USUARIOS 10
+
 #define HARDWARE "1.00"
 #define FIRMWARE "0.00.001"
 #define FIRM_IHM "0.00.02"
@@ -50,7 +51,6 @@ typedef struct {
 		
 		uint16_t nr_repetition;
 		uint16_t nr_decimals;
-
     Config_Grao_t graos[MAX_GRAOS];
 		Config_Usuario_t usuarios[MAX_USUARIOS];
 		char nr_serial[16];
@@ -78,6 +78,7 @@ typedef struct {
 void Gerenciador_Config_Init(CRC_HandleTypeDef* hcrc);
 bool Gerenciador_Config_Validar_e_Restaurar(void);
 bool Gerenciador_Config_Forcar_Restauracao_Padrao(void);
+void Carregar_Configuracao_Padrao(void);
 bool Gerenciador_Config_Verificar_Bloco(uint16_t address, Config_Aplicacao_t* config_out);
 bool Gerenciador_Config_Get_Dados_Grao(uint8_t indice, Config_Grao_t* dados_grao);
 bool Gerenciador_Config_Get_Senha(char* buffer, uint8_t tamanho_buffer);

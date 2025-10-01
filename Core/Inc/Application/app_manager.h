@@ -26,22 +26,6 @@
 #include "controller.h"
 #include "cli_driver.h"
 
-/**
- * @brief Nova estrutura de dados de saída da balança.
- * Substitui a dependência do 'ScaleFilterOut' do scale_filter.h.
- */
-typedef struct {
-    float    grams_display;     // Valor final em gramas (usado pela UI)
-    float    raw_counts_median; // Contagem bruta (resultado da mediana de 3)
-    bool     is_stable;         // Flag de estabilidade (lógica simplificada)
-} App_ScaleData_t;
-
-
-typedef struct {
-    uint32_t pulsos;
-    float escala_a;
-} FreqData_t;
-
 
 /**
  * @brief Inicializa todos os módulos da aplicação em uma sequência controlada.

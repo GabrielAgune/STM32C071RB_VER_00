@@ -1,5 +1,3 @@
-// ===== ARQUIVO REESCRITO (Etapa 2): display_handler.c =====
-
 #include "display_handler.h"
 
 // Valor padrão enviado pelo DWIN ao entrar em uma tela de edição
@@ -175,6 +173,53 @@ void Display_ShowModel(void)
     DWIN_Driver_SetScreen(TELA_MODEL_OEM);
 }
 
+void Display_Preset(uint16_t received_value)
+{
+	char buffer_display[50];
+	if (received_value == 0x0000)
+	{
+		DWIN_Driver_WriteString(VP_MESSAGES, "Preset redefine os ajustes!", strlen("Preset redefine os ajustes!"));
+		DWIN_Driver_SetScreen(TELA_PRESET_PRODUCT);
+	}
+	else
+	{
+		Carregar_Configuracao_Padrao();
+		DWIN_Driver_WriteString(VP_MESSAGES, "Preset Completo!", strlen("Preset Completo!"));
+	}
+	
+}
+
+void Display_Set_Serial(const uint8_t* dwin_data, uint16_t len, uint16_t received_value)
+{
+	if (received_value == 0x0000)
+	{
+		Controller_SetScreen(TELA_SET_SERIAL);
+		char serial_atual[17] = {0};
+		char buffer_display[50] = {0};
+
+		Gerenciador_Config_Get_Serial(serial_atual, sizeof(serial_atual));
+
+		sprintf(buffer_display, "%s", serial_atual);
+		DWIN_Driver_WriteString(VP_MESSAGES, buffer_display, strlen(buffer_display)); 
+	}
+	else
+	{
+		char novo_serial[17] = {0}; 
+		const uint8_t* payload = &dwin_data[8];
+		uint16_t payload_len = len - 8;
+		if (DWIN_Parse_String_Payload_Robust(payload, payload_len, novo_serial, sizeof(novo_serial)))
+		{
+			if (strlen(novo_serial) > 0)
+			{
+				printf("Display Handler: Recebido novo serial: '%s'\n", novo_serial);
+				Gerenciador_Config_Set_Serial(novo_serial);
+				char buffer_display[50] = {0};
+				sprintf(buffer_display, "%s", novo_serial);
+				DWIN_Driver_WriteString(VP_MESSAGES, buffer_display, strlen(buffer_display));
+			}
+		}
+	}
+}
 
 //================================================================================
 // Implementação dos Getters/Setters de Estado

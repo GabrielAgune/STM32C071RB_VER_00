@@ -21,6 +21,8 @@ void Display_SetRepeticoes(uint16_t received_value);
 void Display_SetDecimals(uint16_t received_value);
 void Display_SetUser(const uint8_t* dwin_data, uint16_t len, uint16_t received_value);
 void Display_SetCompany(const uint8_t* dwin_data, uint16_t len, uint16_t received_value);
+void Display_Preset(uint16_t received_value);
+void Display_Set_Serial(const uint8_t* dwin_data, uint16_t len, uint16_t received_value);
 void Display_Adj_Capa(uint16_t received_value);
 void Display_ShowAbout(void);
 void Display_ShowModel(void);

@@ -64,7 +64,6 @@ static struct {
 static void Recalcular_E_Atualizar_CRC_Cache(void);
 static bool Tentar_Carregar_De_Endereco(uint16_t address, Config_Aplicacao_t* config);
 static bool Carregar_Primeira_Config_Valida(Config_Aplicacao_t* config_out);
-static void Carregar_Configuracao_Padrao(void);
 
 
 //================================================================================
@@ -158,7 +157,6 @@ void Gerenciador_Config_Run_FSM(void)
             break;
 
         case FSM_STORE_START_WRITE_BKP1:
-            // **** INÍCIO DA CORREÇÃO ****
             if (!EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP1, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t)))
             {
                 printf("Storage FSM: Falha ao INICIAR escrita BKP1!\r\n");
@@ -168,13 +166,11 @@ void Gerenciador_Config_Run_FSM(void)
             {
                 s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP1;
             }
-            // **** FIM DA CORREÇÃO ****
             break;
 
         case FSM_STORE_WAIT_WRITE_BKP1:
             if (EEPROM_Driver_Write_Async_Poll())
             {
-                // **** INÍCIO DA CORREÇÃO ****
                 if (EEPROM_Driver_GetAndClearErrorFlag())
                 {
                     printf("Storage FSM: Erro de driver ao escrever Bloco BKP1.\r\n");
@@ -185,12 +181,10 @@ void Gerenciador_Config_Run_FSM(void)
                     printf("Storage FSM: Bloco BKP1 OK.\r\n");
                     s_storage_fsm.state = FSM_STORE_START_WRITE_BKP2; // Sucesso, vai para o BKP2
                 }
-                // **** FIM DA CORREÇÃO ****
             }
             break;
 
         case FSM_STORE_START_WRITE_BKP2:
-            // **** INÍCIO DA CORREÇÃO ****
             if (!EEPROM_Driver_Write_Async_Start(ADDR_CONFIG_BACKUP2, (const uint8_t*)&s_config_cache, sizeof(Config_Aplicacao_t)))
             {
                 printf("Storage FSM: Falha ao INICIAR escrita BKP2!\r\n");
@@ -200,13 +194,11 @@ void Gerenciador_Config_Run_FSM(void)
             {
                 s_storage_fsm.state = FSM_STORE_WAIT_WRITE_BKP2;
             }
-            // **** FIM DA CORREÇÃO ****
             break;
 
         case FSM_STORE_WAIT_WRITE_BKP2:
             if (EEPROM_Driver_Write_Async_Poll())
             {
-                // **** INÍCIO DA CORREÇÃO ****
                 if (EEPROM_Driver_GetAndClearErrorFlag())
                 {
                     printf("Storage FSM: Erro de driver ao escrever Bloco BKP2.\r\n");
@@ -216,9 +208,8 @@ void Gerenciador_Config_Run_FSM(void)
                 {
                     printf("Storage FSM: Bloco BKP2 OK. Salvamento completo.\r\n");
                     s_storage_fsm.is_saving = false;
-                    s_storage_fsm.state = FSM_STORE_IDLE; // Concluído!
+                    s_storage_fsm.state = FSM_STORE_IDLE;
                 }
-                // **** FIM DA CORREÇÃO ****
             }
             break;
 
@@ -229,9 +220,8 @@ void Gerenciador_Config_Run_FSM(void)
             s_storage_fsm.is_saving = false; 
             s_storage_fsm.dirty = true; // Marca como dirty novamente para tentar salvar
             s_storage_fsm.state = FSM_STORE_IDLE;
-            s_storage_fsm.error_retry_tick = HAL_GetTick(); // <-- ATIVA O TIMER DE COOLDOWN
+            s_storage_fsm.error_retry_tick = HAL_GetTick();
             printf("Storage FSM: ERRO DURANTE ESCRITA ASYNC! Tentando novamente em %dms...\r\n", FSM_ERROR_COOLDOWN_MS);
-            // **** FIM DA CORREÇÃO ****
             break;
     }
 }
@@ -239,7 +229,6 @@ void Gerenciador_Config_Run_FSM(void)
 /**
  * @brief Valida os 3 slots da EEPROM e carrega o melhor para o cache s_config_cache.
  * Se todos falharem, carrega os padrões de fábrica para o cache.
- * (Esta função ainda é BLOQUEANTE, mas só roda UMA VEZ no boot em App_Manager_Init).
  */
 bool Gerenciador_Config_Validar_e_Restaurar(void)
 {
@@ -276,7 +265,7 @@ bool Gerenciador_Config_Validar_e_Restaurar(void)
 /**
  * @brief Carrega os padrões de fábrica APENAS no cache da RAM (s_config_cache).
  */
-static void Carregar_Configuracao_Padrao(void)
+void Carregar_Configuracao_Padrao(void)
 {
     memset(&s_config_cache, 0, sizeof(Config_Aplicacao_t));
 
@@ -289,7 +278,6 @@ static void Carregar_Configuracao_Padrao(void)
 		s_config_cache.nr_decimals = 2;
 		s_config_cache.nr_repetition = 5;
 		sprintf(s_config_cache.nr_serial, "%s", "22010101001001");
-		
     for (int i = 0; i < MAX_GRAOS; i++)
     {
         strncpy(s_config_cache.graos[i].nome, Produto[i].Nome[0], MAX_NOME_GRAO_LEN);
@@ -305,7 +293,7 @@ static void Carregar_Configuracao_Padrao(void)
 
 
 //================================================================================
-// FUNÇÕES "SET" (REFATORADAS V8.2) - Agora são assíncronas
+// FUNÇÕES "SET" - Agora são assíncronas
 // Elas apenas atualizam o cache da RAM e definem o flag 'dirty'. A FSM faz o resto.
 //================================================================================
 
@@ -395,12 +383,12 @@ bool Gerenciador_Config_Set_Serial(const char* novo_serial)
     
     strncpy(s_config_cache.nr_serial, novo_serial, 16);
     s_config_cache.nr_serial[15] = '\0'; // Garante terminação nula
-    s_storage_fsm.dirty = true; // <-- A mágica acontece aqui!
+    s_storage_fsm.dirty = true;
     return true;
 }
 
 //================================================================================
-// FUNÇÕES "GET" (REFATORADAS V8.2) - Agora leem do Cache RAM (instantâneo)
+// FUNÇÕES "GET" - Agora leem do Cache RAM (instantâneo)
 //================================================================================
 
 void Gerenciador_Config_Get_Config_Snapshot(Config_Aplicacao_t* config_out)
@@ -443,7 +431,7 @@ bool Gerenciador_Config_Get_Grao_Ativo(uint8_t* indice_ativo)
     if (s_config_cache.indice_grao_ativo < MAX_GRAOS) {
         *indice_ativo = s_config_cache.indice_grao_ativo;
     } else {
-        *indice_ativo = 0; // Sanidade
+        *indice_ativo = 0;
     }
     return true;
 }
@@ -495,10 +483,8 @@ static void Recalcular_E_Atualizar_CRC_Cache(void)
     
     // (O HAL_CRC_Calculate espera o tamanho em palavras de 32 bits)
     uint32_t novo_crc = HAL_CRC_Calculate(s_crc_handle, (uint32_t*)&s_config_cache, tamanho_dados_crc / 4);
-    
-    // **** DEBUG ADICIONADO ****
-    printf("DEBUG CRC (WRITE): Calculando CRC sobre %lu bytes. Novo CRC: [0x%lX]\r\n", 
-           (unsigned long)tamanho_dados_crc, (unsigned long)novo_crc);
+    /*printf("DEBUG CRC (WRITE): Calculando CRC sobre %lu bytes. Novo CRC: [0x%lX]\r\n", 
+           (unsigned long)tamanho_dados_crc, (unsigned long)novo_crc);*/
     
     s_config_cache.crc = novo_crc;
 }
